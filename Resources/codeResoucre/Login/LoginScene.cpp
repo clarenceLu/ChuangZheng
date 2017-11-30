@@ -2,6 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "RegisterScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -86,6 +87,7 @@ bool LoginScene::init()
     this->addChild(registerBtn);
     auto registerMenuItem  = MenuItemImage::create("btn_register.png","btn_register.png",CC_CALLBACK_1(LoginScene::menuLoginCallback, this));
     registerMenuItem->setAnchorPoint(Vec2(0,0));
+    registerMenuItem->setTag(101);
     registerMenuItem->setPosition(Vec2(0,0));
     registerMenuItem->setScale(0.87);
     registerBtn->addChild(registerMenuItem);
@@ -121,7 +123,11 @@ void LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType ty
 
 void LoginScene::menuLoginCallback(Ref* pSender)
 {
-
-    CCLOG("dadadadadadad");
+    MenuItem* item = (MenuItem*)pSender;
+    int tag= item->getTag();
+    if (tag==101) {
+        auto registerScene=RegisterScene::createScene();
+        Director::getInstance()->pushScene(registerScene);
+    }
 
 }
