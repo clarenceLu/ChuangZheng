@@ -20,7 +20,6 @@ public:
     
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
     cocos2d::Layer* createCaseLayer();
-    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event);
 };
 
 
