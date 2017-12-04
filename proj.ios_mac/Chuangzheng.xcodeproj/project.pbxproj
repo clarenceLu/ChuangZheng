@@ -80,10 +80,10 @@
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
+		C411806D1FD51858004ABE05 /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C411806C1FD51858004ABE05 /* LoginScene.cpp */; };
 		C43E9E2D1FC8364E00CFB6EC /* bg_input_passwd.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2A1FC8364E00CFB6EC /* bg_input_passwd.png */; };
 		C43E9E2E1FC8364E00CFB6EC /* bg_input_account.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2C1FC8364E00CFB6EC /* bg_input_account.png */; };
 		C43E9E301FC843F300CFB6EC /* btn_register.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2F1FC843F300CFB6EC /* btn_register.png */; };
-		C450254E1FCE9E2C00596F38 /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C450254D1FCE9E2C00596F38 /* LoginScene.cpp */; };
 		C45025511FCE9E7300596F38 /* NetWrokMangerData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C450254F1FCE9E7300596F38 /* NetWrokMangerData.cpp */; };
 		C49D38471FC542E90092C808 /* login_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = C49D38461FC542E90092C808 /* login_bk.png */; };
 		C4DF56971FC678FF0010307E /* btn_login.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DF56951FC678FF0010307E /* btn_login.png */; };
@@ -207,11 +207,11 @@
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C411806B1FD51858004ABE05 /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScene.h; sourceTree = "<group>"; };
+		C411806C1FD51858004ABE05 /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
 		C43E9E2A1FC8364E00CFB6EC /* bg_input_passwd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_input_passwd.png; sourceTree = "<group>"; };
 		C43E9E2C1FC8364E00CFB6EC /* bg_input_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_input_account.png; sourceTree = "<group>"; };
 		C43E9E2F1FC843F300CFB6EC /* btn_register.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_register.png; sourceTree = "<group>"; };
-		C450254C1FCE9E2C00596F38 /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScene.h; sourceTree = "<group>"; };
-		C450254D1FCE9E2C00596F38 /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoginScene.cpp; sourceTree = "<group>"; };
 		C450254F1FCE9E7300596F38 /* NetWrokMangerData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NetWrokMangerData.cpp; sourceTree = "<group>"; };
 		C45025501FCE9E7300596F38 /* NetWrokMangerData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NetWrokMangerData.hpp; sourceTree = "<group>"; };
 		C49D38461FC542E90092C808 /* login_bk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_bk.png; sourceTree = "<group>"; };
@@ -415,24 +415,6 @@
 			path = ios;
 			sourceTree = SOURCE_ROOT;
 		};
-
-		C45025491FCE9E1600596F38 /* 3rdFrameWork */ = {
-			isa = PBXGroup;
-			children = (
-				C450254F1FCE9E7300596F38 /* NetWrokMangerData.cpp */,
-				C45025501FCE9E7300596F38 /* NetWrokMangerData.hpp */,
-			);
-			path = 3rdFrameWork;
-			sourceTree = "<group>";
-		};
-		C450254B1FCE9E2C00596F38 /* Login */ = {
-			isa = PBXGroup;
-			children = (
-				C450254C1FCE9E2C00596F38 /* LoginScene.h */,
-				C450254D1FCE9E2C00596F38 /* LoginScene.cpp */,
-			);
-			path = Login;
-};
 		B223F11E1FCE6B5500DA0315 /* register */ = {
 			isa = PBXGroup;
 			children = (
@@ -464,6 +446,24 @@
 			path = message;
 			sourceTree = "<group>";
 		};
+		C411806A1FD51858004ABE05 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				C411806B1FD51858004ABE05 /* LoginScene.h */,
+				C411806C1FD51858004ABE05 /* LoginScene.cpp */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		C45025491FCE9E1600596F38 /* 3rdFrameWork */ = {
+			isa = PBXGroup;
+			children = (
+				C450254F1FCE9E7300596F38 /* NetWrokMangerData.cpp */,
+				C45025501FCE9E7300596F38 /* NetWrokMangerData.hpp */,
+			);
+			path = 3rdFrameWork;
+			sourceTree = "<group>";
+		};
 		C49D38441FC542E90092C808 /* Image */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,10 +488,8 @@
 		C49D38481FC542F10092C808 /* codeResoucre */ = {
 			isa = PBXGroup;
 			children = (
-				C450254B1FCE9E2C00596F38 /* Login */,
+				C411806A1FD51858004ABE05 /* Login */,
 				C45025491FCE9E1600596F38 /* 3rdFrameWork */,
-				C49D38491FC5431A0092C808 /* LoginScene.cpp */,
-				C49D384A1FC5431A0092C808 /* LoginScene.h */,
 				B223F1301FCE6B7100DA0315 /* RegisterScene.cpp */,
 				B223F1311FCE6B7100DA0315 /* RegisterScene.hpp */,
 				B223F1441FCEAB3B00DA0315 /* RegisterMessageScene.cpp */,
@@ -680,11 +678,8 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				B223F1461FCEAB3B00DA0315 /* RegisterMessageScene.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
-
-				C450254E1FCE9E2C00596F38 /* LoginScene.cpp in Sources */,
-
+				C411806D1FD51858004ABE05 /* LoginScene.cpp in Sources */,
 				B223F1321FCE6B7100DA0315 /* RegisterScene.cpp in Sources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

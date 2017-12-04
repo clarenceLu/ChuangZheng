@@ -2,7 +2,6 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
-<<<<<<< HEAD
 #include "json/rapidjson.h"
 
 #include "json/document.h"
@@ -16,10 +15,7 @@ using namespace rapidjson; // 命名空间
 
 
 #include "NetWrokMangerData.hpp"
-
-=======
 #include "RegisterScene.hpp"
->>>>>>> 0f6b1a2726f0b6b0444af837fdce345d73ac7ead
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
