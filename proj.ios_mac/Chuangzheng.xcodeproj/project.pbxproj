@@ -415,7 +415,7 @@
 			path = ios;
 			sourceTree = SOURCE_ROOT;
 		};
-<<<<<<< HEAD
+
 		C45025491FCE9E1600596F38 /* 3rdFrameWork */ = {
 			isa = PBXGroup;
 			children = (
@@ -432,7 +432,7 @@
 				C450254D1FCE9E2C00596F38 /* LoginScene.cpp */,
 			);
 			path = Login;
-=======
+
 		B223F11E1FCE6B5500DA0315 /* register */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,7 +462,6 @@
 				B223F13B1FCEAB0E00DA0315 /* btn_message_cancel.png */,
 			);
 			path = message;
->>>>>>> 0f6b1a2726f0b6b0444af837fdce345d73ac7ead
 			sourceTree = "<group>";
 		};
 		C49D38441FC542E90092C808 /* Image */ = {
@@ -489,17 +488,14 @@
 		C49D38481FC542F10092C808 /* codeResoucre */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				C450254B1FCE9E2C00596F38 /* Login */,
 				C45025491FCE9E1600596F38 /* 3rdFrameWork */,
-=======
 				C49D38491FC5431A0092C808 /* LoginScene.cpp */,
 				C49D384A1FC5431A0092C808 /* LoginScene.h */,
 				B223F1301FCE6B7100DA0315 /* RegisterScene.cpp */,
 				B223F1311FCE6B7100DA0315 /* RegisterScene.hpp */,
 				B223F1441FCEAB3B00DA0315 /* RegisterMessageScene.cpp */,
 				B223F1451FCEAB3B00DA0315 /* RegisterMessageScene.hpp */,
->>>>>>> 0f6b1a2726f0b6b0444af837fdce345d73ac7ead
 			);
 			path = codeResoucre;
 			sourceTree = "<group>";
@@ -684,11 +680,11 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				B223F1461FCEAB3B00DA0315 /* RegisterMessageScene.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
-<<<<<<< HEAD
+
 				C450254E1FCE9E2C00596F38 /* LoginScene.cpp in Sources */,
-=======
+
 				B223F1321FCE6B7100DA0315 /* RegisterScene.cpp in Sources */,
->>>>>>> 0f6b1a2726f0b6b0444af837fdce345d73ac7ead
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
