@@ -3,6 +3,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "RegisterScene.hpp"
+#include "PerfectCaseScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -77,6 +78,7 @@ bool LoginScene::init()
     auto loginMenuItem  = MenuItemImage::create("btn_login.png","btn_login.png",CC_CALLBACK_1(LoginScene::menuLoginCallback, this));
     loginMenuItem->setAnchorPoint(Vec2(0,0));
     loginMenuItem->setPosition(Vec2(0,0));
+    loginMenuItem->setTag(100);
     loginMenuItem->setScale(0.87);
     LoginBtn->addChild(loginMenuItem);
     
@@ -128,6 +130,10 @@ void LoginScene::menuLoginCallback(Ref* pSender)
     if (tag==101) {
         auto registerScene=RegisterScene::createScene();
         Director::getInstance()->pushScene(registerScene);
+    }
+    if (tag==100) {
+        auto perfectSC=PerfectCaseScene::create();
+        Director::getInstance()->pushScene(perfectSC);
     }
 
 }
