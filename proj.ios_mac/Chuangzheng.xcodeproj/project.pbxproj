@@ -432,7 +432,7 @@
 				C450254D1FCE9E2C00596F38 /* LoginScene.cpp */,
 			);
 			path = Login;
-
+};
 		B223F11E1FCE6B5500DA0315 /* register */ = {
 			isa = PBXGroup;
 			children = (
