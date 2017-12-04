@@ -201,6 +201,7 @@ public:
     {
         _tag = tag;
     }
+    
 
     /**
      * Get the string tag to identify the request.

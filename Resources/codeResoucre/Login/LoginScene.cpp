@@ -2,6 +2,19 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "json/rapidjson.h"
+
+#include "json/document.h"
+
+#include "json/writer.h"
+
+#include "json/stringbuffer.h"
+
+
+using namespace rapidjson; // 命名空间
+
+
+#include "NetWrokMangerData.hpp"
 #include "RegisterScene.hpp"
 #include "PerfectCaseScene.hpp"
 using namespace cocos2d::ui;
@@ -23,13 +36,16 @@ bool LoginScene::init()
         return false;
     }
     
+
+    this->createHudView();
+    
+    return true;
+}
+
+
+void LoginScene::createHudView(){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-//
-    
-    CCLOG("%f",visibleSize.width);
-    CCLOG("%f",visibleSize.height
-          );
     
     auto bkView = Sprite::create("login_bk.png");
     bkView->setAnchorPoint(Vec2(0,0));
@@ -58,7 +74,7 @@ bool LoginScene::init()
     textFieldName->setTextColor(Color4B::BLACK);
     textFieldName->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
     this->addChild(textFieldName);
-   
+    
     auto textFieldPasswd = TextField::create("请输入密码","Arial",30);
     textFieldPasswd->setMaxLength(40);
     textFieldPasswd->setTouchSize(Size(400, 54));
@@ -68,7 +84,6 @@ bool LoginScene::init()
     textFieldPasswd->setTextColor(Color4B::BLACK);
     textFieldPasswd->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
     this->addChild(textFieldPasswd);
-    
     
     auto LoginBtn = Menu::create();
     LoginBtn->setAnchorPoint(Vec2(0,0));
@@ -80,8 +95,8 @@ bool LoginScene::init()
     loginMenuItem->setPosition(Vec2(0,0));
     loginMenuItem->setTag(100);
     loginMenuItem->setScale(0.87);
+    loginMenuItem->setTag(100);
     LoginBtn->addChild(loginMenuItem);
-    
     
     auto registerBtn = Menu::create();
     registerBtn->setAnchorPoint(Vec2(0,0));
@@ -92,12 +107,41 @@ bool LoginScene::init()
     registerMenuItem->setTag(101);
     registerMenuItem->setPosition(Vec2(0,0));
     registerMenuItem->setScale(0.87);
+    registerMenuItem->setTag(101);
     registerBtn->addChild(registerMenuItem);
-
     
-    return true;
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    
+    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this));
 }
 
+
+void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document Jsondata;
+    
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (Jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(Jsondata.HasMember("data")){
+        for(int i = 0; i < Jsondata["data"].Size(); i++) {
+            
+            rapidjson::Value& object = Jsondata["data"][i];
+            CCLOG("%s", object["artistheaderimageurl"].GetString());
+        }
+    }
+}
 
 
 
@@ -107,24 +151,20 @@ void LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType ty
             
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
             CCLOG("INSERT_TEXT");
-            
             break;
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
-            
              CCLOG("DELETE_BACKWARD");
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
-            
             CCLOG("DETACH_WITH_IME");
 
             break;
-            
     }
-    
 }
 
 
 void LoginScene::menuLoginCallback(Ref* pSender)
 {
+
     MenuItem* item = (MenuItem*)pSender;
     int tag= item->getTag();
     if (tag==101) {

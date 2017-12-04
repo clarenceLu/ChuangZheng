@@ -9,13 +9,69 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "533460720.662863"
+            filePath = "../Resources/codeResoucre/3rdFrameWork/NetWrokMangerData.cpp"
+            timestampString = "533804802.32287"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
-            landmarkName = "LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)"
+            startingLineNumber = "91"
+            endingLineNumber = "91">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/3rdFrameWork/NetWrokMangerData.cpp"
+            timestampString = "533804802.322942"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/3rdFrameWork/NetWrokMangerData.cpp"
+            timestampString = "533804802.322996"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/3rdFrameWork/NetWrokMangerData.cpp"
+            timestampString = "533804802.323045"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/3rdFrameWork/NetWrokMangerData.cpp"
+            timestampString = "533804802.323091"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "NetWorkManger::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,44 +82,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "533460720.663299"
+            timestampString = "534059131.329931"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "533460720.663566"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "533460720.663809"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "LoginScene::createHudView()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
