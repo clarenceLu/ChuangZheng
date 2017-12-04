@@ -3,6 +3,12 @@
 
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
+#include "network/HttpClient.h"
+#include <iostream>
+
+using namespace cocos2d::network;
+
+
 
 class LoginScene : public cocos2d::Scene
 {
@@ -14,8 +20,12 @@ public:
     // a selector callback
     void menuLoginCallback(cocos2d::Ref* pSender);
     
+    void createHudView();
+    
     
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
+    
+    void onHttpRequestCompleted(HttpClient* sender, HttpResponse* response);
     
     // implement the "static create()" method manually
     CREATE_FUNC(LoginScene);

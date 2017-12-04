@@ -78,7 +78,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // if the frame's height is larger than the height of medium size.
     
     
-     director->setContentScaleFactor(frameSize.width/designResolutionSize.width);
+    // director->setContentScaleFactor(designResolutionSize.width/frameSize.width);
 
     
 //    if (frameSize.height > mediumResolutionSize.height)
