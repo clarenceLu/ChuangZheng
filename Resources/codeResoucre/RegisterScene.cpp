@@ -76,6 +76,8 @@ bool RegisterScene::init(){
     SQcodeBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+        }
         default:
             break;
     }

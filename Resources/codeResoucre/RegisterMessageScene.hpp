@@ -25,6 +25,8 @@ public:
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     
     cocos2d::Layer* createAlbumLayer();
+    
+    
 };
 
 #endif /* RegisterMessageScene_hpp */

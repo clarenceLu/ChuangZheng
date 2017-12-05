@@ -1,9 +1,3 @@
-//
-//  RegisterMessageScene.cpp
-//  Chuangzheng-mobile
-//
-//  Created by 工作 on 2017/11/29.
-//
 
 #include "RegisterMessageScene.hpp"
 #include "SimpleAudioEngine.h"
@@ -288,6 +282,7 @@ Layer* RegisterMessageScene::createAlbumLayer(){
     
     return layer;
 }
+
 
 
 /*

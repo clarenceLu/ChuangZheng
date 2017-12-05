@@ -10,6 +10,8 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "UserCaseScene.hpp"
+#include "json/rapidjson.h"
+#include "json/document.h"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -22,7 +24,7 @@ bool SelectCaseScene::init(){
     }
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
-    
+    getJsonData("selfBuildCase.json",_VecData);
     auto bkView=Sprite::create("bk_selectCase.png");
     bkView->setPosition(0,0);
     bkView->setAnchorPoint(Vec2(0, 0));
@@ -517,3 +519,42 @@ ScrollView* SelectCaseScene::createScrollV(){
     return scrollView;
     
 }
+
+#pragma -Json         (读取本地的json)
+void SelectCaseScene::getJsonData(std::string filename, std::vector<data> &vec)
+{
+    rapidjson::Document doc;
+    ssize_t size = 0;
+    unsigned char *pBytes = NULL;
+    do {
+        pBytes = cocos2d::FileUtils::getInstance()->getFileData("selfBuildCase.json", "r", &size);
+        CC_BREAK_IF(pBytes == NULL || strcmp((char*)pBytes, "") == 0);
+        std::string load_str((const char*)pBytes, size);
+        CC_SAFE_DELETE_ARRAY(pBytes);
+        doc.Parse<0>(load_str.c_str());
+        CC_BREAK_IF(doc.HasParseError());
+//        CC_BREAK_IF(!doc.IsArray());
+        const rapidjson::Value &p = doc;
+        if (p.HasMember("selfBuildCase"))
+        {
+            rapidjson::Value& object = doc["selfBuildCase"]["step1"];
+            data mydata;
+//            for (rapidjson::SizeType i = 0; i < object.Size(); i++)
+//            {
+//                const rapidjson::Value &p = object[i];
+//                if (p.HasMember("title"))
+//                {
+//                    mydata.title = p["title"].GetString();
+//                }
+//                if (p.HasMember("content"))
+//                {
+//                    mydata.content = p["content"].GetArray();
+//                }
+//                vec.push_back(mydata);              //将获得的数据放入容器中
+//            }
+        }
+    }while (0);
+    
+}
+
+

@@ -19,6 +19,8 @@ public:
     
     //声明CheckBox回调函数
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
-    
+    cocos2d::Layer* createCaseLayer();
+    cocos2d::Layer* createInformLayer();
+    cocos2d::Layer* createNotificationInformLayer();
 };
 #endif /* UserCaseScene_hpp */

@@ -5,7 +5,7 @@
 #include "ui/CocosGUI.h"
 #include "network/HttpClient.h"
 #include <iostream>
-
+#include "UserCaseScene.hpp"
 using namespace cocos2d::network;
 
 

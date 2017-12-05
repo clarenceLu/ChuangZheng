@@ -23,5 +23,14 @@ public:
     
     cocos2d::ui::ScrollView* createScrollV();
     
+    //读取json数据
+    typedef struct data
+    {
+        std::string   title;
+        const  cocos2d::ccArray*  content;
+    }data;
+    
+    void getJsonData(std::string filename, std::vector<data> &vec);
+    std::vector<data> _VecData;
 };
 #endif /* SelectCaseScene_hpp */
