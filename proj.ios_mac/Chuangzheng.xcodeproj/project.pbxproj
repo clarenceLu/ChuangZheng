@@ -97,7 +97,6 @@
 		B232AE041FD13A0100ABBA1D /* usercase_bluerect.png in Resources */ = {isa = PBXBuildFile; fileRef = B232ADFF1FD13A0100ABBA1D /* usercase_bluerect.png */; };
 		B232AE051FD13A0100ABBA1D /* usercase_detail.png in Resources */ = {isa = PBXBuildFile; fileRef = B232AE001FD13A0100ABBA1D /* usercase_detail.png */; };
 		B232AE061FD13A0100ABBA1D /* usercase_whiterect.png in Resources */ = {isa = PBXBuildFile; fileRef = B232AE011FD13A0100ABBA1D /* usercase_whiterect.png */; };
-		B25FB28E1FD451720032D18F /* SelectCaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B25FB28C1FD451720032D18F /* SelectCaseScene.cpp */; };
 		B25FB64E1FD6757F0032D18F /* bk_notification_info.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB6481FD6757F0032D18F /* bk_notification_info.png */; };
 		B25FB64F1FD6757F0032D18F /* notification_none.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB6491FD6757F0032D18F /* notification_none.png */; };
 		B25FB6501FD6757F0032D18F /* bk_notification.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB64A1FD6757F0032D18F /* bk_notification.png */; };
@@ -129,8 +128,6 @@
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
-		C411808C1FD7DFEB004ABE05 /* LoginScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C41180881FD7DFEA004ABE05 /* LoginScene.cpp */; };
-		C411808D1FD7DFEB004ABE05 /* UserCaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C411808B1FD7DFEB004ABE05 /* UserCaseScene.cpp */; };
 		C43E9E2D1FC8364E00CFB6EC /* bg_input_passwd.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2A1FC8364E00CFB6EC /* bg_input_passwd.png */; };
 		C43E9E2E1FC8364E00CFB6EC /* bg_input_account.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2C1FC8364E00CFB6EC /* bg_input_account.png */; };
 		C43E9E301FC843F300CFB6EC /* btn_register.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2F1FC843F300CFB6EC /* btn_register.png */; };
@@ -317,10 +314,6 @@
 		C41180761FD52E6C004ABE05 /* btn_select_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_select_cancel.png; sourceTree = "<group>"; };
 		C41180771FD52E6C004ABE05 /* select_meter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_meter.png; sourceTree = "<group>"; };
 		C41180781FD52E6C004ABE05 /* select_blue_rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_blue_rect.png; sourceTree = "<group>"; };
-		C41180881FD7DFEA004ABE05 /* LoginScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LoginScene.cpp; path = Login/LoginScene.cpp; sourceTree = "<group>"; };
-		C41180891FD7DFEB004ABE05 /* LoginScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginScene.h; path = Login/LoginScene.h; sourceTree = "<group>"; };
-		C411808A1FD7DFEB004ABE05 /* UserCaseScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = UserCaseScene.hpp; path = Login/UserCaseScene.hpp; sourceTree = "<group>"; };
-		C411808B1FD7DFEB004ABE05 /* UserCaseScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UserCaseScene.cpp; path = Login/UserCaseScene.cpp; sourceTree = "<group>"; };
 		C43E9E2A1FC8364E00CFB6EC /* bg_input_passwd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_input_passwd.png; sourceTree = "<group>"; };
 		C43E9E2C1FC8364E00CFB6EC /* bg_input_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_input_account.png; sourceTree = "<group>"; };
 		C43E9E2F1FC843F300CFB6EC /* btn_register.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_register.png; sourceTree = "<group>"; };
@@ -618,9 +611,6 @@
 		B262F7761FD7B95100EF887A /* SelectCase */ = {
 			isa = PBXGroup;
 			children = (
-				C41180881FD7DFEA004ABE05 /* LoginScene.cpp */,
-				C41180891FD7DFEB004ABE05 /* LoginScene.h */,
-				C411808B1FD7DFEB004ABE05 /* UserCaseScene.cpp */,
 				B262F7771FD7B95100EF887A /* select_white_rect.png */,
 				B262F7781FD7B95100EF887A /* select_sure.png */,
 				B262F7791FD7B95100EF887A /* select_line.png */,
@@ -629,7 +619,6 @@
 				B262F77C1FD7B95100EF887A /* btn_select_cancel.png */,
 				B262F77D1FD7B95100EF887A /* select_meter.png */,
 				B262F77E1FD7B95100EF887A /* select_blue_rect.png */,
-
 			);
 			path = SelectCase;
 			sourceTree = "<group>";
@@ -873,7 +862,6 @@
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				B232ADF41FD0FC7300ABBA1D /* btn_user_unselect.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
-
 				B262F7741FD7AB8B00EF887A /* alpha.png in Resources */,
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
 				C43E9E2E1FC8364E00CFB6EC /* bg_input_account.png in Resources */,
@@ -968,8 +956,6 @@
 				B262F79B1FD7BE8000EF887A /* RegisterScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				C45025511FCE9E7300596F38 /* NetWrokMangerData.cpp in Sources */,
-				C411808C1FD7DFEB004ABE05 /* LoginScene.cpp in Sources */,
-				C411808D1FD7DFEB004ABE05 /* UserCaseScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				B262F7951FD7BE7700EF887A /* PerfectCaseScene.cpp in Sources */,
 				B262F79C1FD7BE8000EF887A /* RegisterMessageScene.cpp in Sources */,
@@ -977,7 +963,6 @@
 				B262F78E1FD7B9C200EF887A /* LoginScene.cpp in Sources */,
 				B262F7941FD7BE7700EF887A /* SelectCaseScene.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
-				B223F1321FCE6B7100DA0315 /* RegisterScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

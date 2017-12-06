@@ -9,18 +9,8 @@
 #include "json/document.h"
 #include "json/writer.h"
 #include "json/stringbuffer.h"
-<<<<<<< HEAD
-using namespace cocos2d;
 #include "UserCaseScene.hpp"
-=======
-
-#include "UserCaseScene.hpp"
-
-
-
 using namespace cocos2d;
-
->>>>>>> 0bdfb25556ec566fd544334f0468261ab92ee8a3
 using namespace cocos2d::network;
 
 
