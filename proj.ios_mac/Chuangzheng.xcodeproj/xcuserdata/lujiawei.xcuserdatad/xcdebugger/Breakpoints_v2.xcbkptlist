@@ -82,11 +82,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "534081661.657244"
+            timestampString = "534241991.251808"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "LoginScene::createHudView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -98,11 +98,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "534081661.657656"
+            timestampString = "534241991.251907"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
             landmarkType = "7">
          </BreakpointContent>
@@ -114,11 +114,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "534081661.657928"
+            timestampString = "534241991.251953"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "LoginScene::printLog()"
             landmarkType = "7">
          </BreakpointContent>

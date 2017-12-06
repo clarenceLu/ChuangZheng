@@ -10,6 +10,9 @@ using namespace rapidjson; // 命名空间
 #include "NetWrokMangerData.hpp"
 #include "RegisterScene.hpp"
 #include "PerfectCaseScene.hpp"
+
+
+
 using namespace cocos2d::ui;
 using namespace std;
 using namespace cocos2d;
@@ -85,6 +88,9 @@ void LoginScene::createHudView(){
     
     NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
     
+    
+    
+    
     netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this));
     
     auto textFieldName = TextField::create("请输入账户名","Arial",30);
@@ -108,6 +114,9 @@ void LoginScene::createHudView(){
     this->addChild(textFieldPasswd);
     
 }
+
+
+
 
 
 void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
@@ -137,8 +146,6 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
     }
 
     this->printLog();
-
-    
 }
 
 
@@ -148,10 +155,6 @@ void LoginScene::printLog()
     CCLOG("%d",this->loginData["data"].Size());
     
 }
-
-
-
-
 void LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
     switch (type){
@@ -167,8 +170,6 @@ void LoginScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType ty
             break;
     }
 }
-
-
 void LoginScene::menuLoginCallback(Ref* pSender)
 {
 
