@@ -5,7 +5,17 @@
 #include "ui/CocosGUI.h"
 #include "network/HttpClient.h"
 #include <iostream>
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 #include "UserCaseScene.hpp"
+
+
+
+using namespace cocos2d;
+
 using namespace cocos2d::network;
 
 
@@ -29,6 +39,14 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(LoginScene);
+private:
+    
+    rapidjson::Document loginData;
+    
+    
+    void printLog();
+    
+    
 };
 
 #endif // __HELLOWORLD_SCENE_H__
