@@ -15,6 +15,7 @@
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
+Button* meterBtn;
 Scene *SelectCaseScene::createScene(){
     return SelectCaseScene::create();
 }
@@ -342,18 +343,21 @@ bool SelectCaseScene::init(){
     w4_content1->setTextColor(Color4B(79, 79, 79, 255));
     w4_content1->setAnchorPoint(Vec2(0, 0));
     whiteView4->addChild(w4_content1);
-    auto meterBtn=Button::create();
+   meterBtn=Button::create();
     meterBtn->loadTextures("select_line.png", "select_line.png");
     meterBtn->setTitleText("5000+");
     meterBtn->setTitleFontSize(40);
     meterBtn->setTitleColor(Color3B(178, 238, 94));
-    meterBtn->setPosition(Vec2(95, 10));
+    meterBtn->setPosition(Vec2(95, 5));
     meterBtn->setAnchorPoint(Vec2(0, 0));
     meterBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
 #pragma -在这里选择能走多少路
+            Layer *selectLayer=createSelectMeterLayer();
+            this->addChild(selectLayer,10);
+            selectLayer->setTag(10000);
         }
         default:
             break;
@@ -504,6 +508,158 @@ void SelectCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType t
     }
 }
 
+Layer*  SelectCaseScene::createSelectMeterLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    
+    auto contentV = Sprite::create("select_meter.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setContentSize(visibleSize);
+    contentV->setPosition(Vec2(0,0));
+    layer->addChild(contentV);
+    
+    auto button1=Button::create();
+    button1->loadTextures("alpha.png", "alpha.png");
+    button1->setPosition(Vec2(20, visibleSize.height-335));
+    button1->setAnchorPoint(Vec2(0, 0));
+    button1->setScale9Enabled(true);
+    button1->setContentSize(Size(visibleSize.width-40, 75));
+    button1->setColor(Color3B::BLACK);
+    button1->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(10000);
+            meterBtn->setTitleText("<50");
+        default:
+            break;
+    }
+    });
+    contentV->addChild(button1);
+    
+    auto button2=Button::create();
+    button2->loadTextures("alpha.png", "alpha.png");
+    button2->setPosition(Vec2(20, visibleSize.height-410));
+    button2->setAnchorPoint(Vec2(0, 0));
+    button2->setScale9Enabled(true);
+    button2->setContentSize(Size(visibleSize.width-40, 75));
+    button2->setColor(Color3B::BLACK);
+    button2->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(10000);
+            meterBtn->setTitleText("50");
+        default:
+            break;
+    }
+    });
+    contentV->addChild(button2);
+    
+    auto button3=Button::create();
+    button3->loadTextures("alpha.png", "alpha.png");
+    button3->setPosition(Vec2(20, visibleSize.height-485));
+    button3->setAnchorPoint(Vec2(0, 0));
+    button3->setScale9Enabled(true);
+    button3->setContentSize(Size(visibleSize.width-40, 75));
+    button3->setColor(Color3B::BLACK);
+    button3->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(10000);
+            meterBtn->setTitleText("100");
+        default:
+            break;
+    }
+    });
+    contentV->addChild(button3);
+    
+    auto button4=Button::create();
+    button4->loadTextures("alpha.png", "alpha.png");
+    button4->setPosition(Vec2(20, visibleSize.height-560));
+    button4->setAnchorPoint(Vec2(0, 0));
+    button4->setScale9Enabled(true);
+    button4->setContentSize(Size(visibleSize.width-40, 75));
+    button4->setColor(Color3B::BLACK);
+    button4->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(10000);
+            meterBtn->setTitleText("500");
+        default:
+            break;
+    }
+    });
+    contentV->addChild(button4);
+    
+    auto button5=Button::create();
+    button5->loadTextures("alpha.png", "alpha.png");
+    button5->setPosition(Vec2(20, visibleSize.height-635));
+    button5->setAnchorPoint(Vec2(0, 0));
+    button5->setScale9Enabled(true);
+    button5->setContentSize(Size(visibleSize.width-40, 75));
+    button5->setColor(Color3B::BLACK);
+    button5->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(10000);
+            meterBtn->setTitleText("1000");
+        default:
+            break;
+    }
+    });
+    contentV->addChild(button5);
+    
+    auto button6=Button::create();
+    button6->loadTextures("alpha.png", "alpha.png");
+    button6->setPosition(Vec2(20, visibleSize.height-710));
+    button6->setAnchorPoint(Vec2(0, 0));
+    button6->setScale9Enabled(true);
+    button6->setContentSize(Size(visibleSize.width-40, 75));
+    button6->setColor(Color3B::BLACK);
+    button6->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(10000);
+            meterBtn->setTitleText("5000");
+        default:
+            break;
+    }
+    });
+    contentV->addChild(button6);
+    
+    auto button7=Button::create();
+    button7->loadTextures("alpha.png", "alpha.png");
+    button7->setPosition(Vec2(20, visibleSize.height-785));
+    button7->setAnchorPoint(Vec2(0, 0));
+    button7->setScale9Enabled(true);
+    button7->setContentSize(Size(visibleSize.width-40, 75));
+    button7->setColor(Color3B::BLACK);
+    button7->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(10000);
+            meterBtn->setTitleText("5000+");
+        default:
+            break;
+    }
+    });
+    contentV->addChild(button7);
+    
+    return layer;
+}
+
+
+
 ScrollView* SelectCaseScene::createScrollV(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
@@ -519,6 +675,8 @@ ScrollView* SelectCaseScene::createScrollV(){
     return scrollView;
     
 }
+
+
 
 #pragma -Json         (读取本地的json)
 void SelectCaseScene::getJsonData(std::string filename, std::vector<data> &vec)

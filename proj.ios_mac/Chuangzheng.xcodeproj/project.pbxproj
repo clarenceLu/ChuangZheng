@@ -116,6 +116,7 @@
 		B25FB6511FD6757F0032D18F /* btn_notification_info.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB64B1FD6757F0032D18F /* btn_notification_info.png */; };
 		B25FB6521FD6757F0032D18F /* btn_notification_hospital.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB64C1FD6757F0032D18F /* btn_notification_hospital.png */; };
 		B25FB6531FD6757F0032D18F /* btn_notification_chat.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB64D1FD6757F0032D18F /* btn_notification_chat.png */; };
+		B262F7741FD7AB8B00EF887A /* alpha.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7721FD7AB8B00EF887A /* alpha.png */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -285,6 +286,7 @@
 		B25FB64B1FD6757F0032D18F /* btn_notification_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notification_info.png; sourceTree = "<group>"; };
 		B25FB64C1FD6757F0032D18F /* btn_notification_hospital.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notification_hospital.png; sourceTree = "<group>"; };
 		B25FB64D1FD6757F0032D18F /* btn_notification_chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notification_chat.png; sourceTree = "<group>"; };
+		B262F7721FD7AB8B00EF887A /* alpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alpha.png; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -622,6 +624,7 @@
 		C49D38441FC542E90092C808 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				B262F7721FD7AB8B00EF887A /* alpha.png */,
 				B25FB6471FD6757F0032D18F /* notification */,
 				B25FB2A41FD52E8C0032D18F /* SelectCase */,
 				B232ADFC1FD13A0100ABBA1D /* UserCase */,
@@ -789,6 +792,7 @@
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				B232ADF41FD0FC7300ABBA1D /* btn_user_unselect.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
+				B262F7741FD7AB8B00EF887A /* alpha.png in Resources */,
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
 				C43E9E2E1FC8364E00CFB6EC /* bg_input_account.png in Resources */,
 				B232ADEF1FD0FC7300ABBA1D /* btn_case_select.png in Resources */,

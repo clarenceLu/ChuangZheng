@@ -85,6 +85,7 @@ bool UserCaseScene::init(){
     return true;
 }
 
+//通知
 Layer* UserCaseScene::createInformLayer(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
@@ -164,7 +165,7 @@ Layer* UserCaseScene::createInformLayer(){
     
     return layer;
 }
-
+//复诊说明
 Layer* UserCaseScene::createNotificationInformLayer(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
@@ -201,7 +202,7 @@ Layer* UserCaseScene::createNotificationInformLayer(){
     layer->addChild(backBtn);
     return layer;
 }
-
+//病例
 Layer* UserCaseScene::createCaseLayer(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
@@ -230,7 +231,7 @@ Layer* UserCaseScene::createCaseLayer(){
     addBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
-            Director::getInstance()->popScene();
+            
         default:
             break;
     }

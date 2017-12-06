@@ -22,6 +22,9 @@ public:
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     
     cocos2d::ui::ScrollView* createScrollV();
+    cocos2d::Layer*  createSelectMeterLayer();
+    
+    
     
     //读取json数据
     typedef struct data
