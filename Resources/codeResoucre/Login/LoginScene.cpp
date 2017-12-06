@@ -61,26 +61,6 @@ void LoginScene::createHudView(){
     bg_input_passwd->setContentSize(Size(540,70));
     this->addChild(bg_input_passwd);
     
-    auto textFieldName = TextField::create("请输入账户名","Arial",30);
-    textFieldName->setMaxLength(40);
-    textFieldName->setTouchSize(Size(400, 54));
-    textFieldName->setAnchorPoint(Vec2(0,0));
-    textFieldName->setPosition(Vec2(130,735));
-    textFieldName->setContentSize(Size(400,54));
-    textFieldName->setTextColor(Color4B::BLACK);
-    textFieldName->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
-    this->addChild(textFieldName);
-    
-    auto textFieldPasswd = TextField::create("请输入密码","Arial",30);
-    textFieldPasswd->setMaxLength(40);
-    textFieldPasswd->setTouchSize(Size(400, 54));
-    textFieldPasswd->setAnchorPoint(Vec2(0,0));
-    textFieldPasswd->setPosition(Vec2(130,637));
-    textFieldPasswd->setContentSize(Size(400,54));
-    textFieldPasswd->setTextColor(Color4B::BLACK);
-    textFieldPasswd->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
-    this->addChild(textFieldPasswd);
-    
     auto LoginBtn = Menu::create();
     LoginBtn->setAnchorPoint(Vec2(0,0));
     LoginBtn->setPosition(Vec2(50,458));
@@ -112,6 +92,27 @@ void LoginScene::createHudView(){
     
     
     netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this));
+    
+    auto textFieldName = TextField::create("请输入账户名","Arial",30);
+    textFieldName->setMaxLength(40);
+    textFieldName->setTouchSize(Size(400, 54));
+    textFieldName->setAnchorPoint(Vec2(0,0));
+    textFieldName->setPosition(Vec2(130,735));
+    textFieldName->setContentSize(Size(400,54));
+    textFieldName->setTextColor(Color4B::BLACK);
+    textFieldName->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
+    this->addChild(textFieldName);
+    
+    auto textFieldPasswd = TextField::create("请输入密码","Arial",30);
+    textFieldPasswd->setMaxLength(40);
+    textFieldPasswd->setTouchSize(Size(400, 54));
+    textFieldPasswd->setAnchorPoint(Vec2(0,0));
+    textFieldPasswd->setPosition(Vec2(130,637));
+    textFieldPasswd->setContentSize(Size(400,54));
+    textFieldPasswd->setTextColor(Color4B::BLACK);
+    textFieldPasswd->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
+    this->addChild(textFieldPasswd);
+    
 }
 
 
@@ -175,10 +176,8 @@ void LoginScene::menuLoginCallback(Ref* pSender)
     MenuItem* item = (MenuItem*)pSender;
     int tag= item->getTag();
     if (tag==101) {
-                auto perfectSC=PerfectCaseScene::create();
-                Director::getInstance()->pushScene(perfectSC);
-//        auto registerScene=RegisterScene::createScene();
-//        Director::getInstance()->pushScene(registerScene);
+        auto registerScene=RegisterScene::createScene();
+        Director::getInstance()->pushScene(registerScene);
     }
     if (tag==100) {
         auto userCaseSC=UserCaseScene::create();
