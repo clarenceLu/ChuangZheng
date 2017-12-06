@@ -5,6 +5,7 @@
 #include "ui/CocosGUI.h"
 #include "network/HttpClient.h"
 #include <iostream>
+<<<<<<< HEAD
 #include "json/rapidjson.h"
 #include "json/document.h"
 #include "json/writer.h"
@@ -15,6 +16,9 @@
 
 
 using namespace cocos2d;
+=======
+#include "UserCaseScene.hpp"
+>>>>>>> 71f69d1b4a66c93c8b75d1b137d2deb86ddc7273
 using namespace cocos2d::network;
 
 

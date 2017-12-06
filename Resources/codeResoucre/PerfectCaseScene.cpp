@@ -9,7 +9,8 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
-#include "UserCaseScene.hpp"
+#include "SelectCaseScene.hpp"
+#include "RegisterScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -51,7 +52,8 @@ bool PerfectCaseScene::init(){
     step1Btn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            
+            auto step1SC=SelectCaseScene::create();
+            Director::getInstance()->pushScene(step1SC);
         }
         default:
             break;
@@ -109,73 +111,20 @@ bool PerfectCaseScene::init(){
     
     auto sureBtn=Button::create();
     sureBtn->loadTextures("btn_perfect_sure.png", "btn_perfect_sure.png");
-    sureBtn->setPosition(Vec2(visibleSize.width/2-135, visibleSize.height-930));
+    sureBtn->setPosition(Vec2(visibleSize.width/2-135, 100));
     sureBtn->setAnchorPoint(Vec2(0, 0));
     sureBtn->setScale(0.86);
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            
+            auto registerSC=RegisterScene::create();
+            Director::getInstance()->pushScene(registerSC);
         }
         default:
             break;
     }
     });
     this->addChild(sureBtn);
-    
-    auto bottom=Sprite::create("bk_perfect_bottom.png");
-    bottom->setPosition(Vec2(0, 0));
-    bottom->setAnchorPoint(Vec2(0, 0));
-    this->addChild(bottom);
-    
-    
-    auto caseCheckBox = CheckBox::create("btn_case_unselect.png","btn_case_select.png");
-    //设置CheckBox的位置
-    caseCheckBox->setPosition(Vec2(50,15));
-    caseCheckBox->setTag(0);
-    caseCheckBox->setAnchorPoint(Vec2(0, 0));
-    caseCheckBox->setScale(0.9);
-    //设置CheckBox是否可点击
-    caseCheckBox->setTouchEnabled(true);
-    caseCheckBox->addEventListener(CC_CALLBACK_2(PerfectCaseScene::checkBoxCallback,this));
-    //获取checkbox的选中状态
-    addChild(caseCheckBox);
-    
-    auto informCheckBox = CheckBox::create("btn_inform_unselect.png","btn_inform_select.png");
-    //设置CheckBox的位置
-    informCheckBox->setPosition(Vec2(200,15));
-    informCheckBox->setTag(1);
-    informCheckBox->setAnchorPoint(Vec2(0, 0));
-    informCheckBox->setScale(0.9);
-    //设置CheckBox是否可点击
-    informCheckBox->setTouchEnabled(true);
-    informCheckBox->addEventListener(CC_CALLBACK_2(PerfectCaseScene::checkBoxCallback,this));
-    //获取checkbox的选中状态
-    addChild(informCheckBox);
-    
-    auto dynamicCheckBox = CheckBox::create("btn_dynamic_unselect.png","btn_dynamic_select.png");
-    //设置CheckBox的位置
-    dynamicCheckBox->setPosition(Vec2(340,15));
-    dynamicCheckBox->setTag(2);
-    dynamicCheckBox->setAnchorPoint(Vec2(0, 0));
-    dynamicCheckBox->setScale(0.9);
-    //设置CheckBox是否可点击
-    dynamicCheckBox->setTouchEnabled(true);
-    dynamicCheckBox->addEventListener(CC_CALLBACK_2(PerfectCaseScene::checkBoxCallback,this));
-    //获取checkbox的选中状态
-    addChild(dynamicCheckBox);
-    
-    auto userCheckBox = CheckBox::create("btn_user_unselect.png","btn_user_select.png");
-    //设置CheckBox的位置
-    userCheckBox->setPosition(Vec2(520,15));
-    userCheckBox->setTag(3);
-    userCheckBox->setAnchorPoint(Vec2(0, 0));
-    userCheckBox->setScale(0.9);
-    //设置CheckBox是否可点击
-    userCheckBox->setTouchEnabled(true);
-    userCheckBox->addEventListener(CC_CALLBACK_2(PerfectCaseScene::checkBoxCallback,this));
-    //获取checkbox的选中状态
-    addChild(userCheckBox);
     
     return true;
 }
@@ -199,8 +148,6 @@ void PerfectCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
             if (tag==0) {
-                auto userCaseSC=UserCaseScene::create();
-                Director::getInstance()->replaceScene(userCaseSC);
             }
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
