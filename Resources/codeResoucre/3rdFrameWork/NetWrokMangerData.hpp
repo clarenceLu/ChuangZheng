@@ -31,12 +31,10 @@ public:
     
     void onHttpRequestCompleted(HttpClient* sender,HttpResponse* response);
     
-    
 private:
 
     NetWorkManger();
-    
-    
+
     
 };
 

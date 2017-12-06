@@ -265,6 +265,13 @@
 		B232AE011FD13A0100ABBA1D /* usercase_whiterect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usercase_whiterect.png; sourceTree = "<group>"; };
 		B25FB28C1FD451720032D18F /* SelectCaseScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SelectCaseScene.cpp; sourceTree = "<group>"; };
 		B25FB28D1FD451720032D18F /* SelectCaseScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SelectCaseScene.hpp; sourceTree = "<group>"; };
+		B25FB2A51FD52E8C0032D18F /* select_white_rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_white_rect.png; sourceTree = "<group>"; };
+		B25FB2A61FD52E8C0032D18F /* select_sure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_sure.png; sourceTree = "<group>"; };
+		B25FB2A71FD52E8C0032D18F /* select_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_line.png; sourceTree = "<group>"; };
+		B25FB2A81FD52E8C0032D18F /* bk_selectCase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_selectCase.png; sourceTree = "<group>"; };
+		B25FB2AA1FD52E8C0032D18F /* btn_select_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_select_cancel.png; sourceTree = "<group>"; };
+		B25FB2AB1FD52E8C0032D18F /* select_meter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_meter.png; sourceTree = "<group>"; };
+		B25FB2AC1FD52E8C0032D18F /* select_blue_rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_blue_rect.png; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -381,6 +388,7 @@
 				080E96DDFE201D6D7F000001 /* ios */,
 				503AE10617EB990700D1A890 /* mac */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				C41180821FD5305A004ABE05 /* Recovered References */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -572,6 +580,20 @@
 				C41180781FD52E6C004ABE05 /* select_blue_rect.png */,
 			);
 			path = SelectCase;
+			sourceTree = "<group>";
+		};
+		C41180821FD5305A004ABE05 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				B25FB2A71FD52E8C0032D18F /* select_line.png */,
+				B25FB2AC1FD52E8C0032D18F /* select_blue_rect.png */,
+				B25FB2A51FD52E8C0032D18F /* select_white_rect.png */,
+				B25FB2AA1FD52E8C0032D18F /* btn_select_cancel.png */,
+				B25FB2A81FD52E8C0032D18F /* bk_selectCase.png */,
+				B25FB2A61FD52E8C0032D18F /* select_sure.png */,
+				B25FB2AB1FD52E8C0032D18F /* select_meter.png */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		C45025491FCE9E1600596F38 /* 3rdFrameWork */ = {

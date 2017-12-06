@@ -2,13 +2,6 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
-#include "json/rapidjson.h"
-
-#include "json/document.h"
-
-#include "json/writer.h"
-
-#include "json/stringbuffer.h"
 
 
 using namespace rapidjson; // 命名空间
@@ -19,6 +12,7 @@ using namespace rapidjson; // 命名空间
 #include "PerfectCaseScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
+using namespace cocos2d;
 USING_NS_CC;
 
 Scene* LoginScene::createScene()
@@ -36,7 +30,6 @@ bool LoginScene::init()
         return false;
     }
     
-
     this->createHudView();
     
     return true;
@@ -126,22 +119,35 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
     std::string recieveData;
     recieveData.assign(data->begin(), data->end());
     
-    rapidjson::Document Jsondata;
+   // rapidjson::Document Jsondata;
     
-    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    this->loginData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
     
-    if (Jsondata.HasParseError()) {
+    if (this->loginData.HasParseError()) {
         
         return;
     }
-    if(Jsondata.HasMember("data")){
-        for(int i = 0; i < Jsondata["data"].Size(); i++) {
+    if(this->loginData.HasMember("data")){
+        for(int i = 0; i < this->loginData["data"].Size(); i++) {
             
-            rapidjson::Value& object = Jsondata["data"][i];
+            rapidjson::Value& object = this->loginData["data"][i];
             CCLOG("%s", object["artistheaderimageurl"].GetString());
         }
     }
+
+    this->printLog();
+
+    
 }
+
+
+void LoginScene::printLog()
+{
+    
+    CCLOG("%d",this->loginData["data"].Size());
+    
+}
+
 
 
 
