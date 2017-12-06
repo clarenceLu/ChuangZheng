@@ -9,7 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
-#include "SelectCaseScene.hpp"
+#include "PerfectCaseScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -24,22 +24,25 @@ bool UserCaseScene::init(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin =Director::getInstance()->getVisibleOrigin();
     
-    auto layer2=createInformLayer();
     auto layer1=createCaseLayer();
-    multLayer = LayerMultiplex::create(layer1, layer2, nullptr);
+    auto layer2=createInformLayer();
+    auto layer3=createDynamicLayer();
+    auto layer4=createUserInfoLayer();
+    multLayer = LayerMultiplex::create(layer1, layer2,layer3,layer4,nullptr);
     addChild(multLayer, 0);
     
     auto bottom=Sprite::create("bk_perfect_bottom.png");
     bottom->setPosition(Vec2(0, 0));
     bottom->setAnchorPoint(Vec2(0, 0));
+    bottom->setContentSize(Size(visibleSize.width, 100));
     this->addChild(bottom);
     
     auto caseCheckBox = CheckBox::create("btn_case_unselect.png","btn_case_select.png");
     //设置CheckBox的位置
-    caseCheckBox->setPosition(Vec2(50,15));
+    caseCheckBox->setPosition(Vec2(50,10));
     caseCheckBox->setTag(0);
     caseCheckBox->setAnchorPoint(Vec2(0, 0));
-    caseCheckBox->setScale(0.9);
+    caseCheckBox->setScale(0.87);
     //设置CheckBox是否可点击
     caseCheckBox->setTouchEnabled(true);
     caseCheckBox->setSelected(true);
@@ -49,10 +52,10 @@ bool UserCaseScene::init(){
     
     auto informCheckBox = CheckBox::create("btn_inform_unselect.png","btn_inform_select.png");
     //设置CheckBox的位置
-    informCheckBox->setPosition(Vec2(200,15));
+    informCheckBox->setPosition(Vec2(200,10));
     informCheckBox->setTag(1);
     informCheckBox->setAnchorPoint(Vec2(0, 0));
-    informCheckBox->setScale(0.9);
+    informCheckBox->setScale(0.87);
     //设置CheckBox是否可点击
     informCheckBox->setTouchEnabled(true);
     informCheckBox->addEventListener(CC_CALLBACK_2(UserCaseScene::checkBoxCallback,this));
@@ -61,10 +64,10 @@ bool UserCaseScene::init(){
     
     auto dynamicCheckBox = CheckBox::create("btn_dynamic_unselect.png","btn_dynamic_select.png");
     //设置CheckBox的位置
-    dynamicCheckBox->setPosition(Vec2(340,15));
+    dynamicCheckBox->setPosition(Vec2(340,10));
     dynamicCheckBox->setTag(2);
     dynamicCheckBox->setAnchorPoint(Vec2(0, 0));
-    dynamicCheckBox->setScale(0.9);
+    dynamicCheckBox->setScale(0.87);
     //设置CheckBox是否可点击
     dynamicCheckBox->setTouchEnabled(true);
     dynamicCheckBox->addEventListener(CC_CALLBACK_2(UserCaseScene::checkBoxCallback,this));
@@ -73,10 +76,10 @@ bool UserCaseScene::init(){
     
     auto userCheckBox = CheckBox::create("btn_user_unselect.png","btn_user_select.png");
     //设置CheckBox的位置
-    userCheckBox->setPosition(Vec2(520,15));
+    userCheckBox->setPosition(Vec2(520,10));
     userCheckBox->setTag(3);
     userCheckBox->setAnchorPoint(Vec2(0, 0));
-    userCheckBox->setScale(0.9);
+    userCheckBox->setScale(0.87);
     //设置CheckBox是否可点击
     userCheckBox->setTouchEnabled(true);
     userCheckBox->addEventListener(CC_CALLBACK_2(UserCaseScene::checkBoxCallback,this));
@@ -301,8 +304,8 @@ Layer* UserCaseScene::createCaseLayer(){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
-            auto selectScene= SelectCaseScene::create();
-            Director::getInstance()->pushScene(selectScene);
+            auto perfectScene= PerfectCaseScene::create();
+            Director::getInstance()->pushScene(perfectScene);
         }
         default:
             break;
@@ -325,7 +328,180 @@ Layer* UserCaseScene::createCaseLayer(){
     return layer;
 }
 
+//长征动态
+//个人资料
+Layer* UserCaseScene::createDynamicLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(255, 255, 255, 255));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(origin.x, origin.y));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    
+    return layer;
+}
 
+
+//个人资料
+Layer* UserCaseScene::createUserInfoLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(255, 255, 255, 255));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    
+    
+    auto bkView=Sprite::create("bk_userInfo.png");
+    bkView->setPosition(0,0);
+    bkView->setAnchorPoint(Vec2(0, 0));
+    bkView->setContentSize(Size(visibleSize.width, visibleSize.height));
+    layer->addChild(bkView);
+    
+    auto codeBtn=Button::create();
+    codeBtn->loadTextures("btn_userInfo_code.png", "btn_userInfo_code.png");
+    codeBtn->setPosition(Vec2(visibleSize.width-80, visibleSize.height-90));
+    codeBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    bkView->addChild(codeBtn);
+    
+    auto headImageBtn=Button::create();
+    headImageBtn->loadTextures("HelloWorld.png", "HelloWorld.png");
+    headImageBtn->setPosition(Vec2(52, 830));
+    headImageBtn->setAnchorPoint(Vec2(0, 0));
+    headImageBtn->setScale9Enabled(true);
+    headImageBtn->setContentSize(Size(141, 141));
+    headImageBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        {
+            Layer *headLayer= createAlbumLayer();
+            headLayer->setTag(200);
+            this->addChild(headLayer);
+        }
+        default:
+            break;
+    }
+    });
+    bkView->addChild(headImageBtn);
+    
+    auto userName = Label::createWithSystemFont("用户名：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    userName->setPosition(Point(233,886));
+    userName->setTextColor(Color4B(91, 144, 229, 255));
+    userName->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(userName);
+    
+    auto textFieldUser = TextField::create("抵抗力","Arial",35);
+    textFieldUser->setMaxLength(40);
+    textFieldUser->setTouchSize(Size(300, 50));
+    textFieldUser->setPosition(Vec2(380,886));
+    textFieldUser->setAnchorPoint(Vec2(0,0));
+    textFieldUser->setContentSize(Size(300,50));
+    textFieldUser->setTextColor(Color4B::BLACK);
+    textFieldUser->setPlaceHolderColor(Color4B::GRAY);
+    textFieldUser->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    textFieldUser->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
+    bkView->addChild(textFieldUser);
+    
+    auto lineV=Sprite::create("userInfo_line.png");
+    lineV->setPosition(Vec2(210, 880));
+    lineV->setAnchorPoint(Vec2(0, 0));
+    lineV->setScaleX(0.6);
+    bkView->addChild(lineV);
+    
+    auto sex = Label::createWithSystemFont("性别：","Arial",35,Size(140,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    sex->setPosition(Point(233,822));
+    sex->setTextColor(Color4B(91, 144, 229, 255));
+    sex->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(sex);
+    
+    auto textFieldSex = TextField::create("女","Arial",35);
+    textFieldSex->setMaxLength(40);
+    textFieldSex->setTouchSize(Size(80, 50));
+    textFieldSex->setPosition(Vec2(350,822));
+    textFieldSex->setAnchorPoint(Vec2(0,0));
+    textFieldSex->setContentSize(Size(80,50));
+    textFieldSex->setTextColor(Color4B::BLACK);
+    textFieldSex->setPlaceHolderColor(Color4B::GRAY);
+    textFieldSex->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    textFieldSex->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
+    bkView->addChild(textFieldSex);
+    
+    auto age = Label::createWithSystemFont("性别：","Arial",35,Size(140,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    age->setPosition(Point(412,822));
+    age->setTextColor(Color4B(91, 144, 229, 255));
+    age->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(age);
+    
+    auto textFieldAge = TextField::create("32","Arial",35);
+    textFieldAge->setMaxLength(40);
+    textFieldAge->setTouchSize(Size(120, 50));
+    textFieldAge->setPosition(Vec2(530,822));
+    textFieldAge->setAnchorPoint(Vec2(0,0));
+    textFieldAge->setContentSize(Size(120,50));
+    textFieldAge->setTextColor(Color4B::BLACK);
+    textFieldAge->setPlaceHolderColor(Color4B::GRAY);
+    textFieldAge->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    textFieldAge->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
+    bkView->addChild(textFieldAge);
+    
+    auto lineV2=Sprite::create("userInfo_line.png");
+    lineV2->setPosition(Vec2(210, 816));
+    lineV2->setAnchorPoint(Vec2(0, 0));
+    lineV2->setScaleX(0.6);
+    bkView->addChild(lineV2);
+    
+    
+    
+    
+    return layer;
+}
+
+TextField*  UserCaseScene::createBasicData(Sprite* bkView,Vec2* point,Value* name1,Value* name2){
+    auto userName = Label::createWithSystemFont("用户名：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    userName->setPosition(Point(233,886));
+    userName->setTextColor(Color4B(91, 144, 229, 255));
+    userName->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(userName);
+    
+    auto textFieldUser = TextField::create("抵抗力","Arial",35);
+    textFieldUser->setMaxLength(40);
+    textFieldUser->setTouchSize(Size(300, 50));
+    textFieldUser->setPosition(Vec2(380,886));
+    textFieldUser->setAnchorPoint(Vec2(0,0));
+    textFieldUser->setContentSize(Size(300,50));
+    textFieldUser->setTextColor(Color4B::BLACK);
+    textFieldUser->setPlaceHolderColor(Color4B::GRAY);
+    textFieldUser->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    textFieldUser->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
+    bkView->addChild(textFieldUser);
+    
+    auto lineV=Sprite::create("userInfo_line.png");
+    lineV->setPosition(Vec2(210, 880));
+    lineV->setAnchorPoint(Vec2(0, 0));
+    lineV->setScaleX(0.6);
+    bkView->addChild(lineV);
+    
+}
 
 
 //实现CheckBox回调函数
@@ -345,9 +521,7 @@ void UserCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
-            if (tag==0||tag==1) {
             multLayer->switchTo(tag);
-            }
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
             log("UNSELECTED!");
@@ -355,4 +529,96 @@ void UserCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
         default:
             break;
     }
+}
+void UserCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
+{
+    switch (type){
+            
+        case cocos2d::ui::TextField::EventType::INSERT_TEXT:
+            CCLOG("INSERT_TEXT");
+            
+            break;
+        case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
+            
+            CCLOG("DELETE_BACKWARD");
+        case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
+            
+            CCLOG("DETACH_WITH_IME");
+            
+            break;
+            
+    }
+    
+}
+
+
+
+
+
+//上传头像
+Layer* UserCaseScene::createAlbumLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("update_album.png");
+    contentV->setAnchorPoint(Vec2(0,1));
+    contentV->setPosition(Vec2(57,visibleSize.height-300));
+    contentV->setContentSize(Size(508,349));
+    layer->addChild(contentV);
+    
+    auto cameraBtn=Button::create();
+    cameraBtn->setScale9Enabled(true);
+    cameraBtn->setPosition(Vec2(0, 88));
+    cameraBtn->setAnchorPoint(Vec2(0,0));
+    cameraBtn->setContentSize(Size(contentV->getContentSize().width, 80));
+    cameraBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    contentV->addChild(cameraBtn);
+    
+    auto albumBtn=Button::create();
+    albumBtn->setScale9Enabled(true);
+    albumBtn->setPosition(Vec2(0, 168));
+    albumBtn->setAnchorPoint(Vec2(0,0));
+    albumBtn->setContentSize(Size(contentV->getContentSize().width, 80));
+    albumBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    contentV->addChild(albumBtn);
+    
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_message_cancel.png", "btn_message_cancel.png");
+    deleteBtn->setPosition(Vec2(111, 15));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->cocos2d::Node::setScale(0.87);
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(200);
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
+    
+    
+    return layer;
 }

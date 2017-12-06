@@ -32,8 +32,7 @@ bool PerfectCaseScene::init(){
     
     auto backBtn=Button::create();
     backBtn->loadTextures("btn_register_return.png", "btn_register_return.png");
-    backBtn->setPosition(Vec2(80, visibleSize.height-90));
-    backBtn->setScale(0.87);
+    backBtn->setPosition(Vec2(80, visibleSize.height-85));
     backBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
@@ -117,8 +116,6 @@ bool PerfectCaseScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            auto registerSC=RegisterScene::create();
-            Director::getInstance()->pushScene(registerSC);
         }
         default:
             break;

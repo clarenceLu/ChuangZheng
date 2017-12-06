@@ -175,10 +175,8 @@ void LoginScene::menuLoginCallback(Ref* pSender)
     MenuItem* item = (MenuItem*)pSender;
     int tag= item->getTag();
     if (tag==101) {
-                auto perfectSC=PerfectCaseScene::create();
-                Director::getInstance()->pushScene(perfectSC);
-//        auto registerScene=RegisterScene::createScene();
-//        Director::getInstance()->pushScene(registerScene);
+        auto registerScene=RegisterScene::createScene();
+        Director::getInstance()->pushScene(registerScene);
     }
     if (tag==100) {
         auto userCaseSC=UserCaseScene::create();
