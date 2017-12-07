@@ -404,6 +404,43 @@ Layer* UserCaseScene::createUserInfoLayer(){
     });
     bkView->addChild(headImageBtn);
     
+    auto exitBtn=Button::create();
+    exitBtn->loadTextures("btn_userInfo_back.png", "btn_userInfo_back.png");
+    exitBtn->setPosition(Vec2(visibleSize.width/2-130, 154));
+    exitBtn->setAnchorPoint(Vec2(0, 0));
+    exitBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    bkView->addChild(exitBtn);
+//密码修改
+    auto judgeBtn=Button::create();
+    judgeBtn->loadTextures("userInfo_judge.png", "userInfo_judge.png");
+    judgeBtn->setPosition(Vec2(visibleSize.width-90, 338));
+    judgeBtn->setAnchorPoint(Vec2(0, 0));
+    judgeBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    bkView->addChild(judgeBtn);
+    //手势锁
+    auto keyCheckBox = CheckBox::create("btn_userInfo_OFF.png","btn_userInfo_ON.png");
+    //设置CheckBox的位置
+    keyCheckBox->setPosition(Vec2(visibleSize.width-180, 268));
+    keyCheckBox->setTag(10);
+    keyCheckBox->setAnchorPoint(Vec2(0, 0));
+    //设置CheckBox是否可点击
+    keyCheckBox->setTouchEnabled(true);
+    keyCheckBox->addEventListener(CC_CALLBACK_2(UserCaseScene::checkBoxCallback,this));
+    //获取checkbox的选中状态
+    bkView->addChild(keyCheckBox);
+    
     auto userName = Label::createWithSystemFont("用户名：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     userName->setPosition(Point(233,886));
     userName->setTextColor(Color4B(91, 144, 229, 255));
@@ -470,37 +507,68 @@ Layer* UserCaseScene::createUserInfoLayer(){
     lineV2->setScaleX(0.6);
     bkView->addChild(lineV2);
     
+    auto textfieldName=createBasicData(bkView, Vec2(59, 758), "真实姓名：", "张牧之");
+    auto textfieldNum=createBasicData(bkView, Vec2(59, 688), "证件号：", "未填写");
+     auto textfieldTel1=createBasicData(bkView, Vec2(59, 618), "电话：", "未填写");
+    auto textfieldTel2=createBasicData(bkView, Vec2(59, 548), "电话1：", "未填写");
+    auto textfieldTel3=createBasicData(bkView, Vec2(59, 478), "电话2：", "未填写");
+    auto textfieldCaseNum=createBasicData(bkView, Vec2(59, 408), "病历号：", "未填写");
+    
+    auto password = Label::createWithSystemFont("密码修改","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    password->setPosition(Vec2(59, 338));
+    password->setTextColor(Color4B(91, 144, 229, 255));
+    password->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(password);
+    auto lineV3=Sprite::create("userInfo_line.png");
+    lineV3->setPosition(Vec2(51, 332));
+    lineV3->setAnchorPoint(Vec2(0, 0));
+    lineV3->setScaleX(0.85);
+    bkView->addChild(lineV3);
+    
+    auto key = Label::createWithSystemFont("手势锁：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    key->setPosition(Vec2(59, 268));
+    key->setTextColor(Color4B(91, 144, 229, 255));
+    key->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(key);
+    auto lineV4=Sprite::create("userInfo_line.png");
+    lineV4->setPosition(Vec2(51, 262));
+    lineV4->setAnchorPoint(Vec2(0, 0));
+    lineV4->setScaleX(0.85);
+    bkView->addChild(lineV4);
     
     
     
     return layer;
 }
 
-TextField*  UserCaseScene::createBasicData(Sprite* bkView,Vec2* point,Value* name1,Value* name2){
-    auto userName = Label::createWithSystemFont("用户名：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    userName->setPosition(Point(233,886));
+TextField*  UserCaseScene::createBasicData(Sprite* bkView,Vec2 point,string name1,string name2){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto userName = Label::createWithSystemFont(name1,"Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    userName->setPosition(point);
     userName->setTextColor(Color4B(91, 144, 229, 255));
     userName->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(userName);
     
-    auto textFieldUser = TextField::create("抵抗力","Arial",35);
+    auto textFieldUser = TextField::create(name2,"Arial",35);
     textFieldUser->setMaxLength(40);
-    textFieldUser->setTouchSize(Size(300, 50));
-    textFieldUser->setPosition(Vec2(380,886));
-    textFieldUser->setAnchorPoint(Vec2(0,0));
-    textFieldUser->setContentSize(Size(300,50));
+    textFieldUser->setTouchSize(Size(visibleSize.width-300, 50));
+    textFieldUser->setPosition(Vec2(visibleSize.width-70,point.y));
+    textFieldUser->setAnchorPoint(Vec2(1,0));
+    textFieldUser->setContentSize(Size(visibleSize.width-300,50));
     textFieldUser->setTextColor(Color4B::BLACK);
     textFieldUser->setPlaceHolderColor(Color4B::GRAY);
-    textFieldUser->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    textFieldUser->setTextHorizontalAlignment(TextHAlignment::RIGHT);
     textFieldUser->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
     bkView->addChild(textFieldUser);
     
     auto lineV=Sprite::create("userInfo_line.png");
-    lineV->setPosition(Vec2(210, 880));
+    lineV->setPosition(Vec2(51, point.y-6));
     lineV->setAnchorPoint(Vec2(0, 0));
-    lineV->setScaleX(0.6);
+    lineV->setScaleX(0.85);
     bkView->addChild(lineV);
     
+    return textFieldUser;
 }
 
 
@@ -510,18 +578,28 @@ void UserCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
     CheckBox* item = (CheckBox*)ref;
     int tag= item->getTag();
     if (type==cocos2d::ui::CheckBox::EventType::SELECTED) {
+        if (tag==10) {
+//手势锁
+        }else{
+        //切换按钮的高亮
         for (int i=0; i<4; i++) {
             if (i!=tag) {
                 CheckBox * checkBox=(CheckBox*)this->getChildByTag(i);
                 checkBox->setSelected(false);
             }
         }
+        }
     }
     switch (type)
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
+            if (tag==10) {
+                //手势锁
+            }else{
+                //切换页面
             multLayer->switchTo(tag);
+            }
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
             log("UNSELECTED!");
