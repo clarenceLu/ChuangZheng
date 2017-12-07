@@ -27,7 +27,7 @@ public:
     
     static NetWorkManger* sharedWorkManger();
     
-    void sendMessage(string UrlStr,const ccHttpRequestCallback& callback,CCDictionary *requestData);
+    void sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr);
     
     
     void onHttpRequestCompleted(HttpClient* sender,HttpResponse* response);
