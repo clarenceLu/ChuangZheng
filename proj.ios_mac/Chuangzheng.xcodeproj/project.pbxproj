@@ -126,13 +126,6 @@
 		B262F7AA1FD7D92300EF887A /* userInfo_line.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7A81FD7D92300EF887A /* userInfo_line.png */; };
 		B262F7AB1FD7D92300EF887A /* userInfo_judge.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7A91FD7D92300EF887A /* userInfo_judge.png */; };
 		B262F7BF1FD907D100EF887A /* btn_step4_sure.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7AD1FD907D000EF887A /* btn_step4_sure.png */; };
-		B262F7C01FD907D100EF887A /* 图层-930.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7AE1FD907D000EF887A /* 图层-930.png */; };
-		B262F7C11FD907D100EF887A /* u=818626559,3377865489&fm=27&gp=0.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7AF1FD907D000EF887A /* u=818626559,3377865489&fm=27&gp=0.png */; };
-		B262F7C21FD907D100EF887A /* 选择主治医生.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B01FD907D000EF887A /* 选择主治医生.png */; };
-		B262F7C31FD907D100EF887A /* 搜索.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B11FD907D000EF887A /* 搜索.png */; };
-		B262F7C41FD907D100EF887A /* 搜索框.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B21FD907D000EF887A /* 搜索框.png */; };
-		B262F7C51FD907D100EF887A /* 圆角矩形-836-拷贝.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B31FD907D000EF887A /* 圆角矩形-836-拷贝.png */; };
-		B262F7C61FD907D100EF887A /* live.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B41FD907D000EF887A /* live.png */; };
 		B262F7C71FD907D100EF887A /* btn_step2_sure.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B61FD907D100EF887A /* btn_step2_sure.png */; };
 		B262F7C81FD907D100EF887A /* bk_step2.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B71FD907D100EF887A /* bk_step2.png */; };
 		B262F7C91FD907D100EF887A /* btn_step3_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7B91FD907D100EF887A /* btn_step3_camera.png */; };
@@ -143,6 +136,14 @@
 		B262F7CE1FD907D100EF887A /* bk_step3_next.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7BE1FD907D100EF887A /* bk_step3_next.png */; };
 		B262F7D11FD9081200EF887A /* SelectStep2Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B262F7CF1FD9081200EF887A /* SelectStep2Scene.cpp */; };
 		B262F7DC1FD91C6C00EF887A /* SelectStep3Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B262F7DA1FD91C6C00EF887A /* SelectStep3Scene.cpp */; };
+		B262F7DF1FD9322A00EF887A /* SelectStep4Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B262F7DD1FD9322A00EF887A /* SelectStep4Scene.cpp */; };
+		B262F7E71FD935E000EF887A /* bk_step4.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7E01FD935DF00EF887A /* bk_step4.png */; };
+		B262F7E81FD935E000EF887A /* btn_step4_unselect.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7E11FD935DF00EF887A /* btn_step4_unselect.png */; };
+		B262F7E91FD935E000EF887A /* bk_headIV.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7E21FD935E000EF887A /* bk_headIV.png */; };
+		B262F7EA1FD935E000EF887A /* bk_tableView_white.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7E31FD935E000EF887A /* bk_tableView_white.png */; };
+		B262F7EB1FD935E000EF887A /* btn_step4_search.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7E41FD935E000EF887A /* btn_step4_search.png */; };
+		B262F7EC1FD935E000EF887A /* bk_step4_search.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7E51FD935E000EF887A /* bk_step4_search.png */; };
+		B262F7ED1FD935E000EF887A /* btn_step4_select.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F7E61FD935E000EF887A /* btn_step4_select.png */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -322,13 +323,6 @@
 		B262F7A81FD7D92300EF887A /* userInfo_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userInfo_line.png; sourceTree = "<group>"; };
 		B262F7A91FD7D92300EF887A /* userInfo_judge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userInfo_judge.png; sourceTree = "<group>"; };
 		B262F7AD1FD907D000EF887A /* btn_step4_sure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_step4_sure.png; sourceTree = "<group>"; };
-		B262F7AE1FD907D000EF887A /* 图层-930.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "图层-930.png"; sourceTree = "<group>"; };
-		B262F7AF1FD907D000EF887A /* u=818626559,3377865489&fm=27&gp=0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "u=818626559,3377865489&fm=27&gp=0.png"; sourceTree = "<group>"; };
-		B262F7B01FD907D000EF887A /* 选择主治医生.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "选择主治医生.png"; sourceTree = "<group>"; };
-		B262F7B11FD907D000EF887A /* 搜索.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "搜索.png"; sourceTree = "<group>"; };
-		B262F7B21FD907D000EF887A /* 搜索框.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "搜索框.png"; sourceTree = "<group>"; };
-		B262F7B31FD907D000EF887A /* 圆角矩形-836-拷贝.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "圆角矩形-836-拷贝.png"; sourceTree = "<group>"; };
-		B262F7B41FD907D000EF887A /* live.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = live.png; sourceTree = "<group>"; };
 		B262F7B61FD907D100EF887A /* btn_step2_sure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_step2_sure.png; sourceTree = "<group>"; };
 		B262F7B71FD907D100EF887A /* bk_step2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_step2.png; sourceTree = "<group>"; };
 		B262F7B91FD907D100EF887A /* btn_step3_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_step3_camera.png; sourceTree = "<group>"; };
@@ -341,6 +335,15 @@
 		B262F7D01FD9081200EF887A /* SelectStep2Scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SelectStep2Scene.hpp; sourceTree = "<group>"; };
 		B262F7DA1FD91C6C00EF887A /* SelectStep3Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SelectStep3Scene.cpp; sourceTree = "<group>"; };
 		B262F7DB1FD91C6C00EF887A /* SelectStep3Scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SelectStep3Scene.hpp; sourceTree = "<group>"; };
+		B262F7DD1FD9322A00EF887A /* SelectStep4Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SelectStep4Scene.cpp; sourceTree = "<group>"; };
+		B262F7DE1FD9322A00EF887A /* SelectStep4Scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SelectStep4Scene.hpp; sourceTree = "<group>"; };
+		B262F7E01FD935DF00EF887A /* bk_step4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_step4.png; sourceTree = "<group>"; };
+		B262F7E11FD935DF00EF887A /* btn_step4_unselect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_step4_unselect.png; sourceTree = "<group>"; };
+		B262F7E21FD935E000EF887A /* bk_headIV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_headIV.png; sourceTree = "<group>"; };
+		B262F7E31FD935E000EF887A /* bk_tableView_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_tableView_white.png; sourceTree = "<group>"; };
+		B262F7E41FD935E000EF887A /* btn_step4_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_step4_search.png; sourceTree = "<group>"; };
+		B262F7E51FD935E000EF887A /* bk_step4_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_step4_search.png; sourceTree = "<group>"; };
+		B262F7E61FD935E000EF887A /* btn_step4_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_step4_select.png; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -686,6 +689,8 @@
 				B262F7CF1FD9081200EF887A /* SelectStep2Scene.cpp */,
 				B262F7DB1FD91C6C00EF887A /* SelectStep3Scene.hpp */,
 				B262F7DA1FD91C6C00EF887A /* SelectStep3Scene.cpp */,
+				B262F7DE1FD9322A00EF887A /* SelectStep4Scene.hpp */,
+				B262F7DD1FD9322A00EF887A /* SelectStep4Scene.cpp */,
 			);
 			path = PerfectCase;
 			sourceTree = "<group>";
@@ -718,14 +723,14 @@
 		B262F7AC1FD907D000EF887A /* step4 */ = {
 			isa = PBXGroup;
 			children = (
+				B262F7E21FD935E000EF887A /* bk_headIV.png */,
+				B262F7E51FD935E000EF887A /* bk_step4_search.png */,
+				B262F7E01FD935DF00EF887A /* bk_step4.png */,
+				B262F7E31FD935E000EF887A /* bk_tableView_white.png */,
+				B262F7E41FD935E000EF887A /* btn_step4_search.png */,
+				B262F7E61FD935E000EF887A /* btn_step4_select.png */,
+				B262F7E11FD935DF00EF887A /* btn_step4_unselect.png */,
 				B262F7AD1FD907D000EF887A /* btn_step4_sure.png */,
-				B262F7AE1FD907D000EF887A /* 图层-930.png */,
-				B262F7AF1FD907D000EF887A /* u=818626559,3377865489&fm=27&gp=0.png */,
-				B262F7B01FD907D000EF887A /* 选择主治医生.png */,
-				B262F7B11FD907D000EF887A /* 搜索.png */,
-				B262F7B21FD907D000EF887A /* 搜索框.png */,
-				B262F7B31FD907D000EF887A /* 圆角矩形-836-拷贝.png */,
-				B262F7B41FD907D000EF887A /* live.png */,
 			);
 			path = step4;
 			sourceTree = "<group>";
@@ -926,15 +931,14 @@
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				B262F7A31FD7C27900EF887A /* bk_userInfo.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
-				B262F7C21FD907D100EF887A /* 选择主治医生.png in Resources */,
 				B223F12E1FCE6B5500DA0315 /* bk_register.png in Resources */,
 				B25FB6501FD6757F0032D18F /* bk_notification.png in Resources */,
 				B25FB6531FD6757F0032D18F /* btn_notification_chat.png in Resources */,
 				B262F7AB1FD7D92300EF887A /* userInfo_judge.png in Resources */,
+				B262F7E71FD935E000EF887A /* bk_step4.png in Resources */,
 				B223F1411FCEAB0E00DA0315 /* btn_update_head.png in Resources */,
 				B223F13D1FCEAB0E00DA0315 /* bk_register_message.png in Resources */,
 				B223F13E1FCEAB0E00DA0315 /* update_album.png in Resources */,
-				B262F7C61FD907D100EF887A /* live.png in Resources */,
 				B25FB6521FD6757F0032D18F /* btn_notification_hospital.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				B232ADEA1FD0FC7300ABBA1D /* btn_case_unselect.png in Resources */,
@@ -949,6 +953,7 @@
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				B262F7741FD7AB8B00EF887A /* alpha.png in Resources */,
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
+				B262F7ED1FD935E000EF887A /* btn_step4_select.png in Resources */,
 				B262F7CB1FD907D100EF887A /* btn_step3_cancel.png in Resources */,
 				C43E9E2E1FC8364E00CFB6EC /* bg_input_account.png in Resources */,
 				B232ADEF1FD0FC7300ABBA1D /* btn_case_select.png in Resources */,
@@ -961,8 +966,7 @@
 				B262F7BF1FD907D100EF887A /* btn_step4_sure.png in Resources */,
 				B232ADE61FD0FC7300ABBA1D /* step4.png in Resources */,
 				B232AE041FD13A0100ABBA1D /* usercase_bluerect.png in Resources */,
-				B262F7C31FD907D100EF887A /* 搜索.png in Resources */,
-				B262F7C41FD907D100EF887A /* 搜索框.png in Resources */,
+				B262F7EA1FD935E000EF887A /* bk_tableView_white.png in Resources */,
 				B223F1421FCEAB0E00DA0315 /* message_select_woman.png in Resources */,
 				B25FB64E1FD6757F0032D18F /* bk_notification_info.png in Resources */,
 				B262F7CA1FD907D100EF887A /* btn_step3_sure.png in Resources */,
@@ -979,13 +983,14 @@
 				B232AE051FD13A0100ABBA1D /* usercase_detail.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
+				B262F7E91FD935E000EF887A /* bk_headIV.png in Resources */,
+				B262F7E81FD935E000EF887A /* btn_step4_unselect.png in Resources */,
 				B232ADE91FD0FC7300ABBA1D /* step2.png in Resources */,
 				B232ADEB1FD0FC7300ABBA1D /* step1.png in Resources */,
 				B223F12A1FCE6B5500DA0315 /* btn_register_return.png in Resources */,
 				B262F7811FD7B95100EF887A /* select_sure.png in Resources */,
 				B25FB6511FD6757F0032D18F /* btn_notification_info.png in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
-				B262F7C11FD907D100EF887A /* u=818626559,3377865489&fm=27&gp=0.png in Resources */,
 				B262F7801FD7B95100EF887A /* select_white_rect.png in Resources */,
 				B262F7831FD7B95100EF887A /* bk_selectCase.png in Resources */,
 				B232ADEE1FD0FC7300ABBA1D /* btn_dynamic_unselect.png in Resources */,
@@ -1003,9 +1008,9 @@
 				B223F1291FCE6B5500DA0315 /* register_first_use.png in Resources */,
 				B223F12F1FCE6B5500DA0315 /* btn_register_sure.png in Resources */,
 				B232ADF31FD0FC7300ABBA1D /* btn_inform_unselect.png in Resources */,
-				B262F7C51FD907D100EF887A /* 圆角矩形-836-拷贝.png in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
+				B262F7EB1FD935E000EF887A /* btn_step4_search.png in Resources */,
 				B262F7AA1FD7D92300EF887A /* userInfo_line.png in Resources */,
 				B262F7841FD7B95100EF887A /* select_circle.png in Resources */,
 				B223F13F1FCEAB0E00DA0315 /* select_sure.png in Resources */,
@@ -1015,11 +1020,11 @@
 				B223F1401FCEAB0E00DA0315 /* message_select_man.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
 				B262F7A61FD7C27900EF887A /* btn_userInfo_back.png in Resources */,
-				B262F7C01FD907D100EF887A /* 图层-930.png in Resources */,
 				B232ADF81FD11FB500ABBA1D /* selfBuildCase.json in Resources */,
 				B262F7A41FD7C27900EF887A /* btn_userInfo_ON.png in Resources */,
 				B232ADE81FD0FC7300ABBA1D /* step3.png in Resources */,
 				B262F7A51FD7C27900EF887A /* btn_userInfo_code.png in Resources */,
+				B262F7EC1FD935E000EF887A /* bk_step4_search.png in Resources */,
 				B232ADE71FD0FC7300ABBA1D /* btn_inform_select.png in Resources */,
 				46880B7B19C43A67006E1F66 /* CloseNormal.png in Resources */,
 				B232AE031FD13A0100ABBA1D /* bk_usercase.png in Resources */,
@@ -1061,6 +1066,7 @@
 				B262F78D1FD7B9C200EF887A /* UserCaseScene.cpp in Sources */,
 				B262F78E1FD7B9C200EF887A /* LoginScene.cpp in Sources */,
 				B262F7DC1FD91C6C00EF887A /* SelectStep3Scene.cpp in Sources */,
+				B262F7DF1FD9322A00EF887A /* SelectStep4Scene.cpp in Sources */,
 				B262F7941FD7BE7700EF887A /* SelectCaseScene.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);

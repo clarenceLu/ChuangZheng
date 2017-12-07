@@ -75,6 +75,7 @@ bool SelectStep2Scene::init(){
 };
 
 
+
 void SelectStep2Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
     switch (type){

@@ -13,7 +13,7 @@
 #include "RegisterScene.hpp"
 #include "SelectStep2Scene.hpp"
 #include "SelectStep3Scene.hpp"
-
+#include "SelectStep4Scene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -105,7 +105,8 @@ bool PerfectCaseScene::init(){
     step4Btn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            
+            auto step4SC=SelectStep4Scene::create();
+            Director::getInstance()->pushScene(step4SC);
         }
         default:
             break;
