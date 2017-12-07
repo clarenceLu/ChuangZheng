@@ -21,7 +21,7 @@ public:
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
     
-    cocos2d::ui::TextField*  createBasicData(cocos2d::Sprite* bkView,cocos2d::Vec2* point,cocos2d::Value* name1,cocos2d::Value* name2);
+    cocos2d::ui::TextField*  createBasicData(cocos2d::Sprite* bkView,cocos2d::Vec2 point,std::string name1,std::string name2);
     
     cocos2d::Layer* createCaseLayer();
     
