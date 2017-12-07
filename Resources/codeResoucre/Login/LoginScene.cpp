@@ -89,9 +89,29 @@ void LoginScene::createHudView(){
     NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
     
     
+    CCDictionary * pDict = CCDictionary::create();
+    
+    pDict->setObject(CCString::create("value1"), "key1");
+    
+    pDict->setObject(CCString::create("value2"), "key2");
     
     
-    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this));
+    CCLOG("%s",pDict->valueForKey("key1")->getCString());
+    CCLOG("%s",pDict->valueForKey("key2")->getCString());
+    
+    
+    for(int i =0 ;i<pDict->allKeys()->count();i++){
+        
+        CCString *str =(CCString*)pDict->allKeys()->getObjectAtIndex(i);
+
+        CCLOG("%s",str->getCString());
+        
+        CCLOG("%s",pDict->valueForKey(str->getCString())->getCString());
+    }
+    
+    
+    
+    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),nullptr);
     
     auto textFieldName = TextField::create("请输入账户名","Arial",30);
     textFieldName->setMaxLength(40);

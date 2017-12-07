@@ -8,13 +8,14 @@
 #ifndef NetWrokMangerData_hpp
 #define NetWrokMangerData_hpp
 
-#include <cocos2d.h>
 #include <stdio.h>
+#include "cocos2d.h"
 #include "network/HttpClient.h"
 #include <iostream>
 
 using namespace cocos2d::network;
 using namespace std;
+using namespace cocos2d;
 
 class NetWorkManger:public cocos2d::Ref
 {
@@ -26,7 +27,7 @@ public:
     
     static NetWorkManger* sharedWorkManger();
     
-    void sendMessage(string UrlStr,const ccHttpRequestCallback& callback);
+    void sendMessage(string UrlStr,const ccHttpRequestCallback& callback,CCDictionary *requestData);
     
     
     void onHttpRequestCompleted(HttpClient* sender,HttpResponse* response);
