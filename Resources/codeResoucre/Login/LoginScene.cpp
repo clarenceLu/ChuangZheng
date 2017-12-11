@@ -90,8 +90,74 @@ void LoginScene::createHudView(){
     
     
     
+//    using rapidjson::Value;
+//    rapidjson::Document Jsondata;
+//
+//     Value item(Type::kObjectType);
+//
+//    using rapidjson::Document;
+//    Document doc;
+//    string      stringFromStream;
+//
+//    auto & contents =doc["content"];;
+//    item.AddMember("key", "word5",Jsondata.GetAllocator());
+//    item.AddMember("value", "单词5",Jsondata.GetAllocator());
+//    contents.PushBack(item, Jsondata.GetAllocator());
+//
+//    StringBuffer buffer;      // in rapidjson/stringbuffer.h
+//    Writer<StringBuffer> writer(buffer); // in rapidjson/writer.h
+//    Jsondata.Accept(writer);
+//
+//    CCLOG("%s",buffer.GetString());
+//
+//
     
-    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this));
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    rapidjson::Value array(rapidjson::kArrayType);
+    rapidjson::Value object(rapidjson::kObjectType);
+    object.AddMember("int", 1, allocator);
+    object.AddMember("double", 1.0, allocator);
+    object.AddMember("bool", true, allocator);
+    object.AddMember("hello", "HelloWorld", allocator);
+    array.PushBack(object, allocator);
+
+    document.AddMember("json", array, allocator);
+
+    StringBuffer buffer;
+    rapidjson::Writer<StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    
+    CCLOG("%s", buffer.GetString());
+    
+
+
+    
+    
+    CCDictionary * pDict = CCDictionary::create();
+    
+    pDict->setObject(CCString::create("value1"), "key1");
+    
+    pDict->setObject(CCString::create("value2"), "key2");
+    
+    
+    CCLOG("%s",pDict->valueForKey("key1")->getCString());
+    CCLOG("%s",pDict->valueForKey("key2")->getCString());
+    
+    
+    for(int i =0 ;i<pDict->allKeys()->count();i++){
+        
+        CCString *str =(CCString*)pDict->allKeys()->getObjectAtIndex(i);
+
+        CCLOG("%s",str->getCString());
+        
+        CCLOG("%s",pDict->valueForKey(str->getCString())->getCString());
+    }
+    
+    
+    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),(char *)buffer.GetString());
     
     auto textFieldName = TextField::create("请输入账户名","Arial",30);
     textFieldName->setMaxLength(40);
@@ -114,11 +180,6 @@ void LoginScene::createHudView(){
     this->addChild(textFieldPasswd);
     
 }
-
-
-
-
-
 void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
 {
     if (!response)

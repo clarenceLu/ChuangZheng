@@ -696,6 +696,18 @@ void SelectCaseScene::getJsonData(std::string filename, std::vector<data> &vec)
         {
             rapidjson::Value& object = doc["selfBuildCase"]["step1"];
             data mydata;
+            
+            
+            
+            
+            
+            
+            //mydata.content =
+            
+            
+            
+            
+            
 //            for (rapidjson::SizeType i = 0; i < object.Size(); i++)
 //            {
 //                const rapidjson::Value &p = object[i];

@@ -21,6 +21,7 @@
 using namespace rapidjson; // 命名空间
 using namespace std;
 using namespace cocos2d::network;
+using namespace cocos2d;
 
 NetWorkManger::NetWorkManger()
 {
@@ -41,8 +42,11 @@ NetWorkManger * NetWorkManger::sharedWorkManger()
     return  &instance;
 }
 
-void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callback)
+void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr)
 {
+    
+    
+
     
     HttpRequest* request = new  HttpRequest();
 
@@ -51,6 +55,9 @@ void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callb
     
     request->setRequestType(HttpRequest::Type::POST);
     
+    request->setUserData(requestDataStr);
+    
+
     
     request->setResponseCallback(callback);
 
