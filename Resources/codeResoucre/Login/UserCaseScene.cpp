@@ -10,6 +10,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "PerfectCaseScene.hpp"
+#include "ChatUserDetailScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -140,6 +141,12 @@ Layer* UserCaseScene::createInformLayer(){
     chatBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+#pragma-聊天界面
+            auto chatSC=ChatUserDetailScene::createScene();
+            Director::getInstance()->pushScene(chatSC);
+            
+        }
         default:
             break;
     }
@@ -329,7 +336,6 @@ Layer* UserCaseScene::createCaseLayer(){
 }
 
 //长征动态
-//个人资料
 Layer* UserCaseScene::createDynamicLayer(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
@@ -345,8 +351,79 @@ Layer* UserCaseScene::createDynamicLayer(){
     listener->setSwallowTouches(true);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
     
+    auto bkView=Sprite::create("bk_dynamic.png");
+    bkView->setPosition(0,0);
+    bkView->setAnchorPoint(Vec2(0, 0));
+    bkView->setContentSize(Size(visibleSize.width, visibleSize.height));
+    layer->addChild(bkView);
+    
+    auto scrollV=createTableView(Vec2(0, 100), Size(visibleSize.width, 890));
+    bkView->addChild(scrollV);
+    
     return layer;
 }
+
+ScrollView* UserCaseScene::createTableView(Vec2 origin,Size visibleSize){
+    auto scrollView=cocos2d::ui::ScrollView::create();
+    scrollView->setPosition(Vec2(origin.x, origin.y));
+    scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
+    scrollView->setScrollBarEnabled(true);//是否显示滚动条
+    scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
+    scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
+    scrollView->setInnerContainerSize(Size(visibleSize.width, 220*10));//设置内容大小
+    for (int i=0; i<10; i++) {
+        auto layer1 = createMessageBtn(i,scrollView->getInnerContainerSize());
+        scrollView->addChild(layer1);
+    }
+    
+    return scrollView;
+}
+
+Button* UserCaseScene::createMessageBtn(int i, Size  innerSize){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    
+    auto layer=Button::create();
+    layer->loadTextures("bk_dynamic_tableView.png", "bk_dynamic_tableView.png");
+    layer->setPosition(Point(10,innerSize.height-220*(i+1)+10));
+    layer->setAnchorPoint(Vec2(0, 0));
+    layer->setScale(0.87);
+    layer->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+ log("点击跳转页面");
+        }
+        default:
+            break;
+    }
+    });
+    
+    auto headBtn=ImageView::create("bk_headIV.png");
+    headBtn->setPosition(Vec2(20, 20));
+    headBtn->setAnchorPoint(Vec2(0, 0));
+    headBtn->setTouchEnabled(true);
+    headBtn->ignoreContentAdaptWithSize(true);
+    headBtn->setScale9Enabled(true);
+    headBtn->setContentSize(Size(130, 130));
+    headBtn->setTag(i);
+    layer->addChild(headBtn);
+    headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
+        if (type == Widget::TouchEventType::ENDED){
+            log("点击上传头像");
+        }
+    });
+    
+    auto nameLB = Label::createWithSystemFont("热烈祝贺乾隆--荣获先进党支部！陈书记获院优秀共产党员称号！大家激情澎湃","fonts/Marker Felt.ttf",35,Size(layer->getContentSize().width-190,130),TextHAlignment::LEFT,TextVAlignment::TOP);
+    nameLB->setPosition(Point(170,20));
+    nameLB->setTextColor(Color4B(0, 0, 0, 255/2));
+    nameLB->setAnchorPoint(Vec2(0, 0));
+    layer->addChild(nameLB);
+    
+    
+    return layer;
+}
+
+
 
 
 //个人资料
@@ -378,6 +455,11 @@ Layer* UserCaseScene::createUserInfoLayer(){
     codeBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto codeLayer=createCodeLayer();
+            codeLayer->setTag(201);
+            this->addChild(codeLayer);
+        }
         default:
             break;
     }
@@ -629,9 +711,64 @@ void UserCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType
     
 }
 
-
-
-
+//二维码
+Layer* UserCaseScene::createCodeLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("bk_QRCode.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setPosition(Vec2(0,0));
+    contentV->setContentSize(visibleSize);
+    layer->addChild(contentV);
+    
+    auto codeImage = Sprite::create("example.png");
+    codeImage->setAnchorPoint(Vec2(0,0));
+    codeImage->setPosition(Vec2(225,445));
+    codeImage->setContentSize(Size(196, 196));
+    contentV->addChild(codeImage);
+    
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_QRCode_close.png", "btn_QRCode_close.png");
+    deleteBtn->setPosition(Vec2(visibleSize.width-110, 700));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(201);
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
+    
+    auto sureBtn=Button::create();
+    sureBtn->loadTextures("btn_QRCode_sure.png", "btn_QRCode_sure.png");
+    sureBtn->setPosition(Vec2(225, 361));
+    sureBtn->setAnchorPoint(Vec2(0,0));
+    sureBtn->cocos2d::Node::setScale(0.87);
+    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(201);
+            break;
+    }
+    });
+    contentV->addChild(sureBtn);
+    
+    return layer;
+}
 
 //上传头像
 Layer* UserCaseScene::createAlbumLayer(){

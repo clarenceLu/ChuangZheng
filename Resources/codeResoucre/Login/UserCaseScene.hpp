@@ -33,5 +33,11 @@ public:
     cocos2d::Layer* createUserInfoLayer();
     
     cocos2d::Layer* createAlbumLayer();
+    
+    cocos2d::Layer* createCodeLayer();
+    
+    cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 point,cocos2d::Size size);
+    cocos2d::ui::Button* createMessageBtn(int i, cocos2d::Size  innerSize);
+    
 };
 #endif /* UserCaseScene_hpp */

@@ -17,8 +17,11 @@ public:
     
     CREATE_FUNC(SelectStep4Scene);
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
+    void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     
     cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 point,cocos2d::Size size);
+    
+    cocos2d::Layer* createMessageLayer(int i, cocos2d::Size  innerSize);
     
     
 };
