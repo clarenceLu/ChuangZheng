@@ -3,8 +3,8 @@
 
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
-#include "network/HttpClient.h"
 #include <iostream>
+#include "network/HttpClient.h"
 #include "json/rapidjson.h"
 #include "json/document.h"
 #include "json/writer.h"
@@ -29,11 +29,12 @@ public:
     
     
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
+    // implement the "static create()" method manually
+    CREATE_FUNC(LoginScene);
     
     void onHttpRequestCompleted(HttpClient* sender, HttpResponse* response);
     
-    // implement the "static create()" method manually
-    CREATE_FUNC(LoginScene);
+
 private:
     
     rapidjson::Document loginData;

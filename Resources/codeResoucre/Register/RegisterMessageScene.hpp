@@ -12,6 +12,12 @@
 #include "cocos2d.h"
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
 class RegisterMessageScene:public cocos2d::Scene{
 public:
     static cocos2d::Scene* createScene();
@@ -25,6 +31,12 @@ public:
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     
     cocos2d::Layer* createAlbumLayer();
+    
+#pragma-用于加载数据
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+private:
+    rapidjson::Document loginData;
     
     
 };

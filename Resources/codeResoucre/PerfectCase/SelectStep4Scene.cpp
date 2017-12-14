@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "SearchScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -69,6 +70,10 @@ bool SelectStep4Scene::init(){
     searchBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto searchSC=SearchScene::createScene();
+            Director::getInstance()->pushScene(searchSC);
+        }
     
         default:
             break;

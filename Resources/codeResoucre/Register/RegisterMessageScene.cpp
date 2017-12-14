@@ -3,6 +3,10 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+
+using namespace rapidjson; // 命名空间
+#include "NetWrokMangerData.hpp"
+
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -50,6 +54,24 @@ bool RegisterMessageScene::init(){
     }
     });
     this->addChild(headBtn);
+    
+    auto sureBtn=Button::create();
+    sureBtn->loadTextures("btn_perfect_sure.png", "btn_perfect_sure.png");
+    sureBtn->setPosition(Vec2(visibleSize.width/2-115, 50));
+    sureBtn->setAnchorPoint(Vec2(0, 0));
+    sureBtn->setScale(0.70);
+    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+    //在这里请求接口
+            pushDataToNetWork();
+            
+        }
+        default:
+            break;
+    }
+    });
+    this->addChild(sureBtn);
     
     auto textFieldUser = TextField::create("未填写","Arial",33);
     textFieldUser->setMaxLength(40);
@@ -161,8 +183,39 @@ bool RegisterMessageScene::init(){
      womanCheckBox->addEventListener(CC_CALLBACK_2(RegisterMessageScene::checkBoxCallback,this));
     //获取checkbox的选中状态
     addChild(womanCheckBox);
-   
 
+        auto referrer = Label::createWithSystemFont("推荐人","Arial",32,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+        referrer->setPosition(Vec2(80, 140));
+        referrer->setTextColor(Color4B(51, 145, 233, 255));
+        referrer->setAnchorPoint(Vec2(0, 0));
+        bkView->addChild(referrer);
+        
+        auto lineV=Sprite::create("userInfo_line.png");
+        lineV->setPosition(Vec2(70, 140-6));
+        lineV->setAnchorPoint(Vec2(0, 0));
+        lineV->setScaleX(0.78);
+        bkView->addChild(lineV);
+    
+    auto scanBtn=Button::create();
+    scanBtn->loadTextures("alpha.png", "alpha.png");
+    scanBtn->setTitleText("点击扫描");
+    scanBtn->setTitleColor(Color3B(51, 145, 233/2));
+    scanBtn->setTitleFontSize(33);
+    scanBtn->setPosition(Vec2(visibleSize.width-110, 150));
+    scanBtn->setAnchorPoint(Vec2(1, 0));
+    scanBtn->setScale9Enabled(false);
+    scanBtn->setContentSize(Size(100, 40));
+    scanBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+//扫描二维码
+        }
+        default:
+            break;
+    }
+    });
+    bkView->addChild(scanBtn);
+    
     return true;
 }
 
@@ -282,6 +335,53 @@ Layer* RegisterMessageScene::createAlbumLayer(){
     
     return layer;
 }
+
+#pragma-用于加载网络数据
+
+//void RegisterMessageScene::pushDataToNetWork(string username,string passwd,string name,string sex,string age,string phone,string phone1,string idCardNo,string address,string headUrl,string caseNo){
+    void RegisterMessageScene::pushDataToNetWork(){
+     NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    document.AddMember("userId", "Mr", allocator);
+    document.AddMember("passwd", "123456", allocator);
+    document.AddMember("name", "wulitaotao", allocator);
+    document.AddMember("sex", "F", allocator);
+    StringBuffer buffer;
+    rapidjson::Writer<StringBuffer> writer(buffer);
+    document.Accept(writer);
+    netManeger->sendMessage("http://czapi.looper.pro/web/createUser",CC_CALLBACK_2(RegisterMessageScene::onHttpRequestCompleted, this),(char *)buffer.GetString());
+}
+
+void RegisterMessageScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->loginData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->loginData.HasParseError()) {
+        
+        return;
+    }
+    if(this->loginData.HasMember("data")){
+        for(int i = 0; i < this->loginData["data"].Size(); i++) {
+            
+            rapidjson::Value& object = this->loginData["data"][i];
+            CCLOG("%s", object["artistheaderimageurl"].GetString());
+        }
+    }
+    
+}
+
 
 
 

@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "SelectStep3Scene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -103,7 +104,8 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
             bkView->addChild(imageBtn1);
             imageBtn1->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
                 if (type == Widget::TouchEventType::ENDED){
-                    log("点击添加图片");
+                    auto updateLayer=createUpdateImageLayer();
+                    this->addChild(updateLayer);
                 }
             });
             currentHeight=975-(320-height-(int)((width-154)/(visibleSize.width-154))*150);
@@ -136,7 +138,62 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
     
 }
 
-
+Layer* ChatUserDetailScene::createUpdateImageLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(255, 255, 255, 255));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    
+    
+    auto bkView=Sprite::create("bk_updateImageLayer.png");
+    bkView->setPosition(0,0);
+    bkView->setAnchorPoint(Vec2(0, 0));
+    bkView->setContentSize(Size(visibleSize.width, visibleSize.height));
+    layer->addChild(bkView);
+    
+    auto backBtn=Button::create();
+    backBtn->loadTextures("btn_register_return.png", "btn_register_return.png");
+    backBtn->setPosition(Vec2(80, visibleSize.height-85));
+    backBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            Director::getInstance()->popScene();
+        default:
+            break;
+    }
+    });
+    bkView->addChild(backBtn);
+    
+    auto updateBtn=Button::create();
+    updateBtn->loadTextures("btn_updateImage.png", "btn_updateImage.png");
+    updateBtn->setPosition(Vec2(visibleSize.width/2, 486));
+    updateBtn->setScale(0.87);
+    updateBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        {
+            auto step3SC=SelectStep3Scene::create();
+            Director::getInstance()->pushScene(step3SC);
+        }
+    
+        default:
+            break;
+    }
+    });
+    bkView->addChild(updateBtn);
+    
+    return layer;
+    
+}
 
 float ChatUserDetailScene::createLabel(Vec2 point,string name1,string name2,Sprite* superV){
     auto visibleSize=Director::getInstance()->getVisibleSize();

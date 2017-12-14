@@ -10,6 +10,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "RegisterMessageScene.hpp"
+#include "ResigterDetailScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -145,6 +146,10 @@ Layer* RegisterScene::createCaseLayer(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto detailSC=RegisterDetailScene::createScene();
+            Director::getInstance()->pushScene(detailSC);
+        }
         default:
             break;
     }

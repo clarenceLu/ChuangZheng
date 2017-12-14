@@ -20,6 +20,8 @@ public:
     void createScrollDetailView(cocos2d::ui::ScrollView* superV);
     float createLabel(cocos2d::Vec2 point,std::string name1,std::string name2,cocos2d::Sprite* superV);
     
+    cocos2d::Layer* createUpdateImageLayer();
+    
 };
 
 #endif /* ChatUserDetailScene_hpp */
