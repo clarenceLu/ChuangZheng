@@ -10,6 +10,9 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "PerfectCaseScene.hpp"
+#include "ChatScene.hpp"
+#include "LoginScene.h"
+#include "MedicalRecordScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -17,6 +20,7 @@ Scene *UserCaseScene::createScene(){
     return UserCaseScene::create();
 }
 LayerMultiplex *multLayer;
+
 bool UserCaseScene::init(){
     if (!Scene::init()) {
         return false;
@@ -140,6 +144,12 @@ Layer* UserCaseScene::createInformLayer(){
     chatBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+#pragma-聊天界面
+            auto chatSC=ChatScene::createScene();
+            Director::getInstance()->pushScene(chatSC);
+            
+        }
         default:
             break;
     }
@@ -233,7 +243,10 @@ Layer* UserCaseScene::createCaseLayer(){
     addBtn->setScale(0.95);
     addBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:  {
+            auto perfectScene= PerfectCaseScene::create();
+            Director::getInstance()->pushScene(perfectScene);
+        }
             
         default:
             break;
@@ -275,6 +288,10 @@ Layer* UserCaseScene::createCaseLayer(){
     detailBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto medicalSC= MedicalRecordScene::create();
+            Director::getInstance()->pushScene(medicalSC);
+        }
         default:
             break;
     }
@@ -329,7 +346,6 @@ Layer* UserCaseScene::createCaseLayer(){
 }
 
 //长征动态
-//个人资料
 Layer* UserCaseScene::createDynamicLayer(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
@@ -345,8 +361,79 @@ Layer* UserCaseScene::createDynamicLayer(){
     listener->setSwallowTouches(true);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
     
+    auto bkView=Sprite::create("bk_dynamic.png");
+    bkView->setPosition(0,0);
+    bkView->setAnchorPoint(Vec2(0, 0));
+    bkView->setContentSize(Size(visibleSize.width, visibleSize.height));
+    layer->addChild(bkView);
+    
+    auto scrollV=createTableView(Vec2(0, 100), Size(visibleSize.width, 890));
+    bkView->addChild(scrollV);
+    
     return layer;
 }
+
+ScrollView* UserCaseScene::createTableView(Vec2 origin,Size visibleSize){
+    auto scrollView=cocos2d::ui::ScrollView::create();
+    scrollView->setPosition(Vec2(origin.x, origin.y));
+    scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
+    scrollView->setScrollBarEnabled(true);//是否显示滚动条
+    scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
+    scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
+    scrollView->setInnerContainerSize(Size(visibleSize.width, 220*10));//设置内容大小
+    for (int i=0; i<10; i++) {
+        auto layer1 = createMessageBtn(i,scrollView->getInnerContainerSize());
+        scrollView->addChild(layer1);
+    }
+    
+    return scrollView;
+}
+
+Button* UserCaseScene::createMessageBtn(int i, Size  innerSize){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    
+    auto layer=Button::create();
+    layer->loadTextures("bk_dynamic_tableView.png", "bk_dynamic_tableView.png");
+    layer->setPosition(Point(10,innerSize.height-220*(i+1)+10));
+    layer->setAnchorPoint(Vec2(0, 0));
+    layer->setScale(0.87);
+    layer->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+ log("点击跳转页面");
+        }
+        default:
+            break;
+    }
+    });
+    
+    auto headBtn=ImageView::create("bk_headIV.png");
+    headBtn->setPosition(Vec2(20, 20));
+    headBtn->setAnchorPoint(Vec2(0, 0));
+    headBtn->setTouchEnabled(true);
+    headBtn->ignoreContentAdaptWithSize(true);
+    headBtn->setScale9Enabled(true);
+    headBtn->setContentSize(Size(130, 130));
+    headBtn->setTag(i);
+    layer->addChild(headBtn);
+    headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
+        if (type == Widget::TouchEventType::ENDED){
+            log("点击上传头像");
+        }
+    });
+    
+    auto nameLB = Label::createWithSystemFont("热烈祝贺乾隆--荣获先进党支部！陈书记获院优秀共产党员称号！大家激情澎湃","fonts/Marker Felt.ttf",35,Size(layer->getContentSize().width-190,130),TextHAlignment::LEFT,TextVAlignment::TOP);
+    nameLB->setPosition(Point(170,20));
+    nameLB->setTextColor(Color4B(0, 0, 0, 255/2));
+    nameLB->setAnchorPoint(Vec2(0, 0));
+    layer->addChild(nameLB);
+    
+    
+    return layer;
+}
+
+
 
 
 //个人资料
@@ -378,6 +465,11 @@ Layer* UserCaseScene::createUserInfoLayer(){
     codeBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto codeLayer=createCodeLayer();
+            codeLayer->setTag(201);
+            this->addChild(codeLayer);
+        }
         default:
             break;
     }
@@ -406,11 +498,18 @@ Layer* UserCaseScene::createUserInfoLayer(){
     
     auto exitBtn=Button::create();
     exitBtn->loadTextures("btn_userInfo_back.png", "btn_userInfo_back.png");
-    exitBtn->setPosition(Vec2(visibleSize.width/2-130, 154));
+    exitBtn->setPosition(Vec2(visibleSize.width/2-120, 154));
     exitBtn->setAnchorPoint(Vec2(0, 0));
+    exitBtn->setScale(0.87);
     exitBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto exitLayer=createExitLayer();
+            exitLayer->setTag(2001);
+            this->addChild(exitLayer);
+                break;
+        }
         default:
             break;
     }
@@ -424,6 +523,11 @@ Layer* UserCaseScene::createUserInfoLayer(){
     judgeBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto chageLayer=createChangeKeyLayer();
+            chageLayer->setTag(1050);
+            this->addChild(chageLayer);
+        }
         default:
             break;
     }
@@ -608,11 +712,17 @@ void UserCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
             break;
     }
 }
-void UserCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
+void UserCaseScene::eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
+    TextField* textField = dynamic_cast<cocos2d::ui::TextField*>(pSender);
+     int tag= textField->getTag();
     switch (type){
-            
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
+            if (tag>=1000&&tag<=1002) {
+                if (textField->getStringLength()>13) {
+                    textField->setString(subUTF8(textField->getString(), 0, 12));
+                }
+            }
             CCLOG("INSERT_TEXT");
             
             break;
@@ -620,7 +730,9 @@ void UserCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType
             
             CCLOG("DELETE_BACKWARD");
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
-            
+            if (tag>=1000&&tag<=1002) {
+                
+            }
             CCLOG("DETACH_WITH_IME");
             
             break;
@@ -629,9 +741,226 @@ void UserCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType
     
 }
 
+//退出账号
+Layer* UserCaseScene::createExitLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("bk_sureExit.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setPosition(Vec2(0,0));
+    contentV->setContentSize(visibleSize);
+    layer->addChild(contentV);
+    auto sureBtn=Button::create();
+    sureBtn->loadTextures("btn_sureExit_sure.png", "btn_sureExit_sure.png");
+    sureBtn->setPosition(Vec2(160, 541));
+    sureBtn->setAnchorPoint(Vec2(0,0));
+    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        {
+           this->removeChildByTag(2001);
+            auto loginnSC=LoginScene::createScene();
+            Director::getInstance()->replaceScene(loginnSC);
+            break;
+        }
+        default:
+            break;
+    }
+    });
+    contentV->addChild(sureBtn);
+
+    return layer;
+    
+}
+
+
+TextField *originalPassword;
+TextField *newPassword;
+TextField* surePassword;
+//修改密码
+Layer* UserCaseScene::createChangeKeyLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("bk_change_password.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setPosition(Vec2(0,0));
+    contentV->setContentSize(visibleSize);
+    layer->addChild(contentV);
+    
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_QRCode_close.png", "btn_QRCode_close.png");
+    deleteBtn->setPosition(Vec2(visibleSize.width-110, 700));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(1050);
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
+    
+    auto sureBtn=Button::create();
+    sureBtn->loadTextures("btn_change_password_save.png", "btn_change_password_save.png");
+    sureBtn->setPosition(Vec2(225, 361));
+    sureBtn->setAnchorPoint(Vec2(0,0));
+    sureBtn->cocos2d::Node::setScale(0.87);
+    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        {
+            if (newPassword->getStringLength()<6) {
+                auto judgeV = Label::createWithSystemFont("您设置的密码位数少于6位","Arial",35,Size(visibleSize.width,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+                judgeV->setPosition(Vec2(visibleSize.width/2+100, 268));
+                judgeV->setTextColor(Color4B(91, 144, 229, 255));
+                judgeV->setAnchorPoint(Vec2(0, 0));
+                this->addChild(judgeV);
+                judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+            }else if(strcmp(newPassword->getString().c_str(), surePassword->getString().c_str())){
+                auto judgeV = Label::createWithSystemFont("您输入的密码前后不一样","Arial",35,Size(visibleSize.width,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+                judgeV->setPosition(Vec2(visibleSize.width/2+100, 268));
+                judgeV->setTextColor(Color4B(91, 144, 229, 255));
+                judgeV->setAnchorPoint(Vec2(0, 0));
+                this->addChild(judgeV);
+                judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+            }else{
+               this->removeChildByTag(1050);
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    });
+    contentV->addChild(sureBtn);
+    
+    originalPassword = TextField::create("未填写","Arial",35);
+    originalPassword->setMaxLength(40);
+    originalPassword->setTouchSize(Size(visibleSize.width-300, 50));
+    originalPassword->setPosition(Vec2(visibleSize.width-100,590));
+    originalPassword->setAnchorPoint(Vec2(1,0));
+    originalPassword->setContentSize(Size(visibleSize.width-300,50));
+    originalPassword->setTextColor(Color4B::BLACK);
+    originalPassword->setPlaceHolderColor(Color4B::GRAY);
+    originalPassword->setTextHorizontalAlignment(TextHAlignment::RIGHT);
+    originalPassword->setPasswordEnabled(true);
+    originalPassword->setTag(1000);
+    originalPassword->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
+    contentV->addChild(originalPassword);
+    
+    newPassword = TextField::create("未填写","Arial",35);
+    newPassword->setMaxLength(40);
+    newPassword->setTouchSize(Size(visibleSize.width-300, 50));
+    newPassword->setPosition(Vec2(visibleSize.width-100,524));
+    newPassword->setAnchorPoint(Vec2(1,0));
+    newPassword->setContentSize(Size(visibleSize.width-300,50));
+    newPassword->setTextColor(Color4B::BLACK);
+    newPassword->setPlaceHolderColor(Color4B::GRAY);
+    newPassword->setTextHorizontalAlignment(TextHAlignment::RIGHT);
+    newPassword->setTag(1001);
+    newPassword->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
+    contentV->addChild(newPassword);
+    
+    surePassword = TextField::create("未填写","Arial",35);
+    surePassword->setMaxLength(40);
+    surePassword->setTouchSize(Size(visibleSize.width-300, 50));
+    surePassword->setPosition(Vec2(visibleSize.width-100,455));
+    surePassword->setAnchorPoint(Vec2(1,0));
+    surePassword->setContentSize(Size(visibleSize.width-300,50));
+    surePassword->setTextColor(Color4B::BLACK);
+    surePassword->setPlaceHolderColor(Color4B::GRAY);
+    surePassword->setTextHorizontalAlignment(TextHAlignment::RIGHT);
+    surePassword->setTag(1002);
+    surePassword->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
+    contentV->addChild(surePassword);
+    
+    
+    return layer;
+}
 
 
 
+//二维码
+Layer* UserCaseScene::createCodeLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("bk_QRCode.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setPosition(Vec2(0,0));
+    contentV->setContentSize(visibleSize);
+    layer->addChild(contentV);
+    
+    auto codeImage = Sprite::create("example.png");
+    codeImage->setAnchorPoint(Vec2(0,0));
+    codeImage->setPosition(Vec2(225,445));
+    codeImage->setContentSize(Size(196, 196));
+    contentV->addChild(codeImage);
+    
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_QRCode_close.png", "btn_QRCode_close.png");
+    deleteBtn->setPosition(Vec2(visibleSize.width-110, 700));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(201);
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
+    
+    auto sureBtn=Button::create();
+    sureBtn->loadTextures("btn_QRCode_sure.png", "btn_QRCode_sure.png");
+    sureBtn->setPosition(Vec2(225, 361));
+    sureBtn->setAnchorPoint(Vec2(0,0));
+    sureBtn->cocos2d::Node::setScale(0.87);
+    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(201);
+            break;
+    }
+    });
+    contentV->addChild(sureBtn);
+    
+    return layer;
+}
 
 //上传头像
 Layer* UserCaseScene::createAlbumLayer(){
@@ -699,4 +1028,66 @@ Layer* UserCaseScene::createAlbumLayer(){
     
     
     return layer;
+}
+
+//截取字符串
+std::vector<std::string> UserCaseScene::parseUTF8(const std::string &str)
+{
+    int l = str.length();
+    std::vector<std::string> ret;
+    ret.clear();
+    for(int p = 0; p < l; )
+    {
+        int size=0;
+        unsigned char c = str[p];
+        if(c < 0x80) {
+            size = 1;
+        }
+        else if(c < 0xc2)
+        {
+            size = 2;
+        }
+        else if(c < 0xe0)
+        {
+            size = 2;
+        }
+        else if(c < 0xf0)
+        {
+            size = 3;
+        }
+        else if(c < 0xf8)
+        {
+            size = 4;
+        }
+        else if (c < 0xfc)
+        {
+            size = 5;
+        }
+        else if (c < 0xfe)
+        {
+            size = 6;
+        }
+        else
+            size = 7;
+        std::string temp = "";
+        temp = str.substr(p, size);
+        ret.push_back(temp);
+        p += size;
+    }
+    return ret;
+}
+
+std::string UserCaseScene::subUTF8(const std::string &str,int from, int to)
+{
+    if(from > to) return "";
+    if (str.length() < to) return "";
+    std::vector<std::string> vstr = parseUTF8(str);
+    std::vector<std::string>::iterator iter=vstr.begin();
+    std::string res;
+    std::string result;
+    for(iter=(vstr.begin() + from); iter != (vstr.begin() + to); iter++)
+    {
+        res += *iter;
+    }
+    return res;
 }

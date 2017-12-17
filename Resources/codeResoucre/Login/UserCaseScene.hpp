@@ -33,5 +33,24 @@ public:
     cocos2d::Layer* createUserInfoLayer();
     
     cocos2d::Layer* createAlbumLayer();
+    
+    cocos2d::Layer* createCodeLayer();
+    
+    cocos2d::Layer* createChangeKeyLayer();
+    
+    cocos2d::Layer* createExitLayer();
+    
+    cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 point,cocos2d::Size size);
+    cocos2d::ui::Button* createMessageBtn(int i, cocos2d::Size  innerSize);
+    
+    
+    
+    
+  //裁剪字符串
+    static std::string subUTF8(const std::string &str, int from, int to);
+private:
+    static std::vector<std::string> parseUTF8(const std::string &str);
+    
+    
 };
 #endif /* UserCaseScene_hpp */
