@@ -33,10 +33,11 @@ public:
     CREATE_FUNC(LoginScene);
     
     void onHttpRequestCompleted(HttpClient* sender, HttpResponse* response);
-    
+
+#pragma-用于加载数据
+    void pushDataToNetWork(std::string username,std::string passwd);
 
 private:
-    
     rapidjson::Document loginData;
     
     

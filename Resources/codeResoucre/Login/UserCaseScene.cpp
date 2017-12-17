@@ -12,6 +12,7 @@
 #include "PerfectCaseScene.hpp"
 #include "ChatScene.hpp"
 #include "LoginScene.h"
+#include "MedicalRecordScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -287,6 +288,10 @@ Layer* UserCaseScene::createCaseLayer(){
     detailBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+            auto medicalSC= MedicalRecordScene::create();
+            Director::getInstance()->pushScene(medicalSC);
+        }
         default:
             break;
     }

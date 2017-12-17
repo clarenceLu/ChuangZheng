@@ -34,7 +34,7 @@ public:
     
 #pragma-用于加载数据
     void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
-    void pushDataToNetWork();
+    void pushDataToNetWork(std::string username,std::string passwd,std::string name,std::string sex,std::string age,std::string phone,std::string phone1,std::string idCardNo,std::string address,std::string headUrl,std::string caseNo);
 private:
     rapidjson::Document loginData;
     

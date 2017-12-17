@@ -13,13 +13,27 @@ USING_NS_CC;
 Scene *RegisterMessageScene::createScene(){
     return RegisterMessageScene::create();
 }
+
+//data
+TextField* textFieldUser;
+TextField* textFieldPass;
+TextField* textFieldSurePass;
+TextField* textFieldName;
+TextField*textFieldAge;
+TextField*textFieldNum;
+TextField*textFieldCard;
+string sex;
+
+
+
+Sprite* bkView;
 bool RegisterMessageScene::init(){
     if (!Scene::init()) {
         return false;
     }
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
-    auto bkView=Sprite::create("bk_register_message.png");
+    bkView=Sprite::create("bk_register_message.png");
     bkView->setPosition(Vec2(0, 0));
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(Size(visibleSize.width, visibleSize.height));
@@ -55,25 +69,7 @@ bool RegisterMessageScene::init(){
     });
     this->addChild(headBtn);
     
-    auto sureBtn=Button::create();
-    sureBtn->loadTextures("btn_perfect_sure.png", "btn_perfect_sure.png");
-    sureBtn->setPosition(Vec2(visibleSize.width/2-115, 50));
-    sureBtn->setAnchorPoint(Vec2(0, 0));
-    sureBtn->setScale(0.70);
-    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
-        case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:{
-    //在这里请求接口
-            pushDataToNetWork();
-            
-        }
-        default:
-            break;
-    }
-    });
-    this->addChild(sureBtn);
-    
-    auto textFieldUser = TextField::create("未填写","Arial",33);
+    textFieldUser = TextField::create("未填写","Arial",33);
     textFieldUser->setMaxLength(40);
     textFieldUser->setTouchSize(Size(400, 54));
     textFieldUser->setAnchorPoint(Vec2(1,0));
@@ -85,7 +81,7 @@ bool RegisterMessageScene::init(){
     textFieldUser->addEventListener(CC_CALLBACK_2(RegisterMessageScene::eventCallBack, this));
     this->addChild(textFieldUser);
     
-    auto textFieldPass = TextField::create("未填写","Arial",33);
+    textFieldPass = TextField::create("未填写","Arial",33);
     textFieldPass->setMaxLength(40);
     textFieldPass->setTouchSize(Size(400, 54));
     textFieldPass->setAnchorPoint(Vec2(1,0));
@@ -98,7 +94,7 @@ bool RegisterMessageScene::init(){
     textFieldPass->addEventListener(CC_CALLBACK_2(RegisterMessageScene::eventCallBack, this));
     this->addChild(textFieldPass);
     
-    auto textFieldSurePass = TextField::create("未填写","Arial",33);
+    textFieldSurePass = TextField::create("未填写","Arial",33);
     textFieldSurePass->setMaxLength(40);
     textFieldSurePass->setTouchSize(Size(400, 54));
     textFieldSurePass->setAnchorPoint(Vec2(1,0));
@@ -111,7 +107,7 @@ bool RegisterMessageScene::init(){
     textFieldSurePass->addEventListener(CC_CALLBACK_2(RegisterMessageScene::eventCallBack, this));
     this->addChild(textFieldSurePass);
     
-    auto textFieldName= TextField::create("未填写","Arial",33);
+    textFieldName= TextField::create("未填写","Arial",33);
     textFieldName->setMaxLength(40);
     textFieldName->setTouchSize(Size(400, 54));
     textFieldName->setAnchorPoint(Vec2(1,0));
@@ -123,7 +119,7 @@ bool RegisterMessageScene::init(){
     textFieldName->addEventListener(CC_CALLBACK_2(RegisterMessageScene::eventCallBack, this));
     this->addChild(textFieldName);
     
-    auto textFieldAge= TextField::create("未填写","Arial",33);
+     textFieldAge= TextField::create("未填写","Arial",33);
     textFieldAge->setMaxLength(40);
     textFieldAge->setTouchSize(Size(400, 54));
     textFieldAge->setAnchorPoint(Vec2(1,0));
@@ -135,7 +131,7 @@ bool RegisterMessageScene::init(){
     textFieldAge->addEventListener(CC_CALLBACK_2(RegisterMessageScene::eventCallBack, this));
     this->addChild(textFieldAge);
     
-    auto textFieldNum= TextField::create("未填写","Arial",33);
+    textFieldNum= TextField::create("未填写","Arial",33);
     textFieldNum->setMaxLength(40);
     textFieldNum->setTouchSize(Size(400, 54));
     textFieldNum->setAnchorPoint(Vec2(1,0));
@@ -147,7 +143,7 @@ bool RegisterMessageScene::init(){
     textFieldNum->addEventListener(CC_CALLBACK_2(RegisterMessageScene::eventCallBack, this));
     this->addChild(textFieldNum);
     
-    auto textFieldCard= TextField::create("未填写","Arial",33);
+     textFieldCard= TextField::create("未填写","Arial",33);
     textFieldCard->setMaxLength(40);
     textFieldCard->setTouchSize(Size(400, 54));
     textFieldCard->setAnchorPoint(Vec2(1,0));
@@ -160,9 +156,9 @@ bool RegisterMessageScene::init(){
     this->addChild(textFieldCard);
     
     
-    auto manCheckBox = CheckBox::create("message_select_man.png","select_sure.png");
+    auto manCheckBox = CheckBox::create("select_circle.png","select_sure.png");
     //设置CheckBox的位置
-    manCheckBox->setPosition(Vec2(350, 470));
+    manCheckBox->setPosition(Vec2(340, 470));
     manCheckBox->setAnchorPoint(Vec2(0, 0));
     manCheckBox->setTag(50);
     //设置CheckBox是否可点击
@@ -172,8 +168,13 @@ bool RegisterMessageScene::init(){
     auto bool selected  = manCheckBox->getSelectedState();
     manCheckBox->addEventListener(CC_CALLBACK_2(RegisterMessageScene::checkBoxCallback,this));
     addChild(manCheckBox);
+    auto manLB= Label::createWithSystemFont("男","Arial",35,Size(50,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    manLB->setPosition(Vec2(380, 470));
+    manLB->setTextColor(Color4B::GRAY);
+    manLB->setAnchorPoint(Vec2(0, 0));
+    this->addChild(manLB);
     
-    auto womanCheckBox = CheckBox::create("message_select_woman.png","select_sure.png");
+    auto womanCheckBox = CheckBox::create("select_circle.png","select_sure.png");
     //设置CheckBox的位置
     womanCheckBox->setPosition(Vec2(460, 470));
     womanCheckBox->setTag(51);
@@ -183,6 +184,12 @@ bool RegisterMessageScene::init(){
      womanCheckBox->addEventListener(CC_CALLBACK_2(RegisterMessageScene::checkBoxCallback,this));
     //获取checkbox的选中状态
     addChild(womanCheckBox);
+    auto womanLB= Label::createWithSystemFont("女","Arial",35,Size(50,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    womanLB->setPosition(Vec2(500, 470));
+    womanLB->setTextColor(Color4B::GRAY);
+    womanLB->setAnchorPoint(Vec2(0, 0));
+    this->addChild(womanLB);
+    
 
         auto referrer = Label::createWithSystemFont("推荐人","Arial",32,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
         referrer->setPosition(Vec2(80, 140));
@@ -216,6 +223,39 @@ bool RegisterMessageScene::init(){
     });
     bkView->addChild(scanBtn);
     
+    auto sureBtn=Button::create();
+    sureBtn->loadTextures("btn_perfect_sure.png", "btn_perfect_sure.png");
+    sureBtn->setPosition(Vec2(visibleSize.width/2-115, 50));
+    sureBtn->setAnchorPoint(Vec2(0, 0));
+    sureBtn->setScale(0.70);
+    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            //在这里请求接口
+            if (textFieldPass->getStringLength()<6) {
+                auto judgeV = Label::createWithSystemFont("您设置的密码位数少于6位","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+                judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+                judgeV->setTextColor(Color4B(91, 144, 229, 255));
+                judgeV->setAnchorPoint(Vec2(0.5, 0));
+                this->addChild(judgeV,10);
+                judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+            }else if(strcmp(textFieldPass->getString().c_str(), textFieldSurePass->getString().c_str())){
+                auto judgeV = Label::createWithSystemFont("您输入的密码前后不一样","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+                judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+                judgeV->setTextColor(Color4B(91, 144, 229, 255));
+                judgeV->setAnchorPoint(Vec2(0.5, 0));
+                this->addChild(judgeV,10);
+                judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+            }else{
+                    pushDataToNetWork(textFieldUser->getString(),textFieldSurePass->getString(),textFieldName->getString(),sex,textFieldAge->getString(),textFieldNum->getString(),"",textFieldCard->getString(),"","","");
+            }
+        }
+        default:
+            break;
+    }
+    });
+    this->addChild(sureBtn);
+    
     return true;
 }
 
@@ -237,6 +277,7 @@ void RegisterMessageScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventT
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
+            if (tag==50) {sex="M";}else{sex="F";}
             checkBox->setSelected(false);
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
@@ -338,20 +379,13 @@ Layer* RegisterMessageScene::createAlbumLayer(){
 
 #pragma-用于加载网络数据
 
-//void RegisterMessageScene::pushDataToNetWork(string username,string passwd,string name,string sex,string age,string phone,string phone1,string idCardNo,string address,string headUrl,string caseNo){
-    void RegisterMessageScene::pushDataToNetWork(){
+void RegisterMessageScene::pushDataToNetWork(string username,string passwd,string name,string sex,string age,string phone,string phone1,string idCardNo,string address,string headUrl,string caseNo){
      NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
-    rapidjson::Document document;
-    document.SetObject();
-    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-    document.AddMember("userId", "Mr", allocator);
-    document.AddMember("passwd", "123456", allocator);
-    document.AddMember("name", "wulitaotao", allocator);
-    document.AddMember("sex", "F", allocator);
-    StringBuffer buffer;
-    rapidjson::Writer<StringBuffer> writer(buffer);
-    document.Accept(writer);
-    netManeger->sendMessage("http://czapi.looper.pro/web/createUser",CC_CALLBACK_2(RegisterMessageScene::onHttpRequestCompleted, this),(char *)buffer.GetString());
+        char strtest[500] = {0};
+        sprintf(strtest,"http://czapi.looper.pro/web/createUser?userId=%s&passwd=%s&name=%s&sex=%s&number=%s&phone=%s&idCardNo=%s", username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),age.c_str(),phone.c_str(),idCardNo.c_str());
+        string url=strtest;
+        
+    netManeger->sendMessage(url,CC_CALLBACK_2(RegisterMessageScene::onHttpRequestCompleted, this),nullptr);
 }
 
 void RegisterMessageScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
@@ -373,11 +407,17 @@ void RegisterMessageScene::onHttpRequestCompleted(HttpClient* sender, HttpRespon
         return;
     }
     if(this->loginData.HasMember("data")){
-        for(int i = 0; i < this->loginData["data"].Size(); i++) {
-            
-            rapidjson::Value& object = this->loginData["data"][i];
-            CCLOG("%s", object["artistheaderimageurl"].GetString());
-        }
+        log("注册成功");
+        Director::getInstance()->popToRootScene();
+        
+    }else{
+        Size visibleSize=Director::getInstance()->getVisibleSize();
+        auto judgeV = Label::createWithSystemFont("用户名重复","Arial",35,Size(visibleSize.width,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+        judgeV->setPosition(Vec2(visibleSize.width/2+100, 268));
+        judgeV->setTextColor(Color4B(91, 144, 229, 255));
+        judgeV->setAnchorPoint(Vec2(0, 0));
+        this->addChild(judgeV);
+        judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
     }
     
 }

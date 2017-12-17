@@ -9,12 +9,27 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+
+using namespace rapidjson; // 命名空间
+#include "NetWrokMangerData.hpp"
+
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
 Scene *RegisterDetailScene::createScene(){
     return RegisterDetailScene::create();
 }
+
+//data
+TextField* textfieldName;
+TextField* textfieldPass;
+TextField* textfieldSurePass;
+TextField* textfieldTel;
+TextField* textfieldCaseTel2;
+TextField* textfieldCaseAddress;
+TextField* textfieldCaseRefer;
+string sexLB;
+
 bool RegisterDetailScene::init(){
     if (!Scene::init()) {
         return false;
@@ -59,12 +74,30 @@ bool RegisterDetailScene::init(){
     
     auto sureBtn=Button::create();
     sureBtn->loadTextures("btn_perfect_sure.png", "btn_perfect_sure.png");
-    sureBtn->setPosition(Vec2(visibleSize.width/2-120, 30));
+    sureBtn->setPosition(Vec2(visibleSize.width/2-120, 60));
     sureBtn->setAnchorPoint(Vec2(0, 0));
     sureBtn->setScale(0.70);
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
+            //在这里请求接口
+            if (textfieldPass->getStringLength()<6) {
+                auto judgeV = Label::createWithSystemFont("您设置的密码位数少于6位","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+                judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+                judgeV->setTextColor(Color4B(91, 144, 229, 255));
+                judgeV->setAnchorPoint(Vec2(0.5, 0));
+                this->addChild(judgeV,10);
+                judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+            }else if(strcmp(textfieldPass->getString().c_str(), textfieldSurePass->getString().c_str())){
+                auto judgeV = Label::createWithSystemFont("您输入的密码前后不一样","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+                judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+                judgeV->setTextColor(Color4B(91, 144, 229, 255));
+                judgeV->setAnchorPoint(Vec2(0.5, 0));
+                this->addChild(judgeV,10);
+                judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+            }else{
+                pushDataToNetWork(textfieldName->getString(),textfieldPass->getString(),textfieldName->getString(),sexLB,"",textfieldTel->getString(),textfieldCaseTel2->getString(),"",textfieldCaseAddress->getString(),"","");
+            }
         }
         default:
             break;
@@ -72,42 +105,22 @@ bool RegisterDetailScene::init(){
     });
     this->addChild(sureBtn);
     
-    auto textfieldName=createBasicData(bkView, Vec2(59, 768), "用户名：", "张牧之");
-    auto textfieldPass=createBasicData(bkView, Vec2(59, 688), "密码：", "未填写");
+    textfieldName=createBasicData(bkView, Vec2(59, 768), "用户名：", "张牧之");
+    textfieldPass=createBasicData(bkView, Vec2(59, 688), "密码：", "未填写");
      textfieldPass->setPasswordEnabled(true);
-    auto textfieldSurePass=createBasicData(bkView, Vec2(59, 608), "确认密码：", "未填写");
+     textfieldSurePass=createBasicData(bkView, Vec2(59, 608), "确认密码：", "未填写");
      textfieldSurePass->setPasswordEnabled(true);
-    auto textfieldTel=createBasicData(bkView, Vec2(59, 448), "联系电话：", "未填写");
-    auto textfieldCaseTel2=createBasicData(bkView, Vec2(59, 368), "手机：", "未填写");
-    auto textfieldCaseAddress=createBasicData(bkView, Vec2(59, 288), "家庭住址：", "未填写");
-    
-     auto textfieldCaseRefer=createBasicData(bkView, Vec2(59, 208), "家庭住址：", "未填写");
-    
-    
-    
-    
-    auto scan = Label::createWithSystemFont("推荐人","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    scan->setPosition(Vec2(59, 128));
-    scan->setTextColor(Color4B(91, 144, 229, 255));
-    scan->setAnchorPoint(Vec2(0, 0));
-    bkView->addChild(scan);
-    auto scanStar = Label::createWithSystemFont("*","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    scanStar->setPosition(30,123);
-    scanStar->setTextColor(Color4B(205, 133, 147, 255));
-    scanStar->setAnchorPoint(Vec2(0, 0));
-    bkView->addChild(scanStar);
-    auto scanlineV=Sprite::create("userInfo_line.png");
-    scanlineV->setPosition(Vec2(51,122));
-    scanlineV->setAnchorPoint(Vec2(0, 0));
-    scanlineV->setScaleX(0.85);
-    bkView->addChild(scanlineV);
+     textfieldTel=createBasicData(bkView, Vec2(59, 448), "联系电话：", "未填写");
+     textfieldCaseTel2=createBasicData(bkView, Vec2(59, 368), "手机：", "未填写");
+     textfieldCaseAddress=createBasicData(bkView, Vec2(59, 288), "家庭住址：", "未填写");
+      textfieldCaseRefer=createBasicData(bkView, Vec2(59, 208), "推荐人：", "");
     
     auto scanBtn=Button::create();
     scanBtn->loadTextures("alpha.png", "alpha.png");
     scanBtn->setTitleText("点击扫描");
     scanBtn->setTitleColor(Color3B(51, 145, 233/2));
     scanBtn->setTitleFontSize(33);
-    scanBtn->setPosition(Vec2(visibleSize.width-110, 135));
+    scanBtn->setPosition(Vec2(visibleSize.width-110, 215));
     scanBtn->setAnchorPoint(Vec2(1, 0));
     scanBtn->setScale9Enabled(false);
     scanBtn->setContentSize(Size(100, 40));
@@ -141,9 +154,9 @@ bool RegisterDetailScene::init(){
     lineV->setScaleX(0.85);
     bkView->addChild(lineV);
     
-    auto manCheckBox = CheckBox::create("message_select_man.png","select_sure.png");
+    auto manCheckBox = CheckBox::create("select_circle.png","select_sure.png");
     //设置CheckBox的位置
-    manCheckBox->setPosition(Vec2(350, 530));
+    manCheckBox->setPosition(Vec2(340, 530));
     manCheckBox->setAnchorPoint(Vec2(0, 0));
     manCheckBox->setTag(50);
     //设置CheckBox是否可点击
@@ -153,8 +166,13 @@ bool RegisterDetailScene::init(){
     auto bool selected  = manCheckBox->getSelectedState();
     manCheckBox->addEventListener(CC_CALLBACK_2(RegisterDetailScene::checkBoxCallback,this));
     addChild(manCheckBox);
+    auto manLB= Label::createWithSystemFont("男","Arial",35,Size(50,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    manLB->setPosition(Vec2(380, 530));
+    manLB->setTextColor(Color4B::GRAY);
+    manLB->setAnchorPoint(Vec2(0, 0));
+    this->addChild(manLB);
     
-    auto womanCheckBox = CheckBox::create("message_select_woman.png","select_sure.png");
+    auto womanCheckBox = CheckBox::create("select_circle.png","select_sure.png");
     //设置CheckBox的位置
     womanCheckBox->setPosition(Vec2(460, 530));
     womanCheckBox->setTag(51);
@@ -164,6 +182,11 @@ bool RegisterDetailScene::init(){
     womanCheckBox->addEventListener(CC_CALLBACK_2(RegisterDetailScene::checkBoxCallback,this));
     //获取checkbox的选中状态
     addChild(womanCheckBox);
+    auto womanLB= Label::createWithSystemFont("女","Arial",35,Size(50,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    womanLB->setPosition(Vec2(500, 530));
+    womanLB->setTextColor(Color4B::GRAY);
+    womanLB->setAnchorPoint(Vec2(0, 0));
+    this->addChild(womanLB);
     
     return true;
 }
@@ -221,6 +244,7 @@ void RegisterDetailScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventTy
     switch (type)
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
+            if (tag==50) {sexLB="M";}     else{sexLB="F";}
             log("SELECTED!");
             checkBox->setSelected(false);
             break;
@@ -321,3 +345,52 @@ Layer* RegisterDetailScene::createAlbumLayer(){
     
     return layer;
 }
+
+
+#pragma-用于加载网络数据
+
+void RegisterDetailScene::pushDataToNetWork(string username,string passwd,string name,string sex,string age,string phone,string phone1,string idCardNo,string address,string headUrl,string caseNo){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char strtest[500] = {0};
+    sprintf(strtest,"http://czapi.looper.pro/web/createUser?userId=%s&passwd=%s&name=%s&sex=%s&phone=%s&phone1=%s&address=%s", username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),phone.c_str(),phone1.c_str(),address.c_str());
+    string url=strtest;
+    
+    netManeger->sendMessage(url,CC_CALLBACK_2(RegisterDetailScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void RegisterDetailScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->loginData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->loginData.HasParseError()) {
+        
+        return;
+    }
+    if(this->loginData.HasMember("data")){
+        log("注册成功");
+        Director::getInstance()->popToRootScene();
+        
+    }else{
+        Size visibleSize=Director::getInstance()->getVisibleSize();
+        auto judgeV = Label::createWithSystemFont("用户名重复","Arial",35,Size(visibleSize.width,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+        judgeV->setPosition(Vec2(visibleSize.width/2+100, 268));
+        judgeV->setTextColor(Color4B(91, 144, 229, 255));
+        judgeV->setAnchorPoint(Vec2(0, 0));
+        this->addChild(judgeV);
+        judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+    }
+    
+}
+
+
+

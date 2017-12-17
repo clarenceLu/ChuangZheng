@@ -59,6 +59,7 @@
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
+		B20C29A91FE276C800149DCB /* bk_medicalRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = B20C29A71FE276C800149DCB /* bk_medicalRecord.png */; };
 		B223F1281FCE6B5500DA0315 /* register_case.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F11F1FCE6B5500DA0315 /* register_case.png */; };
 		B223F1291FCE6B5500DA0315 /* register_first_use.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F1201FCE6B5500DA0315 /* register_first_use.png */; };
 		B223F12A1FCE6B5500DA0315 /* btn_register_return.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F1211FCE6B5500DA0315 /* btn_register_return.png */; };
@@ -166,6 +167,7 @@
 		B28993C81FE1152F0047C9E6 /* bk_change_password.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993C61FE1152F0047C9E6 /* bk_change_password.png */; };
 		B28993CD1FE12E120047C9E6 /* bk_sureExit.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993CB1FE12E120047C9E6 /* bk_sureExit.png */; };
 		B28993CE1FE12E120047C9E6 /* btn_sureExit_sure.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993CC1FE12E120047C9E6 /* btn_sureExit_sure.png */; };
+		B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B28993D01FE267500047C9E6 /* MedicalRecordScene.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -272,6 +274,7 @@
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		B20C29A71FE276C800149DCB /* bk_medicalRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_medicalRecord.png; sourceTree = "<group>"; };
 		B223F11F1FCE6B5500DA0315 /* register_case.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register_case.png; sourceTree = "<group>"; };
 		B223F1201FCE6B5500DA0315 /* register_first_use.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register_first_use.png; sourceTree = "<group>"; };
 		B223F1211FCE6B5500DA0315 /* btn_register_return.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_register_return.png; sourceTree = "<group>"; };
@@ -392,6 +395,8 @@
 		B28993C61FE1152F0047C9E6 /* bk_change_password.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_change_password.png; sourceTree = "<group>"; };
 		B28993CB1FE12E120047C9E6 /* bk_sureExit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_sureExit.png; sourceTree = "<group>"; };
 		B28993CC1FE12E120047C9E6 /* btn_sureExit_sure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_sureExit_sure.png; sourceTree = "<group>"; };
+		B28993D01FE267500047C9E6 /* MedicalRecordScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MedicalRecordScene.cpp; sourceTree = "<group>"; };
+		B28993D11FE267500047C9E6 /* MedicalRecordScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MedicalRecordScene.hpp; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -609,6 +614,14 @@
 			name = Icons;
 			path = ios;
 			sourceTree = SOURCE_ROOT;
+		};
+		B20C29A61FE276C800149DCB /* MedicalRecord */ = {
+			isa = PBXGroup;
+			children = (
+				B20C29A71FE276C800149DCB /* bk_medicalRecord.png */,
+			);
+			path = MedicalRecord;
+			sourceTree = "<group>";
 		};
 		B223F11E1FCE6B5500DA0315 /* register */ = {
 			isa = PBXGroup;
@@ -879,6 +892,15 @@
 			path = SureExit;
 			sourceTree = "<group>";
 		};
+		B28993CF1FE267340047C9E6 /* medicalRecord */ = {
+			isa = PBXGroup;
+			children = (
+				B28993D11FE267500047C9E6 /* MedicalRecordScene.hpp */,
+				B28993D01FE267500047C9E6 /* MedicalRecordScene.cpp */,
+			);
+			path = medicalRecord;
+			sourceTree = "<group>";
+		};
 		C41180861FD7B6B3004ABE05 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -906,6 +928,7 @@
 		C49D38441FC542E90092C808 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				B20C29A61FE276C800149DCB /* MedicalRecord */,
 				B28993CA1FE12E120047C9E6 /* SureExit */,
 				B28993C41FE1152F0047C9E6 /* ChangePassWord */,
 				B28993C01FE107990047C9E6 /* RegisterDetail */,
@@ -942,6 +965,7 @@
 		C49D38481FC542F10092C808 /* codeResoucre */ = {
 			isa = PBXGroup;
 			children = (
+				B28993CF1FE267340047C9E6 /* medicalRecord */,
 				B262F7961FD7BE8000EF887A /* Register */,
 				B262F78F1FD7BE7700EF887A /* PerfectCase */,
 				B262F7881FD7B9C100EF887A /* Login */,
@@ -1147,6 +1171,7 @@
 				B232ADF11FD0FC7300ABBA1D /* btn_user_select.png in Resources */,
 				B262F8181FDFD92100EF887A /* btn_updateImage.png in Resources */,
 				B223F1291FCE6B5500DA0315 /* register_first_use.png in Resources */,
+				B20C29A91FE276C800149DCB /* bk_medicalRecord.png in Resources */,
 				B223F12F1FCE6B5500DA0315 /* btn_register_sure.png in Resources */,
 				B262F8121FDE616200EF887A /* bk_chat_userdetail.png in Resources */,
 				B232ADF31FD0FC7300ABBA1D /* btn_inform_unselect.png in Resources */,
@@ -1209,6 +1234,7 @@
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				C45025511FCE9E7300596F38 /* NetWrokMangerData.cpp in Sources */,
 				B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */,
+				B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				B262F7951FD7BE7700EF887A /* PerfectCaseScene.cpp in Sources */,
 				B262F79C1FD7BE8000EF887A /* RegisterMessageScene.cpp in Sources */,

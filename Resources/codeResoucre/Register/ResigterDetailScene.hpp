@@ -12,6 +12,13 @@
 #include "cocos2d.h"
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 class RegisterDetailScene:public cocos2d::Scene{
 public:
     static cocos2d::Scene* createScene();
@@ -28,6 +35,13 @@ public:
     
     
     cocos2d::ui::TextField*  createBasicData(cocos2d::Sprite* bkView,cocos2d::Vec2 point,std::string name1,std::string name2);
+    
+    
+#pragma-用于加载数据
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork(std::string username,std::string passwd,std::string name,std::string sex,std::string age,std::string phone,std::string phone1,std::string idCardNo,std::string address,std::string headUrl,std::string caseNo);
+private:
+    rapidjson::Document loginData;
     
 };
 

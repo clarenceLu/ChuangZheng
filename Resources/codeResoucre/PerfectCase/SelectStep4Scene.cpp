@@ -10,6 +10,10 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "SearchScene.hpp"
+
+using namespace rapidjson; // 命名空间
+#include "NetWrokMangerData.hpp"
+
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -230,3 +234,37 @@ void SelectStep4Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventT
     }
     
 }
+
+
+
+#pragma-用于加载网络数据
+
+void SelectStep4Scene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    string url="http://czapi.looper.pro/web/getDoctor";
+    netManeger->sendMessage(url,CC_CALLBACK_2(SelectStep4Scene::onHttpRequestCompleted, this),nullptr);
+}
+
+void SelectStep4Scene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    // rapidjson::Document Jsondata;
+    this->loginData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (this->loginData.HasParseError()) {
+        return;
+    }
+    if(this->loginData.HasMember("data")){
+                for(int i = 0; i < this->loginData["data"].Size(); i++) {
+                    rapidjson::Value& object = this->loginData["data"][i];
+                    CCLOG("%s", object["artistheaderimageurl"].GetString());
+                }
+    }
+    
+}
+

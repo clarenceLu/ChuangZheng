@@ -32,13 +32,12 @@ bool LoginScene::init()
     {
         return false;
     }
-    
     this->createHudView();
-    
     return true;
 }
 
-
+TextField *userName;
+TextField *password;
 void LoginScene::createHudView(){
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -86,7 +85,7 @@ void LoginScene::createHudView(){
     registerMenuItem->setTag(101);
     registerBtn->addChild(registerMenuItem);
     
-    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+//    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
     
     
     
@@ -157,27 +156,27 @@ void LoginScene::createHudView(){
     }
     
     
-    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),(char *)buffer.GetString());
+//    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),(char *)buffer.GetString());
     
-    auto textFieldName = TextField::create("请输入账户名","Arial",30);
-    textFieldName->setMaxLength(40);
-    textFieldName->setTouchSize(Size(400, 54));
-    textFieldName->setAnchorPoint(Vec2(0,0));
-    textFieldName->setPosition(Vec2(130,735));
-    textFieldName->setContentSize(Size(400,54));
-    textFieldName->setTextColor(Color4B::BLACK);
-    textFieldName->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
-    this->addChild(textFieldName);
+    userName = TextField::create("请输入账户名","Arial",30);
+    userName->setMaxLength(40);
+    userName->setTouchSize(Size(400, 54));
+    userName->setAnchorPoint(Vec2(0,0));
+    userName->setPosition(Vec2(130,735));
+    userName->setContentSize(Size(400,54));
+    userName->setTextColor(Color4B::BLACK);
+    userName->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
+    this->addChild(userName);
     
-    auto textFieldPasswd = TextField::create("请输入密码","Arial",30);
-    textFieldPasswd->setMaxLength(40);
-    textFieldPasswd->setTouchSize(Size(400, 54));
-    textFieldPasswd->setAnchorPoint(Vec2(0,0));
-    textFieldPasswd->setPosition(Vec2(130,637));
-    textFieldPasswd->setContentSize(Size(400,54));
-    textFieldPasswd->setTextColor(Color4B::BLACK);
-    textFieldPasswd->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
-    this->addChild(textFieldPasswd);
+    password = TextField::create("请输入密码","Arial",30);
+    password->setMaxLength(40);
+    password->setTouchSize(Size(400, 54));
+    password->setAnchorPoint(Vec2(0,0));
+    password->setPosition(Vec2(130,637));
+    password->setContentSize(Size(400,54));
+    password->setTextColor(Color4B::BLACK);
+    password->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
+    this->addChild(password);
     
 }
 void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
@@ -199,14 +198,34 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
         return;
     }
     if(this->loginData.HasMember("data")){
-        for(int i = 0; i < this->loginData["data"].Size(); i++) {
-            
-            rapidjson::Value& object = this->loginData["data"][i];
-            CCLOG("%s", object["artistheaderimageurl"].GetString());
-        }
+//        for(int i = 0; i < this->loginData["data"].Size(); i++) {
+//
+//            rapidjson::Value& object = this->loginData["data"][i];
+//            CCLOG("%s", object["artistheaderimageurl"].GetString());
+//        }
+        auto userCaseSC=UserCaseScene::create();
+        Director::getInstance()->replaceScene(userCaseSC);
+    }else{
+        Size visibleSize= Director::getInstance()->getVisibleSize();
+        auto judgeV = Label::createWithSystemFont("登录失败","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+        judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+        judgeV->setTextColor(Color4B(91, 144, 229, 255));
+        judgeV->setAnchorPoint(Vec2(0.5, 0));
+        this->addChild(judgeV,10);
+        judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
     }
 
-    this->printLog();
+//    this->printLog();
+}
+
+#pragma-用于加载网络数据
+
+void LoginScene::pushDataToNetWork(string username,string passwd){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char strtest[500] = {0};
+    sprintf(strtest,"http://czapi.looper.pro/web/userLogin?userId=%s&passwd=%s", username.c_str(),passwd.c_str());
+    string url=strtest;
+    netManeger->sendMessage(url,CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),nullptr);
 }
 
 
@@ -241,8 +260,31 @@ void LoginScene::menuLoginCallback(Ref* pSender)
         Director::getInstance()->pushScene(registerScene);
     }
     if (tag==100) {
-        auto userCaseSC=UserCaseScene::create();
-        Director::getInstance()->replaceScene(userCaseSC);
+         Size visibleSize=Director::getInstance()->getVisibleSize();
+        if (userName->getStringLength()<2) {
+            auto judgeV = Label::createWithSystemFont("请输入您的账号","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+            judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+            judgeV->setTextColor(Color4B(91, 144, 229, 255));
+            judgeV->setAnchorPoint(Vec2(0.5, 0));
+            this->addChild(judgeV,10);
+//            judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+        }else if(password->getStringLength()<6){
+            auto judgeV = Label::createWithSystemFont("请输入您的密码","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+            judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+            judgeV->setTextColor(Color4B(91, 144, 229, 255));
+            judgeV->setAnchorPoint(Vec2(0.5, 0));
+            this->addChild(judgeV,10);
+            judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+        }else if(password->getStringLength()>=6&&userName->getStringLength()>=2){
+     pushDataToNetWork(userName->getString(), password->getString());
+        }else{
+            auto judgeV = Label::createWithSystemFont("请输入账号和密码","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
+            judgeV->setPosition(Vec2(visibleSize.width/2, 568));
+            judgeV->setTextColor(Color4B(91, 144, 229, 255));
+            judgeV->setAnchorPoint(Vec2(0.5, 0));
+            this->addChild(judgeV,10);
+            judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+        }
     }
 
 }
