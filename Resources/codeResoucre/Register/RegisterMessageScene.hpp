@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include <stdio.h>
 #include "ui/CocosGUI.h"
 
 #include "network/HttpClient.h"
