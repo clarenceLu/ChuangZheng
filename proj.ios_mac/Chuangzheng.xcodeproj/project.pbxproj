@@ -60,6 +60,8 @@
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		B20C29A91FE276C800149DCB /* bk_medicalRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = B20C29A71FE276C800149DCB /* bk_medicalRecord.png */; };
+		B20C29AD1FE8E91F00149DCB /* btn_search.png in Resources */ = {isa = PBXBuildFile; fileRef = B20C29AC1FE8E91F00149DCB /* btn_search.png */; };
+		B20C29B31FE9053400149DCB /* AppearanceAbnormalScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B20C29B11FE9053400149DCB /* AppearanceAbnormalScene.cpp */; };
 		B223F1281FCE6B5500DA0315 /* register_case.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F11F1FCE6B5500DA0315 /* register_case.png */; };
 		B223F1291FCE6B5500DA0315 /* register_first_use.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F1201FCE6B5500DA0315 /* register_first_use.png */; };
 		B223F12A1FCE6B5500DA0315 /* btn_register_return.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F1211FCE6B5500DA0315 /* btn_register_return.png */; };
@@ -275,6 +277,9 @@
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B20C29A71FE276C800149DCB /* bk_medicalRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_medicalRecord.png; sourceTree = "<group>"; };
+		B20C29AC1FE8E91F00149DCB /* btn_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_search.png; sourceTree = "<group>"; };
+		B20C29B11FE9053400149DCB /* AppearanceAbnormalScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppearanceAbnormalScene.cpp; sourceTree = "<group>"; };
+		B20C29B21FE9053400149DCB /* AppearanceAbnormalScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppearanceAbnormalScene.hpp; sourceTree = "<group>"; };
 		B223F11F1FCE6B5500DA0315 /* register_case.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register_case.png; sourceTree = "<group>"; };
 		B223F1201FCE6B5500DA0315 /* register_first_use.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register_first_use.png; sourceTree = "<group>"; };
 		B223F1211FCE6B5500DA0315 /* btn_register_return.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_register_return.png; sourceTree = "<group>"; };
@@ -623,6 +628,15 @@
 			path = MedicalRecord;
 			sourceTree = "<group>";
 		};
+		B20C29AB1FE8E79E00149DCB /* Doctor */ = {
+			isa = PBXGroup;
+			children = (
+				B20C29B21FE9053400149DCB /* AppearanceAbnormalScene.hpp */,
+				B20C29B11FE9053400149DCB /* AppearanceAbnormalScene.cpp */,
+			);
+			path = Doctor;
+			sourceTree = "<group>";
+		};
 		B223F11E1FCE6B5500DA0315 /* register */ = {
 			isa = PBXGroup;
 			children = (
@@ -861,6 +875,7 @@
 		B262F8221FDFF36B00EF887A /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				B20C29AC1FE8E91F00149DCB /* btn_search.png */,
 				B262F8231FDFF36B00EF887A /* bk_search.png */,
 			);
 			path = Search;
@@ -965,6 +980,7 @@
 		C49D38481FC542F10092C808 /* codeResoucre */ = {
 			isa = PBXGroup;
 			children = (
+				B20C29AB1FE8E79E00149DCB /* Doctor */,
 				B28993CF1FE267340047C9E6 /* medicalRecord */,
 				B262F7961FD7BE8000EF887A /* Register */,
 				B262F78F1FD7BE7700EF887A /* PerfectCase */,
@@ -1183,6 +1199,7 @@
 				B223F13F1FCEAB0E00DA0315 /* select_sure.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				C43E9E301FC843F300CFB6EC /* btn_register.png in Resources */,
+				B20C29AD1FE8E91F00149DCB /* btn_search.png in Resources */,
 				C49D38471FC542E90092C808 /* login_bk.png in Resources */,
 				B262F8241FDFF36B00EF887A /* bk_search.png in Resources */,
 				B223F1401FCEAB0E00DA0315 /* message_select_man.png in Resources */,
@@ -1233,6 +1250,7 @@
 				B262F79B1FD7BE8000EF887A /* RegisterScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				C45025511FCE9E7300596F38 /* NetWrokMangerData.cpp in Sources */,
+				B20C29B31FE9053400149DCB /* AppearanceAbnormalScene.cpp in Sources */,
 				B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */,
 				B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,

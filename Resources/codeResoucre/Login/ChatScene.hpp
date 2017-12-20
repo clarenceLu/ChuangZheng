@@ -16,6 +16,7 @@ public:
     virtual bool init();
     
     CREATE_FUNC(ChatScene);
-    
+    cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 point,cocos2d::Size size);
+    cocos2d::Layer* createMessageLayer(int i, cocos2d::Size  innerSize);
 };
 #endif /* ChatScene_hpp */

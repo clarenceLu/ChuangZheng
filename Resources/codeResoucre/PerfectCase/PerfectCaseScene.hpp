@@ -19,6 +19,9 @@ public:
     
     //声明CheckBox回调函数
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
+    
+    cocos2d::Layer* createMessageLayer();
+   cocos2d::Layer* createAlbumLayer();
 
 };
 #endif /* PerfectCaseScene_hpp */

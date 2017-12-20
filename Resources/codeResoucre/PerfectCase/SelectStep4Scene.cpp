@@ -77,8 +77,6 @@ bool SelectStep4Scene::init(){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
-            auto searchSC=SearchScene::createScene();
-            Director::getInstance()->pushScene(searchSC);
         }
     
         default:
