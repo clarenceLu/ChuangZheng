@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "LoginScene.h"
-
+#include "SpineTendernessScene.hpp"
+#include "AppearanceAbnormalScene.hpp"
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -99,9 +100,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    // create a scene. it's an autorelease object
+//     create a scene. it's an autorelease object
     auto scene = LoginScene::createScene();
-
+//auto scene = SpineTendernessScene::createScene();
     // run
     director->runWithScene(scene);
 

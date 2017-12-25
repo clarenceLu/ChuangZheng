@@ -20,6 +20,8 @@ USING_NS_CC;
 Scene *SelectStep4Scene::createScene(){
     return SelectStep4Scene::create();
 }
+ScrollView *Select4Scroll;
+rapidjson::Value dataArr(rapidjson::kArrayType);
 bool SelectStep4Scene::init(){
     if (!Scene::init()) {
         return false;
@@ -75,8 +77,6 @@ bool SelectStep4Scene::init(){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
-            auto searchSC=SearchScene::createScene();
-            Director::getInstance()->pushScene(searchSC);
         }
     
         default:
@@ -100,9 +100,8 @@ bool SelectStep4Scene::init(){
     searchText->addEventListener(CC_CALLBACK_2(SelectStep4Scene::eventCallBack, this));
     serachV->addChild(searchText);
     
-    auto scrollV=createTableView(Vec2(0, 0), Size(visibleSize.width, 910));
-    bkView->addChild(scrollV);
-    
+    Select4Scroll=createTableView(Vec2(0, 0), Size(visibleSize.width, 910));
+    bkView->addChild(Select4Scroll);
     
     return true;
 }
@@ -114,22 +113,25 @@ ScrollView* SelectStep4Scene::createTableView(Vec2 origin,Size visibleSize){
     scrollView->setScrollBarEnabled(true);//是否显示滚动条
     scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
     scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
-    scrollView->setInnerContainerSize(Size(visibleSize.width, 160*10));//设置内容大小
-    for (int i=0; i<10; i++) {
-        auto layer1 = createMessageLayer(i,scrollView->getInnerContainerSize());
-        scrollView->addChild(layer1);
-    }
-    
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    string url="http://czapi.looper.pro/web/getDoctor";
+    netManeger->sendMessage(url,CC_CALLBACK_2(SelectStep4Scene::onHttpRequestCompleted, this),nullptr);
     return scrollView;
 }
 
 Layer* SelectStep4Scene::createMessageLayer(int i, Size  innerSize){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
+//Data
+     rapidjson::Value& object = this->loginData["data"][i];
+    if (dataArr.GetArray().Size()) {
+        object=dataArr[i];
+    }
     auto layer = LayerColor::create(Color4B(255, 255, 255, 255));
     layer->setContentSize(Size(visibleSize.width-40, 140));
     layer->setPosition(Point(20,innerSize.height-160*(i+1)+10));
     layer->setAnchorPoint(Vec2(0, 0));
+    layer->setTag(1000+i);
     
     auto bkView=Sprite::create("bk_tableView_white.png");
     bkView->setPosition(Vec2(0, 0));
@@ -157,24 +159,32 @@ Layer* SelectStep4Scene::createMessageLayer(int i, Size  innerSize){
                                                     log("点击上传头像");
                                                 }
     });
+    string name=object["name"].GetString();
     
-    auto contentLB = Label::createWithSystemFont("专业及科研皇帝，有前途，不收红包，是不负责的好教授。","Arial",28,Size(380,80),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    contentLB->setPosition(Point(140,10));
-    contentLB->setTextColor(Color4B(0, 0, 0, 255/2));
-    contentLB->setAnchorPoint(Vec2(0, 0));
-    bkView->addChild(contentLB);
+    if (object["intro"].IsObject()||object["intro"].IsNull()) {
+    }else{
+         string info=object["intro"].GetString();
+        auto contentLB = Label::createWithSystemFont(info,"Arial",28,Size(380,80),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+        contentLB->setPosition(Point(140,10));
+        contentLB->setTextColor(Color4B(0, 0, 0, 255/2));
+        contentLB->setAnchorPoint(Vec2(0, 0));
+        bkView->addChild(contentLB);
+    }
     
-    auto nameLB = Label::createWithSystemFont("乾隆","Arial",35,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    if (object["education"].IsObject()||object["education"].IsNull()) {
+    }else{
+    string education=object["education"].GetString();
+        auto jobLB = Label::createWithSystemFont(education,"Arial",32,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+        jobLB->setPosition(Point(300,80));
+        jobLB->setTextColor(Color4B(0, 0, 0, 240));
+        jobLB->setAnchorPoint(Vec2(0, 0));
+        bkView->addChild(jobLB);
+    }
+    auto nameLB = Label::createWithSystemFont(name,"Arial",35,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     nameLB->setPosition(Point(140,80));
     nameLB->setTextColor(Color4B(0, 0, 0, 255));
     nameLB->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(nameLB);
-    
-    auto jobLB = Label::createWithSystemFont("教授","Arial",32,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    jobLB->setPosition(Point(300,80));
-    jobLB->setTextColor(Color4B(0, 0, 0, 240));
-    jobLB->setAnchorPoint(Vec2(0, 0));
-    bkView->addChild(jobLB);
     
     auto selectCheckBox = CheckBox::create("btn_step4_unselect.png","btn_step4_select.png");
     //设置CheckBox的位置
@@ -216,14 +226,56 @@ void SelectStep4Scene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
 
 void SelectStep4Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
+    TextField* textField = dynamic_cast<cocos2d::ui::TextField*>(pSender);
     switch (type){
             
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
+            if (textField->getString().length()) {
+                log("有数据");
+               for (int i=0; i<loginData["data"].Size(); i++) {
+                    rapidjson::Value& object = this->loginData["data"][i];
+                   rapidjson::Document::AllocatorType&allocator= loginData.GetAllocator();
+                    CCLOG("%s", object["name"].GetString());
+                 if(strcmp(object["name"].GetString(), textField->getString().c_str())==0){
+                       log("%s",object["name"].GetString());
+                     dataArr.PushBack(object, allocator);
+                   }
+               }
+                if (dataArr.GetArray().Size()>0) {
+                    for (int j=0; j<loginData["data"].Size(); j++) {
+                        Select4Scroll->removeChildByTag(1000+j);
+                    }
+                    for (int k=0; k<dataArr.GetArray().Size(); k++) {
+                        Size visibleSize=Director::getInstance()->getVisibleSize();
+                        Select4Scroll->setInnerContainerSize(Size(visibleSize.width, 160*dataArr.GetArray().Size()));//设置内容大小
+                        auto layer1 = createMessageLayer(k,Select4Scroll->getInnerContainerSize());
+                        Select4Scroll->addChild(layer1);
+                    }
+                }
+                
+                log("%d",dataArr.GetArray().Size());
+            }
             CCLOG("INSERT_TEXT");
             
             break;
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
-            
+            if (textField->getString().length()) {
+                  log("%s",textField->getString().c_str());
+            }else{
+                Size visibleSize=Director::getInstance()->getVisibleSize();
+                Select4Scroll->setInnerContainerSize(Size(visibleSize.width, 160*loginData["data"].Size()));//设置内容大小
+                    for (int j=0; j<dataArr.GetArray().Size(); j++) {
+                        Select4Scroll->removeChildByTag(1000+j);
+                        dataArr.Clear();
+                    }
+                 log("%d",loginData["data"].Size());
+                for (int i=0; i<loginData["data"].Size(); i++) {
+                    Size visibleSize=Director::getInstance()->getVisibleSize();
+                    Select4Scroll->setInnerContainerSize(Size(visibleSize.width, 160*loginData["data"].Size()));//设置内容大小
+                    auto layer1 = createMessageLayer(i,Select4Scroll->getInnerContainerSize());
+                    Select4Scroll->addChild(layer1);
+                }
+            }
             CCLOG("DELETE_BACKWARD");
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
             
@@ -260,10 +312,16 @@ void SelectStep4Scene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* 
         return;
     }
     if(this->loginData.HasMember("data")){
-                for(int i = 0; i < this->loginData["data"].Size(); i++) {
-                    rapidjson::Value& object = this->loginData["data"][i];
-                    CCLOG("%s", object["artistheaderimageurl"].GetString());
-                }
+        Size visibleSize=Director::getInstance()->getVisibleSize();
+        Select4Scroll->setInnerContainerSize(Size(visibleSize.width, 160*loginData["data"].Size()));//设置内容大小
+        for (int i=0; i<loginData["data"].Size(); i++) {
+            auto layer1 = createMessageLayer(i,Select4Scroll->getInnerContainerSize());
+            Select4Scroll->addChild(layer1);
+        }
+//                for(int i = 0; i < this->loginData["data"].Size(); i++) {
+//                    rapidjson::Value& object = this->loginData["data"][i];
+//                    CCLOG("%s", object["name"].GetString());
+//                }
     }
     
 }

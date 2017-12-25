@@ -205,6 +205,9 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
 //        }
         auto userCaseSC=UserCaseScene::create();
         Director::getInstance()->replaceScene(userCaseSC);
+        
+      
+        
     }else{
         Size visibleSize= Director::getInstance()->getVisibleSize();
         auto judgeV = Label::createWithSystemFont("登录失败","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);

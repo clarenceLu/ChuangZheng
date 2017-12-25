@@ -18,7 +18,7 @@ public:
     CREATE_FUNC(MedicalRecordScene);
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
     
-    cocos2d::ui::TextField*  createBasicData(cocos2d::Sprite* bkView,cocos2d::Vec2 point,std::string name1,std::string name2);
+    float createLabel(cocos2d::Vec2 point,std::string name1,std::string name2,cocos2d::Sprite* superV);
 };
 
 #endif /* MedicalRecordScene_hpp */

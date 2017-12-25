@@ -41,42 +41,43 @@ bool MedicalRecordScene::init(){
     });
     bkView->addChild(backBtn);
     
-     auto textfieldName=createBasicData(bkView, Vec2(59, 900), "责任医生：", "刘玄德,张翼德,关云长");
+     float height1=createLabel(Vec2(0, 900), "责任医生：", "刘玄德,张翼德,关云长",bkView);
+    float height2= createLabel(Vec2(0, 810+41-height1), "印象：", "头后仰上身麻无敌无敌无敌无敌无敌", bkView);
+    float height3= createLabel(Vec2(0, 720+41*2-height2-height1), "症状：", "右手麻木，右手疼痛", bkView);
+    float height4= createLabel(Vec2(0, 630+41*3-height3-height2-height1), "体征：", "体质弱", bkView);
+    float height5= createLabel(Vec2(0, 540+41*4-height4-height3-height2-height1), "影像：", "无", bkView);
+    float height6= createLabel(Vec2(0, 450+41*5-height5-height4-height3-height2-height1), "评分：", "颈椎", bkView);
+    float height7= createLabel(Vec2(0, 360+41*6-height6-height5-height4-height3-height2-height1), "治疗方式：", "手术，支架", bkView);
+    float height8= createLabel(Vec2(0, 270+41*7-height7-height6-height5-height4-height3-height2-height1), "备注：", "多喝水", bkView);
     
     return true;
 }
 
-
-
-TextField*  MedicalRecordScene::createBasicData(Sprite* bkView,Vec2 point,string name1,string name2){
+float MedicalRecordScene::createLabel(Vec2 point,string name1,string name2,Sprite* superV){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
-    auto userName = Label::createWithSystemFont(name1,"Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    userName->setPosition(point);
-    userName->setTextColor(Color4B(91, 144, 229, 255));
-    userName->setAnchorPoint(Vec2(0, 0));
-    bkView->addChild(userName);
+    auto nameLB = Label::createWithSystemFont(name1,"fonts/Marker Felt.ttf",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    nameLB->setPosition(Point(56,point.y));
+    nameLB->setTextColor(Color4B(91,144,230, 255));
+    nameLB->setAnchorPoint(Vec2(0, 0));
+    superV->addChild(nameLB);
     
-    auto textFieldUser = TextField::create(name2,"Arial",35);
-    textFieldUser->setMaxLength(40);
-    textFieldUser->setTouchSize(Size(visibleSize.width-300, 50));
-    textFieldUser->setPosition(Vec2(visibleSize.width-60,point.y));
-    textFieldUser->setAnchorPoint(Vec2(1,0));
-    textFieldUser->setContentSize(Size(visibleSize.width-300,50));
-    textFieldUser->setTextColor(Color4B::BLACK);
-    textFieldUser->setPlaceHolderColor(Color4B::GRAY);
-    textFieldUser->setTextHorizontalAlignment(TextHAlignment::RIGHT);
-    textFieldUser->addEventListener(CC_CALLBACK_2(MedicalRecordScene::eventCallBack, this));
-    bkView->addChild(textFieldUser);
+    auto nameLB2 = Label::createWithSystemFont(name2,"Arial",35,Size(visibleSize.width-265,0),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    float height=nameLB2->getContentSize().height;
+    nameLB2->setPosition(Point(218,point.y+41-height));
+    nameLB2->setTextColor(Color4B(0,0,0, 255/3*2));
+    nameLB2->setAnchorPoint(Vec2(0, 0));
+    superV->addChild(nameLB2);
     
     auto lineV=Sprite::create("userInfo_line.png");
-    lineV->setPosition(Vec2(51, point.y-10));
+    lineV->setPosition(Vec2(51, point.y+31-height));
     lineV->setAnchorPoint(Vec2(0, 0));
-    lineV->setScaleX(0.85);
-    bkView->addChild(lineV);
+    lineV->setScaleX(0.87);
+    superV->addChild(lineV);
     
-    return textFieldUser;
+    return height;
 }
+
 
 void MedicalRecordScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
