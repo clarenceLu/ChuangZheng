@@ -20,7 +20,7 @@ public:
     void menuSelectCallback(cocos2d::Ref* pSender);
     
     
-    void   createRectButton(cocos2d::Vec2 point,int tag);
+    Label*   createRectButton(cocos2d::Vec2 point,int index,int tag);
     
     
     void onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event  *event);
