@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
-#include "QRSprite.hpp"
 USING_NS_CC;
 class SenseAbnormalScene:public cocos2d::Scene{
 public:
