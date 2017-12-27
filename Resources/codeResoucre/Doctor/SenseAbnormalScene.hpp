@@ -9,8 +9,8 @@
 #define SenseAbnormalScene_hpp
 
 #include <stdio.h>
-#include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "QRSprite.hpp"
 USING_NS_CC;
 class SenseAbnormalScene:public cocos2d::Scene{
 public:
@@ -20,6 +20,7 @@ public:
     
     cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 origin,Size visibleSize);
     
+    cocos2d::Layer* createCodeLayer();
     
     void onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event  *event);
     void onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event  *event);
@@ -27,11 +28,15 @@ public:
     void onTouchesCancelled(const std::vector<Touch*>& touches, cocos2d::Event  *event);
     
 public:
+//双指
     double distance;    //两个触摸点之间的距离
     double deltax;    //目标x轴的改变值
     double deltay;    //目标y轴的改变值
     double mscale;   //初始地图缩放比例
+//单指
+    cocos2d::Vec2 changePoint;
     cocos2d::Sprite* imageV;
+    
 };
 
 

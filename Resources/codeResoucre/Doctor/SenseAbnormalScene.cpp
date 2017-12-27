@@ -12,6 +12,7 @@
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
+
 Scene *SenseAbnormalScene::createScene(){
     return SenseAbnormalScene::create();
 }
@@ -39,9 +40,34 @@ bool SenseAbnormalScene::init(){
     });
     this->addChild(backBtn);
     
-    ScrollView *scrollV=createTableView(Vec2(20, 20), Size(visibleSize.width-40, visibleSize.height-200));
-    bkView->addChild(scrollV);
+    imageV=Sprite::create("l_r8_c14.png");
+    imageV->setPosition(Vec2(20, 20));
+    imageV->setColor(Color3B::RED);
+    imageV->setContentSize(Size(visibleSize.width-40, visibleSize.height-200));
+    imageV->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(imageV);
     
+    
+//    auto  testBtn=Button::create();
+//    testBtn->loadTextures("btn_register.png", "bg_input_passwd.png");
+//    testBtn->setPosition(Vec2(20, 100));
+//    testBtn->setAnchorPoint(Vec2(0, 0));
+//    testBtn->setScale(0.87);
+//    testBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+//        case ui::Widget::TouchEventType::BEGAN:
+//            break;
+//        case ui::Widget::TouchEventType::ENDED:
+//
+//        default:
+//            break;
+//    }
+//    });
+//    imageV->addChild(testBtn);
+//
+    
+
+    
+    mscale=1.0;
     
     //添加触控监听
     EventDispatcher* eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -55,49 +81,30 @@ bool SenseAbnormalScene::init(){
     return true;
 }
 
-ScrollView* SenseAbnormalScene::createTableView(Vec2 origin,Size visibleSize){
-    auto scrollView=cocos2d::ui::ScrollView::create();
-    scrollView->setPosition(Vec2(origin.x, origin.y));
-    scrollView->setDirection(cocos2d::ui::ScrollView::Direction::BOTH);//方向
-    scrollView->setScrollBarEnabled(true);//是否显示滚动条
-    scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
-    scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
-    scrollView->setInnerContainerSize(Size(visibleSize.width*2, (visibleSize.height-160)*2));//设置内容大小
-    scrollView->setInnerContainerPosition(Vec2(0, 0));
-    
-    this->imageV=Sprite::create("HelloWorld.png");
-    this->imageV->setPosition(Vec2(0, 0));
-    this->imageV->setContentSize(Size(visibleSize.width, visibleSize.height));
-    this->imageV->setAnchorPoint(Vec2(0, 0));
-    scrollView->addChild(this->imageV);
-    
-    return scrollView;
-}
 
 
 //触摸事件开始，手指按下时
 void SenseAbnormalScene::onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event  *event)
 {
-    for(auto &item : touches)
-    {
-        auto touch = item;
-        auto pos1 = touch->getLocation();
-        auto pos2 = touch->getLocationInView();
-        auto pos3 = Director::getInstance()->convertToUI(pos2);
+    auto touch = touches.at(0);
+    //右指，从左往右的时候为扩大，从右往左的时候为缩放
+    auto pos1 = touch->getLocation();
+    auto pos2 = touch->getLocationInView();
+    auto pos3 = Director::getInstance()->convertToUI(pos2);
+    if (touches.size()>1) {
+        auto touch2=touches.at(1);
+        //左指，从左往右为缩放，从右往左为扩大
+        auto pos4 = touch2->getLocation();
+        auto pos5 = touch2->getLocationInView();
+        auto pos6 = Director::getInstance()->convertToUI(pos5);
+    distance=sqrt((pos6.x-pos3.x)*(pos6.x-pos3.x)+(pos6.y-pos3.y)*(pos6.y-pos3.y));//计算两个触摸点距离
+    deltax = (pos3.x + pos6.x)/2 - this->imageV->getPositionX();     //得到两个触摸点中点和精灵锚点的差值
+    deltay = (pos3.y + pos6.y)/2 - this->imageV->getPositionY();
+    }else if (touches.size()==1){
+        changePoint=pos3-imageV->getPosition();
+        log("pos3:%f,%f  ;  imageV:%f,%f",pos3.x,pos3.y,imageV->getPosition().x,imageV->getPosition().y);
     }
     
-    
-    
-    
-    
-    
-    
-//        if (pos1.x-pos3.x<0) {
-//            log("从右往左滑动");
-//        }
-//        if (pos1.y-pos3.y<0) {
-//            log("从上往下滑动");
-//        }
 }
 //触摸移动事件，也就是手指在屏幕滑动的过程
 void SenseAbnormalScene::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event  *event)
@@ -110,7 +117,7 @@ void SenseAbnormalScene::onTouchesMoved(const std::vector<Touch*>& touches, coco
     log("pos1 x: %f, y: %f",pos1.x,pos1.y);
     log("pos2 x: %f, y: %f",pos2.x,pos2.y);
     log("pos3 x: %f, y: %f",pos3.x,pos3.y);
-    log("touch size %ld",touches.size());
+//    log("touch size %ld",touches.size());
     if (touches.size()>1) {
         auto touch2=touches.at(1);
         //左指，从左往右为缩放，从右往左为扩大
@@ -120,6 +127,22 @@ void SenseAbnormalScene::onTouchesMoved(const std::vector<Touch*>& touches, coco
         log("pos4 x: %f, y: %f",pos4.x,pos4.y);
         log("pos5 x: %f, y: %f",pos5.x,pos5.y);
         log("pos6 x: %f, y: %f",pos6.x,pos6.y);
+        
+//如果是双指移动
+        double mdistance = sqrt((pos3.x-pos6.x)*(pos3.x-pos6.x)+(pos3.y-pos6.y)*(pos3.y-pos6.y));
+        mscale = mdistance/distance * mscale;                      //   新的距离 / 老的距离  * 原来的缩放比例，即为新的缩放比例
+        distance = mdistance;
+        this->imageV->setScale(mscale);
+
+        double x = (pos6.x+pos3.x)/2 - deltax;      //计算两触点中点与精灵锚点的差值
+        double y = (pos6.y+pos3.y)/2 - deltay;
+         imageV->setPosition(Vec2(x,y));                        //保持两触点中点与精灵锚点的差值不变
+        deltax = (pos3.x+ pos6.x)/2 - imageV->getPositionX();       //计算新的偏移量
+        deltay = (pos6.y + pos3.y)/2 - imageV->getPositionY();
+    }else if (touches.size()==1){ //坐标转换
+        double x = pos3.x - changePoint.x;
+        double y = pos3.y- changePoint.y;
+            imageV->setPosition(Vec2(x, y));                    //直接移动精灵x
     }
     
 }

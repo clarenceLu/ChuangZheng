@@ -51,6 +51,5 @@ public:
 private:
     static std::vector<std::string> parseUTF8(const std::string &str);
     
-    
 };
 #endif /* UserCaseScene_hpp */
