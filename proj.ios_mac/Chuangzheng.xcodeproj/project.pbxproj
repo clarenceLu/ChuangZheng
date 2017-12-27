@@ -177,14 +177,6 @@
 		B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B262F81F1FDFF2C800EF887A /* SearchScene.cpp */; };
 		B262F8241FDFF36B00EF887A /* bk_search.png in Resources */ = {isa = PBXBuildFile; fileRef = B262F8231FDFF36B00EF887A /* bk_search.png */; };
 		B262F8271FE1029300EF887A /* ResigterDetailScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B262F8251FE1029300EF887A /* ResigterDetailScene.cpp */; };
-		B2749BBD1FF230A3007516BF /* QRSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2749BAC1FF230A2007516BF /* QRSprite.cpp */; };
-		B2749BBE1FF230A3007516BF /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = B2749BB11FF230A2007516BF /* bitstream.c */; };
-		B2749BBF1FF230A3007516BF /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = B2749BB21FF230A2007516BF /* qrencode.c */; };
-		B2749BC01FF230A3007516BF /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = B2749BB41FF230A2007516BF /* split.c */; };
-		B2749BC11FF230A3007516BF /* qrinput.c in Sources */ = {isa = PBXBuildFile; fileRef = B2749BB61FF230A2007516BF /* qrinput.c */; };
-		B2749BC21FF230A3007516BF /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = B2749BB81FF230A2007516BF /* mask.c */; };
-		B2749BC31FF230A3007516BF /* qrspec.c in Sources */ = {isa = PBXBuildFile; fileRef = B2749BB91FF230A2007516BF /* qrspec.c */; };
-		B2749BC41FF230A3007516BF /* rscode.c in Sources */ = {isa = PBXBuildFile; fileRef = B2749BBC1FF230A2007516BF /* rscode.c */; };
 		B2749CA31FF37811007516BF /* btn_sickInfo_group.png in Resources */ = {isa = PBXBuildFile; fileRef = B2749BCC1FF37810007516BF /* btn_sickInfo_group.png */; };
 		B2749CA41FF37811007516BF /* btn_sickInfo_account.png in Resources */ = {isa = PBXBuildFile; fileRef = B2749BCD1FF37810007516BF /* btn_sickInfo_account.png */; };
 		B2749CA51FF37811007516BF /* bk_sickInfo_QRCode.png in Resources */ = {isa = PBXBuildFile; fileRef = B2749BCE1FF37810007516BF /* bk_sickInfo_QRCode.png */; };
@@ -635,22 +627,6 @@
 		B262F8231FDFF36B00EF887A /* bk_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_search.png; sourceTree = "<group>"; };
 		B262F8251FE1029300EF887A /* ResigterDetailScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResigterDetailScene.cpp; sourceTree = "<group>"; };
 		B262F8261FE1029300EF887A /* ResigterDetailScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResigterDetailScene.hpp; sourceTree = "<group>"; };
-		B2749BAC1FF230A2007516BF /* QRSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QRSprite.cpp; sourceTree = "<group>"; };
-		B2749BAD1FF230A2007516BF /* QRSprite.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = QRSprite.hpp; sourceTree = "<group>"; };
-		B2749BAF1FF230A2007516BF /* mask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mask.h; sourceTree = "<group>"; };
-		B2749BB01FF230A2007516BF /* qrinput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrinput.h; sourceTree = "<group>"; };
-		B2749BB11FF230A2007516BF /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitstream.c; sourceTree = "<group>"; };
-		B2749BB21FF230A2007516BF /* qrencode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrencode.c; sourceTree = "<group>"; };
-		B2749BB31FF230A2007516BF /* qrspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrspec.h; sourceTree = "<group>"; };
-		B2749BB41FF230A2007516BF /* split.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = split.c; sourceTree = "<group>"; };
-		B2749BB51FF230A2007516BF /* rscode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rscode.h; sourceTree = "<group>"; };
-		B2749BB61FF230A2007516BF /* qrinput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrinput.c; sourceTree = "<group>"; };
-		B2749BB71FF230A2007516BF /* bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitstream.h; sourceTree = "<group>"; };
-		B2749BB81FF230A2007516BF /* mask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mask.c; sourceTree = "<group>"; };
-		B2749BB91FF230A2007516BF /* qrspec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrspec.c; sourceTree = "<group>"; };
-		B2749BBA1FF230A2007516BF /* qrencode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrencode.h; sourceTree = "<group>"; };
-		B2749BBB1FF230A2007516BF /* split.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = split.h; sourceTree = "<group>"; };
-		B2749BBC1FF230A2007516BF /* rscode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rscode.c; sourceTree = "<group>"; };
 		B2749BCC1FF37810007516BF /* btn_sickInfo_group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_sickInfo_group.png; sourceTree = "<group>"; };
 		B2749BCD1FF37810007516BF /* btn_sickInfo_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_sickInfo_account.png; sourceTree = "<group>"; };
 		B2749BCE1FF37810007516BF /* bk_sickInfo_QRCode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_sickInfo_QRCode.png; sourceTree = "<group>"; };
@@ -1234,7 +1210,6 @@
 		B262F7881FD7B9C100EF887A /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				B2749BA71FF22C3C007516BF /* QRCode */,
 				B262F78A1FD7B9C100EF887A /* UserCaseScene.hpp */,
 				B262F8091FDE604800EF887A /* UserCaseScene.cpp */,
 				B262F81A1FDFEDD600EF887A /* ChatScene.hpp */,
@@ -1376,37 +1351,6 @@
 				B262F8231FDFF36B00EF887A /* bk_search.png */,
 			);
 			path = Search;
-			sourceTree = "<group>";
-		};
-		B2749BA71FF22C3C007516BF /* QRCode */ = {
-			isa = PBXGroup;
-			children = (
-				B2749BAE1FF230A2007516BF /* libqrencode */,
-				B2749BAC1FF230A2007516BF /* QRSprite.cpp */,
-				B2749BAD1FF230A2007516BF /* QRSprite.hpp */,
-			);
-			path = QRCode;
-			sourceTree = "<group>";
-		};
-		B2749BAE1FF230A2007516BF /* libqrencode */ = {
-			isa = PBXGroup;
-			children = (
-				B2749BAF1FF230A2007516BF /* mask.h */,
-				B2749BB01FF230A2007516BF /* qrinput.h */,
-				B2749BB11FF230A2007516BF /* bitstream.c */,
-				B2749BB21FF230A2007516BF /* qrencode.c */,
-				B2749BB31FF230A2007516BF /* qrspec.h */,
-				B2749BB41FF230A2007516BF /* split.c */,
-				B2749BB51FF230A2007516BF /* rscode.h */,
-				B2749BB61FF230A2007516BF /* qrinput.c */,
-				B2749BB71FF230A2007516BF /* bitstream.h */,
-				B2749BB81FF230A2007516BF /* mask.c */,
-				B2749BB91FF230A2007516BF /* qrspec.c */,
-				B2749BBA1FF230A2007516BF /* qrencode.h */,
-				B2749BBB1FF230A2007516BF /* split.h */,
-				B2749BBC1FF230A2007516BF /* rscode.c */,
-			);
-			path = libqrencode;
 			sourceTree = "<group>";
 		};
 		B2749BCA1FF37810007516BF /* Doctor */ = {
@@ -2334,29 +2278,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
-				B2749BC41FF230A3007516BF /* rscode.c in Sources */,
-				B2749BC11FF230A3007516BF /* qrinput.c in Sources */,
 				B262F80D1FDE608300EF887A /* ChatUserDetailScene.cpp in Sources */,
 				B262F7D11FD9081200EF887A /* SelectStep2Scene.cpp in Sources */,
 				B262F79B1FD7BE8000EF887A /* RegisterScene.cpp in Sources */,
-				B2749BBF1FF230A3007516BF /* qrencode.c in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				C45025511FCE9E7300596F38 /* NetWrokMangerData.cpp in Sources */,
 				B20C29B31FE9053400149DCB /* AppearanceAbnormalScene.cpp in Sources */,
-				B2749BBD1FF230A3007516BF /* QRSprite.cpp in Sources */,
 				B2749D731FF38105007516BF /* MainScene.cpp in Sources */,
 				B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */,
 				B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
-				B2749BC31FF230A3007516BF /* qrspec.c in Sources */,
-				B2749BC01FF230A3007516BF /* split.c in Sources */,
 				B262F7951FD7BE7700EF887A /* PerfectCaseScene.cpp in Sources */,
 				B262F79C1FD7BE8000EF887A /* RegisterMessageScene.cpp in Sources */,
 				B262F78E1FD7B9C200EF887A /* LoginScene.cpp in Sources */,
 				B262F80A1FDE604800EF887A /* UserCaseScene.cpp in Sources */,
 				B262F7DC1FD91C6C00EF887A /* SelectStep3Scene.cpp in Sources */,
-				B2749BBE1FF230A3007516BF /* bitstream.c in Sources */,
-				B2749BC21FF230A3007516BF /* mask.c in Sources */,
 				B262F81B1FDFEDD600EF887A /* ChatScene.cpp in Sources */,
 				B262F8271FE1029300EF887A /* ResigterDetailScene.cpp in Sources */,
 				B262F7DF1FD9322A00EF887A /* SelectStep4Scene.cpp in Sources */,
