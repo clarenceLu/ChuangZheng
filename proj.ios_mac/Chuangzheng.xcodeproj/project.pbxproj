@@ -186,6 +186,7 @@
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
+		C427CF7E1FF3646B00127931 /* QR_Encode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C427CF7C1FF3646B00127931 /* QR_Encode.cpp */; };
 		C43E9E2D1FC8364E00CFB6EC /* bg_input_passwd.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2A1FC8364E00CFB6EC /* bg_input_passwd.png */; };
 		C43E9E2E1FC8364E00CFB6EC /* bg_input_account.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2C1FC8364E00CFB6EC /* bg_input_account.png */; };
 		C43E9E301FC843F300CFB6EC /* btn_register.png in Resources */ = {isa = PBXBuildFile; fileRef = C43E9E2F1FC843F300CFB6EC /* btn_register.png */; };
@@ -441,6 +442,8 @@
 		C41180761FD52E6C004ABE05 /* btn_select_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_select_cancel.png; sourceTree = "<group>"; };
 		C41180771FD52E6C004ABE05 /* select_meter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_meter.png; sourceTree = "<group>"; };
 		C41180781FD52E6C004ABE05 /* select_blue_rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_blue_rect.png; sourceTree = "<group>"; };
+		C427CF7B1FF3646B00127931 /* QR_Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QR_Encode.h; sourceTree = "<group>"; };
+		C427CF7C1FF3646B00127931 /* QR_Encode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QR_Encode.cpp; sourceTree = "<group>"; };
 		C43E9E2A1FC8364E00CFB6EC /* bg_input_passwd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_input_passwd.png; sourceTree = "<group>"; };
 		C43E9E2C1FC8364E00CFB6EC /* bg_input_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_input_account.png; sourceTree = "<group>"; };
 		C43E9E2F1FC843F300CFB6EC /* btn_register.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_register.png; sourceTree = "<group>"; };
@@ -988,9 +991,19 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		C427CF7A1FF3646B00127931 /* Qcode */ = {
+			isa = PBXGroup;
+			children = (
+				C427CF7B1FF3646B00127931 /* QR_Encode.h */,
+				C427CF7C1FF3646B00127931 /* QR_Encode.cpp */,
+			);
+			path = Qcode;
+			sourceTree = "<group>";
+		};
 		C45025491FCE9E1600596F38 /* 3rdFrameWork */ = {
 			isa = PBXGroup;
 			children = (
+				C427CF7A1FF3646B00127931 /* Qcode */,
 				C450254F1FCE9E7300596F38 /* NetWrokMangerData.cpp */,
 				C45025501FCE9E7300596F38 /* NetWrokMangerData.hpp */,
 			);
@@ -1321,6 +1334,7 @@
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				C45025511FCE9E7300596F38 /* NetWrokMangerData.cpp in Sources */,
 				B20C29B31FE9053400149DCB /* AppearanceAbnormalScene.cpp in Sources */,
+				C427CF7E1FF3646B00127931 /* QR_Encode.cpp in Sources */,
 				B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */,
 				B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,

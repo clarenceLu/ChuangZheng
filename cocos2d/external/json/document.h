@@ -54,6 +54,9 @@ RAPIDJSON_DIAG_OFF(terminate) // ignore throwing RAPIDJSON_ASSERT in RAPIDJSON_N
 
 RAPIDJSON_NAMESPACE_BEGIN
 
+using namespace std;
+
+
 // Forward declaration.
 template <typename Encoding, typename Allocator>
 class GenericValue;
@@ -961,9 +964,10 @@ public:
         if (IsInt64()) {
             int64_t i = GetInt64();
             volatile double d = static_cast<double>(i);
-            return (d >= static_cast<double>(std::numeric_limits<int64_t>::min()))
-                && (d < static_cast<double>(std::numeric_limits<int64_t>::max()))
-                && (i == static_cast<int64_t>(d));
+//            return (d >= static_cast<double>(std::numeric_limits<int64_t>::min()))
+//                && (d < static_cast<double>(std::numeric_limits<int64_t>::max()))
+//                && (i == static_cast<int64_t>(d));
+             return true;
         }
         return true; // double, int, uint are always lossless
     }
