@@ -2,7 +2,7 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
-
+#include "QR_Encode.h"
 /**
 @brief    The cocos2d Application.
 
@@ -34,6 +34,8 @@ public:
     @param  the pointer of the application
     */
     virtual void applicationWillEnterForeground();
+    
+    CQR_Encode m_QREncode;
 };
 
 #endif // _APP_DELEGATE_H_

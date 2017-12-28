@@ -779,6 +779,19 @@ Layer* UserCaseScene::createExitLayer(){
     }
     });
     contentV->addChild(sureBtn);
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_QRCode_close.png", "btn_QRCode_close.png");
+    deleteBtn->setPosition(Vec2(visibleSize.width-115, 730));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(2001);
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
 
     return layer;
     

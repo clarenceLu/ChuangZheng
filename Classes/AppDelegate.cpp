@@ -1,9 +1,13 @@
 #include "AppDelegate.h"
 #include "LoginScene.h"
+#include "WelcomeScene.hpp"
+
+
 #include "SpineTendernessScene.hpp"
 #include "AppearanceAbnormalScene.hpp"
 #include "SenseAbnormalScene.hpp"
-#include "WelcomeScene.hpp"
+#include "AccountManageScene.hpp"
+
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -16,6 +20,10 @@
 using namespace cocos2d::experimental;
 #elif USE_SIMPLE_AUDIO_ENGINE
 #include "audio/include/SimpleAudioEngine.h"
+
+
+
+using namespace
 using namespace CocosDenshion;
 #endif
 
@@ -102,11 +110,62 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-//     create a scene. it's an autorelease object
+  /*
+    auto testScene = Scene::create();
+    director->runWithScene(testScene);
+    bool bRet = m_QREncode.EncodeData(0, 0, 1, -1, "autor:johance qq:421465201");
+    if(bRet)
+    {
+        int nSize = 5;
+        int originalSize = m_QREncode.m_nSymbleSize + (QR_MARGIN * 2);
+        CCDrawNode *pQRNode = CCDrawNode::create();
+
+        CCPoint pt[6];
+        ccColor4F color;
+
+        pt[0] = ccp(0, 0);
+        pt[1] = ccp((m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize, (m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize);
+        pt[2] = ccp((m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize, 0);
+
+        pt[3] = pt[0];
+        pt[4] = ccp(0, (m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize);
+        pt[5] = pt[1];
+        color = ccc4f(1, 1, 1, 1);
+        pQRNode->drawPolygon(pt, 6, color, 0, color);
+
+        for (int i = 0; i < m_QREncode.m_nSymbleSize; ++i)
+        {
+            for (int j = 0; j < m_QREncode.m_nSymbleSize; ++j)
+            {
+                pt[0] = ccp((i + QR_MARGIN)*nSize, (j + QR_MARGIN)*nSize);
+                pt[1] = ccp(((i + QR_MARGIN) + 1)*nSize, ((j + QR_MARGIN) + 1)*nSize);
+                pt[2] = ccp(((i + QR_MARGIN) + 1)*nSize, ((j + QR_MARGIN) + 0)*nSize);
+
+                pt[3] = pt[0];
+                pt[4] = ccp(((i + QR_MARGIN) + 0)*nSize, ((j + QR_MARGIN) + 1)*nSize);
+                pt[5] = pt[1];
+                if (m_QREncode.m_byModuleData[i][j] == 1)
+                {
+                    color = ccc4f(0, 0, 0, 1);
+                }
+                else
+                {
+                    color = ccc4f(1, 1, 1, 1);
+                }
+                pQRNode->drawPolygon(pt, 6, color, 0, color);
+            }
+        }
+        CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+        pQRNode->setPosition(ccp((winSize.width - nSize*m_QREncode.m_nSymbleSize) / 2, winSize.height - (winSize.height - nSize*m_QREncode.m_nSymbleSize) / 2));
+        pQRNode->setScaleY(-1);
+        testScene->addChild(pQRNode);
+    }
+   */
 //    auto scene = LoginScene::createScene();
    auto scene = WelcomeScene::createScene();
-    // run
+//    auto scene=AccountManageScene::createScene();
     director->runWithScene(scene);
+
 
     return true;
 }

@@ -82,11 +82,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "535223188.925424"
+            timestampString = "536056436.318503"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "LoginScene::createHudView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -98,11 +98,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "535223188.925893"
+            timestampString = "536056436.318568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
             landmarkType = "7">
          </BreakpointContent>
@@ -114,45 +114,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "535223188.926112"
+            timestampString = "536056436.318615"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
             landmarkName = "LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LoginScene::onHttpRequestCompleted(cocos2d::network::HttpClient*, cocos2d::network::HttpResponse*)"
-                  moduleName = "Chuangzheng-mobile"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lujiawei/Documents/cocos2d-x-3.16/Chuangzheng/Resources/codeResoucre/Login/LoginScene.cpp"
-                  timestampString = "535223189.013627"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "1029">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LoginScene::onHttpRequestCompleted(cocos2d::network::HttpClient*, cocos2d::network::HttpResponse*)"
-                  moduleName = "Chuangzheng-mobile"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lujiawei/Documents/cocos2d-x-3.16/Chuangzheng/Resources/codeResoucre/Login/LoginScene.cpp"
-                  timestampString = "535223189.01501"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "2187">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -162,11 +130,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "535223188.926317"
+            timestampString = "536056436.318656"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "LoginScene::createHudView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -178,11 +146,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "535223188.926517"
+            timestampString = "536056436.318696"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "LoginScene::createHudView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -194,11 +162,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "535223188.926719"
+            timestampString = "536056436.318735"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "LoginScene::createHudView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -226,11 +194,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
-            timestampString = "535223188.926936"
+            timestampString = "536056436.318802"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "LoginScene::createHudView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -264,6 +232,86 @@
             startingLineNumber = "59"
             endingLineNumber = "59"
             landmarkName = "NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback&amp; callback,char *requestDataStr)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
+            timestampString = "536056436.318891"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
+            landmarkName = "LoginScene::menuLoginCallback(Ref* pSender)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
+            timestampString = "536056436.318944"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
+            timestampString = "536056436.31898"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
+            landmarkName = "LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/Login/LoginScene.cpp"
+            timestampString = "536056436.319017"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
+            landmarkName = "LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../cocos2d/cocos/ui/UIWebViewImpl-ios.mm"
+            timestampString = "535874658.362254"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "-loadUrl:cleanCachedData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

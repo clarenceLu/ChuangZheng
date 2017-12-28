@@ -11,11 +11,13 @@ using namespace rapidjson; // 命名空间
 #include "RegisterScene.hpp"
 #include "PerfectCaseScene.hpp"
 
+#include "ui/UIWebView.h"
 
 
 using namespace cocos2d::ui;
 using namespace std;
 using namespace cocos2d;
+
 USING_NS_CC;
 
 Scene* LoginScene::createScene()
@@ -177,6 +179,19 @@ void LoginScene::createHudView(){
     password->setTextColor(Color4B::BLACK);
     password->addEventListener(CC_CALLBACK_2(LoginScene::eventCallBack, this));
     this->addChild(password);
+    
+    
+ //   webView
+    
+//    auto webView = cocos2d::experimental::ui::WebView::create();
+//    webView->loadURL("http://www.baidu.com");
+//    webView->setContentSize(Size(visibleSize.width, visibleSize.height));
+//    webView->setAnchorPoint(Vec2(0,0));
+//    webView->setPosition(Vec2(0,0));
+//    this->addChild(webView);
+//
+    
+    
     
 }
 void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
