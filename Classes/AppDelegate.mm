@@ -6,11 +6,18 @@
 #include "SpineTendernessScene.hpp"
 #include "AppearanceAbnormalScene.hpp"
 #include "SenseAbnormalScene.hpp"
+
+#include "WelcomeScene.hpp"
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+//#import "platform/ios/CCEAGLView-ios.h"
+
 #include "GroupMemberScene.hpp"
 #include "CaseHistoryScene.hpp"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
+
 
 #if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
 #error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
@@ -161,6 +168,21 @@ bool AppDelegate::applicationDidFinishLaunching() {
         pQRNode->setScaleY(-1);
         testScene->addChild(pQRNode);
     }
+<<<<<<< HEAD:Classes/AppDelegate.mm
+    
+    NSLog(@"%f",[UIScreen mainScreen].bounds.size.width);
+    NSLog(@"%f",[UIScreen mainScreen].bounds.size.height);
+    
+    
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    
+    
+   ///  [[CCEAGLView sharedEGLView] addSubview:view];
+    
+    
+    
+=======
    */
 //    auto scene = LoginScene::createScene();
    auto scene = WelcomeScene::createScene();

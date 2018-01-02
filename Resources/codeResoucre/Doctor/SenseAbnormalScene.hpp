@@ -9,6 +9,11 @@
 #define SenseAbnormalScene_hpp
 
 #include <stdio.h>
+
+
+
+
+
 #include "ui/CocosGUI.h"
 USING_NS_CC;
 class SenseAbnormalScene:public cocos2d::Scene{
@@ -17,7 +22,7 @@ public:
     virtual bool init();
     CREATE_FUNC(SenseAbnormalScene);
     
-    cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 origin,Size visibleSize);
+    cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 origin,cocos2d::Size visibleSize);
     
     cocos2d::Layer* createCodeLayer();
     
