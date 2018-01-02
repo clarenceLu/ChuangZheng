@@ -5,17 +5,17 @@
 //  Created by 工作 on 2017/12/28.
 //
 
-#include "GroupLeaderScene.hpp"
+#include "GroupMemberScene.hpp"
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
-Scene *GroupLeaderScene::createScene(){
-    return GroupLeaderScene::create();
+Scene *GroupMemberScene::createScene(){
+    return GroupMemberScene::create();
 }
-bool GroupLeaderScene::init(){
+bool GroupMemberScene::init(){
     if (!Scene::init()) {
         return false;
     }
@@ -30,7 +30,7 @@ bool GroupLeaderScene::init(){
     vector2.push_back(Value("小黄"));
     vector2.push_back(Value("小小白"));
     vector2.push_back(Value("大白"));
-    string key2 = "组员申请列表";
+    string key2 = "选择一个医疗组";
 #pragma-ValueMap加入数据
     map1[key1] = Value(vector1).asValueVector();
     map1[key2]=Value(vector2).asValueVector();
@@ -57,12 +57,12 @@ bool GroupLeaderScene::init(){
     this->addChild(backBtn);
     
     auto sureBtn=Button::create();
-    sureBtn->loadTextures("btn_group_leader_sure.png", "btn_group_leader_sure.png");
+    sureBtn->loadTextures("btn_group_member_join.png", "btn_group_member_join.png");
     sureBtn->setPosition(Vec2(visibleSize.width-100, visibleSize.height-85));
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            auto layer=createPromptLayer("确认将该医生加入医疗组吗？");
+            auto layer=createPromptLayer("确定要加入医疗组吗？");
             layer->setTag(2001);
             this->addChild(layer);
         }
@@ -77,7 +77,7 @@ bool GroupLeaderScene::init(){
     this->addChild(scrollV);
     return true;
 }
-ScrollView* GroupLeaderScene::createTableView(Vec2 origin,Size visibleSize){
+ScrollView* GroupMemberScene::createTableView(Vec2 origin,Size visibleSize){
     auto scrollView=cocos2d::ui::ScrollView::create();
     scrollView->setPosition(Vec2(origin.x, origin.y));
     scrollView->setAnchorPoint(Vec2(0, 1));
@@ -103,7 +103,7 @@ ScrollView* GroupLeaderScene::createTableView(Vec2 origin,Size visibleSize){
     moveView->addChild(userLB);
     
     float pointY1 =createPopUpView(Vec2(40, visibleSize.height-80), moveView, "医疗组成员",0,2);
-    float pointY2 =createPopUpView(Vec2(40, pointY1+60*4), moveView, "组员申请列表",5,1);
+    float pointY2 =createPopUpView(Vec2(40, pointY1+60*4), moveView, "选择一个医疗组",5,1);
     
 #warning -在这里设置没有用，因为当innerSize<contentSize，以contentSize为准
     if (visibleSize.height>visibleSize.height-20-pointY2) {
@@ -120,7 +120,7 @@ ScrollView* GroupLeaderScene::createTableView(Vec2 origin,Size visibleSize){
 }
 
 
-float GroupLeaderScene::createPopUpView(Vec2 point,Sprite* bkView,string name,int tag,int type){
+float GroupMemberScene::createPopUpView(Vec2 point,Sprite* bkView,string name,int tag,int type){
     Size visibleSize=Director::getInstance()->getVisibleSize();
 #pragma-ValueMap取值
     ValueVector vect=map1.at(name).asValueVector();
@@ -164,7 +164,7 @@ float GroupLeaderScene::createPopUpView(Vec2 point,Sprite* bkView,string name,in
     auto start = MenuItemImage::create("btn_appearance_down.png","");  //显示为on
     auto stop = MenuItemImage::create("btn_appearance_up.png","");  //显示为off
     auto toggle = MenuItemToggle::createWithCallback(
-                                                     CC_CALLBACK_1(GroupLeaderScene::menuLoginCallback,this),
+                                                     CC_CALLBACK_1(GroupMemberScene::menuLoginCallback,this),
                                                      start,
                                                      stop,
                                                      NULL);
@@ -179,7 +179,7 @@ float GroupLeaderScene::createPopUpView(Vec2 point,Sprite* bkView,string name,in
     
 }
 
-float GroupLeaderScene::creatBlueLabelView(Vec2 point,Sprite* bkView,string name,int tag,int type){
+float GroupMemberScene::creatBlueLabelView(Vec2 point,Sprite* bkView,string name,int tag,int type){
     Size visibleSize=Director::getInstance()->getVisibleSize();
     auto userName = Label::createWithSystemFont(name,"Arial",35,Size(200,60),TextHAlignment::LEFT,TextVAlignment::CENTER);
     userName->setPosition(Vec2(point.x+20, point.y));
@@ -196,19 +196,7 @@ float GroupLeaderScene::creatBlueLabelView(Vec2 point,Sprite* bkView,string name
         box->setAnchorPoint(Vec2(0, 0));
         //设置CheckBox是否可点击
         box->setTouchEnabled(true);
-        box->addEventListener(CC_CALLBACK_2(GroupLeaderScene::checkBoxCallback,this));
-        //获取checkbox的选中状态
-        bkView->addChild(box);
-    }else if (type==2){
-        auto box = CheckBox::create("btn_group_leader_delete.png","btn_group_leader_delete.png");
-        //设置CheckBox的位置
-        box->setPosition(Vec2(bkView->getContentSize().width-50,point.y+20));
-        box->setScale(0.87);
-        box->setTag(tag);
-        box->setAnchorPoint(Vec2(0, 0));
-        //设置CheckBox是否可点击
-        box->setTouchEnabled(true);
-        box->addEventListener(CC_CALLBACK_2(GroupLeaderScene::checkBoxCallback,this));
+        box->addEventListener(CC_CALLBACK_2(GroupMemberScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box);
     }
@@ -223,7 +211,7 @@ float GroupLeaderScene::creatBlueLabelView(Vec2 point,Sprite* bkView,string name
 
 
 
-void GroupLeaderScene::menuLoginCallback(Ref* pSender)
+void GroupMemberScene::menuLoginCallback(Ref* pSender)
 {
     Size visibleSize=Director::getInstance()->getVisibleSize();
     MenuItemToggle* item=(MenuItemToggle*)pSender;
@@ -283,7 +271,7 @@ void GroupLeaderScene::menuLoginCallback(Ref* pSender)
     
 }
 
-cocos2d::Layer* GroupLeaderScene::createPromptLayer(std::string content){
+cocos2d::Layer* GroupMemberScene::createPromptLayer(std::string content){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
     auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
@@ -345,7 +333,7 @@ cocos2d::Layer* GroupLeaderScene::createPromptLayer(std::string content){
 }
 
 //实现CheckBox回调函数
-void GroupLeaderScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
+void GroupMemberScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
 {
     Size visibleSize=Director::getInstance()->getVisibleSize();
     CheckBox* item = (CheckBox*)ref;
@@ -354,13 +342,6 @@ void GroupLeaderScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
-        {
-            if (tag<5) {
-                auto layer=createPromptLayer("确认将该医生移出医疗组吗？");
-                layer->setTag(2001);
-                this->addChild(layer);
-            }
-        }
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
             log("UNSELECTED!");

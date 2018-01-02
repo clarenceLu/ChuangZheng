@@ -91,6 +91,7 @@
 		B223F1411FCEAB0E00DA0315 /* btn_update_head.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F1391FCEAB0E00DA0315 /* btn_update_head.png */; };
 		B223F1421FCEAB0E00DA0315 /* message_select_woman.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F13A1FCEAB0E00DA0315 /* message_select_woman.png */; };
 		B223F1431FCEAB0E00DA0315 /* btn_message_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = B223F13B1FCEAB0E00DA0315 /* btn_message_cancel.png */; };
+		B23066551FFB460C00E85600 /* import_complete_info.png in Resources */ = {isa = PBXBuildFile; fileRef = B23066531FFB460C00E85600 /* import_complete_info.png */; };
 		B232ADE51FD0FC7300ABBA1D /* btn_dynamic_select.png in Resources */ = {isa = PBXBuildFile; fileRef = B232ADD51FD0FC7200ABBA1D /* btn_dynamic_select.png */; };
 		B232ADE61FD0FC7300ABBA1D /* step4.png in Resources */ = {isa = PBXBuildFile; fileRef = B232ADD61FD0FC7200ABBA1D /* step4.png */; };
 		B232ADE71FD0FC7300ABBA1D /* btn_inform_select.png in Resources */ = {isa = PBXBuildFile; fileRef = B232ADD71FD0FC7200ABBA1D /* btn_inform_select.png */; };
@@ -113,6 +114,18 @@
 		B232AE041FD13A0100ABBA1D /* usercase_bluerect.png in Resources */ = {isa = PBXBuildFile; fileRef = B232ADFF1FD13A0100ABBA1D /* usercase_bluerect.png */; };
 		B232AE051FD13A0100ABBA1D /* usercase_detail.png in Resources */ = {isa = PBXBuildFile; fileRef = B232AE001FD13A0100ABBA1D /* usercase_detail.png */; };
 		B232AE061FD13A0100ABBA1D /* usercase_whiterect.png in Resources */ = {isa = PBXBuildFile; fileRef = B232AE011FD13A0100ABBA1D /* usercase_whiterect.png */; };
+		B23529C61FF5EBF000737DFD /* GroupMemberScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23529C51FF5EBF000737DFD /* GroupMemberScene.cpp */; };
+		B23529CA1FF60B8B00737DFD /* CaseSearchScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23529C81FF60B8B00737DFD /* CaseSearchScene.cpp */; };
+		B23529CE1FF60D6B00737DFD /* bk_case_search.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529CD1FF60D6B00737DFD /* bk_case_search.png */; };
+		B23529D01FF61DAB00737DFD /* btn_caseSearch_next.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529CF1FF61DAB00737DFD /* btn_caseSearch_next.png */; };
+		B23529D51FF621FF00737DFD /* CaseListScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23529D41FF621FF00737DFD /* CaseListScene.cpp */; };
+		B23529D91FF6239D00737DFD /* bk_case_list.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529D71FF6239D00737DFD /* bk_case_list.png */; };
+		B23529DA1FF6239D00737DFD /* btn_caselist_add.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529D81FF6239D00737DFD /* btn_caselist_add.png */; };
+		B23529E01FF63ED300737DFD /* bk_addCase.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529DC1FF63ED300737DFD /* bk_addCase.png */; };
+		B23529E11FF63ED300737DFD /* btn_addCase_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529DD1FF63ED300737DFD /* btn_addCase_cancel.png */; };
+		B23529E21FF63ED300737DFD /* bk_caseHistory.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529DF1FF63ED300737DFD /* bk_caseHistory.png */; };
+		B23529E41FF63F4200737DFD /* btn_addCase_add.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529E31FF63F4200737DFD /* btn_addCase_add.png */; };
+		B23529E71FF63F7F00737DFD /* CaseHistoryScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23529E51FF63F7F00737DFD /* CaseHistoryScene.cpp */; };
 		B25FB64E1FD6757F0032D18F /* bk_notification_info.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB6481FD6757F0032D18F /* bk_notification_info.png */; };
 		B25FB64F1FD6757F0032D18F /* notification_none.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB6491FD6757F0032D18F /* notification_none.png */; };
 		B25FB6501FD6757F0032D18F /* bk_notification.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB64A1FD6757F0032D18F /* bk_notification.png */; };
@@ -540,6 +553,7 @@
 		B223F1391FCEAB0E00DA0315 /* btn_update_head.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_update_head.png; sourceTree = "<group>"; };
 		B223F13A1FCEAB0E00DA0315 /* message_select_woman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message_select_woman.png; sourceTree = "<group>"; };
 		B223F13B1FCEAB0E00DA0315 /* btn_message_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_message_cancel.png; sourceTree = "<group>"; };
+		B23066531FFB460C00E85600 /* import_complete_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = import_complete_info.png; sourceTree = "<group>"; };
 		B232ADD51FD0FC7200ABBA1D /* btn_dynamic_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_dynamic_select.png; sourceTree = "<group>"; };
 		B232ADD61FD0FC7200ABBA1D /* step4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = step4.png; sourceTree = "<group>"; };
 		B232ADD71FD0FC7200ABBA1D /* btn_inform_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_inform_select.png; sourceTree = "<group>"; };
@@ -562,6 +576,22 @@
 		B232ADFF1FD13A0100ABBA1D /* usercase_bluerect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usercase_bluerect.png; sourceTree = "<group>"; };
 		B232AE001FD13A0100ABBA1D /* usercase_detail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usercase_detail.png; sourceTree = "<group>"; };
 		B232AE011FD13A0100ABBA1D /* usercase_whiterect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usercase_whiterect.png; sourceTree = "<group>"; };
+		B23529C31FF5EBF000737DFD /* GroupMemberScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GroupMemberScene.hpp; sourceTree = "<group>"; };
+		B23529C51FF5EBF000737DFD /* GroupMemberScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GroupMemberScene.cpp; sourceTree = "<group>"; };
+		B23529C81FF60B8B00737DFD /* CaseSearchScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CaseSearchScene.cpp; sourceTree = "<group>"; };
+		B23529C91FF60B8B00737DFD /* CaseSearchScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseSearchScene.hpp; sourceTree = "<group>"; };
+		B23529CD1FF60D6B00737DFD /* bk_case_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_case_search.png; sourceTree = "<group>"; };
+		B23529CF1FF61DAB00737DFD /* btn_caseSearch_next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_caseSearch_next.png; sourceTree = "<group>"; };
+		B23529D21FF6213600737DFD /* CaseListScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseListScene.hpp; sourceTree = "<group>"; };
+		B23529D41FF621FF00737DFD /* CaseListScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CaseListScene.cpp; sourceTree = "<group>"; };
+		B23529D71FF6239D00737DFD /* bk_case_list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_case_list.png; sourceTree = "<group>"; };
+		B23529D81FF6239D00737DFD /* btn_caselist_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_caselist_add.png; sourceTree = "<group>"; };
+		B23529DC1FF63ED300737DFD /* bk_addCase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_addCase.png; sourceTree = "<group>"; };
+		B23529DD1FF63ED300737DFD /* btn_addCase_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_addCase_cancel.png; sourceTree = "<group>"; };
+		B23529DF1FF63ED300737DFD /* bk_caseHistory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_caseHistory.png; sourceTree = "<group>"; };
+		B23529E31FF63F4200737DFD /* btn_addCase_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_addCase_add.png; sourceTree = "<group>"; };
+		B23529E51FF63F7F00737DFD /* CaseHistoryScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CaseHistoryScene.cpp; sourceTree = "<group>"; };
+		B23529E61FF63F7F00737DFD /* CaseHistoryScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseHistoryScene.hpp; sourceTree = "<group>"; };
 		B25FB6481FD6757F0032D18F /* bk_notification_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_notification_info.png; sourceTree = "<group>"; };
 		B25FB6491FD6757F0032D18F /* notification_none.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notification_none.png; sourceTree = "<group>"; };
 		B25FB64A1FD6757F0032D18F /* bk_notification.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_notification.png; sourceTree = "<group>"; };
@@ -1203,6 +1233,66 @@
 			path = UserCase;
 			sourceTree = "<group>";
 		};
+		B23529C71FF60B7000737DFD /* Case */ = {
+			isa = PBXGroup;
+			children = (
+				B23529C91FF60B8B00737DFD /* CaseSearchScene.hpp */,
+				B23529C81FF60B8B00737DFD /* CaseSearchScene.cpp */,
+				B23529D21FF6213600737DFD /* CaseListScene.hpp */,
+				B23529D41FF621FF00737DFD /* CaseListScene.cpp */,
+				B23529E61FF63F7F00737DFD /* CaseHistoryScene.hpp */,
+				B23529E51FF63F7F00737DFD /* CaseHistoryScene.cpp */,
+			);
+			path = Case;
+			sourceTree = "<group>";
+		};
+		B23529CB1FF60D6B00737DFD /* Case */ = {
+			isa = PBXGroup;
+			children = (
+				B23529DB1FF63ED300737DFD /* AddCase */,
+				B23529DE1FF63ED300737DFD /* CaseHistory */,
+				B23529D61FF6239D00737DFD /* CaseList */,
+				B23529CC1FF60D6B00737DFD /* CaseSearch */,
+			);
+			path = Case;
+			sourceTree = "<group>";
+		};
+		B23529CC1FF60D6B00737DFD /* CaseSearch */ = {
+			isa = PBXGroup;
+			children = (
+				B23529CF1FF61DAB00737DFD /* btn_caseSearch_next.png */,
+				B23529CD1FF60D6B00737DFD /* bk_case_search.png */,
+			);
+			path = CaseSearch;
+			sourceTree = "<group>";
+		};
+		B23529D61FF6239D00737DFD /* CaseList */ = {
+			isa = PBXGroup;
+			children = (
+				B23529D71FF6239D00737DFD /* bk_case_list.png */,
+				B23529D81FF6239D00737DFD /* btn_caselist_add.png */,
+			);
+			path = CaseList;
+			sourceTree = "<group>";
+		};
+		B23529DB1FF63ED300737DFD /* AddCase */ = {
+			isa = PBXGroup;
+			children = (
+				B23529E31FF63F4200737DFD /* btn_addCase_add.png */,
+				B23529DC1FF63ED300737DFD /* bk_addCase.png */,
+				B23529DD1FF63ED300737DFD /* btn_addCase_cancel.png */,
+			);
+			path = AddCase;
+			sourceTree = "<group>";
+		};
+		B23529DE1FF63ED300737DFD /* CaseHistory */ = {
+			isa = PBXGroup;
+			children = (
+				B23529DF1FF63ED300737DFD /* bk_caseHistory.png */,
+			);
+			path = CaseHistory;
+			sourceTree = "<group>";
+		};
 		B25FB6471FD6757F0032D18F /* notification */ = {
 			isa = PBXGroup;
 			children = (
@@ -1383,6 +1473,7 @@
 		B2749BCA1FF37810007516BF /* Doctor */ = {
 			isa = PBXGroup;
 			children = (
+				B23066531FFB460C00E85600 /* import_complete_info.png */,
 				B2749BCB1FF37810007516BF /* SickInfo */,
 				B2749BD71FF37810007516BF /* Outpatient */,
 				B2749BDA1FF37810007516BF /* PeoplePart */,
@@ -1395,6 +1486,7 @@
 		B2749BCB1FF37810007516BF /* SickInfo */ = {
 			isa = PBXGroup;
 			children = (
+				B23529CB1FF60D6B00737DFD /* Case */,
 				B2749D811FF4E886007516BF /* MedicalGroup */,
 				B2749D7A1FF4D4EC007516BF /* AccountManage */,
 				B2749BCC1FF37810007516BF /* btn_sickInfo_group.png */,
@@ -1722,12 +1814,15 @@
 		B2749D6D1FF37954007516BF /* MainDoctor */ = {
 			isa = PBXGroup;
 			children = (
+				B23529C71FF60B7000737DFD /* Case */,
 				B2749D721FF38105007516BF /* MainScene.hpp */,
 				B2749D711FF38105007516BF /* MainScene.cpp */,
 				B2749D771FF4D2C8007516BF /* AccountManageScene.hpp */,
 				B2749D761FF4D2C8007516BF /* AccountManageScene.cpp */,
 				B2749D981FF4E928007516BF /* GroupLeaderScene.hpp */,
 				B2749D971FF4E928007516BF /* GroupLeaderScene.cpp */,
+				B23529C31FF5EBF000737DFD /* GroupMemberScene.hpp */,
+				B23529C51FF5EBF000737DFD /* GroupMemberScene.cpp */,
 			);
 			path = MainDoctor;
 			sourceTree = "<group>";
@@ -2038,6 +2133,7 @@
 				B2749CB71FF37811007516BF /* 1_r16_c22.png in Resources */,
 				B2749CDE1FF37811007516BF /* l_r37_c31.png in Resources */,
 				B2749D661FF37811007516BF /* box_fixedBed_select.png in Resources */,
+				B23529E01FF63ED300737DFD /* bk_addCase.png in Resources */,
 				B262F8111FDE616200EF887A /* btn_chat_userImage.png in Resources */,
 				B2749D351FF37811007516BF /* r_r26_c4.png in Resources */,
 				B223F1411FCEAB0E00DA0315 /* btn_update_head.png in Resources */,
@@ -2118,8 +2214,10 @@
 				B2749D5F1FF37811007516BF /* bk_welcome.png in Resources */,
 				B2749CAD1FF37811007516BF /* btn_sickInfo_save.png in Resources */,
 				B2749CF91FF37811007516BF /* l_r60_c26.png in Resources */,
+				B23529CE1FF60D6B00737DFD /* bk_case_search.png in Resources */,
 				B2749D641FF37811007516BF /* bedNum4.png in Resources */,
 				B2749D1D1FF37811007516BF /* r_r2_c11.png in Resources */,
+				B23529E11FF63ED300737DFD /* btn_addCase_cancel.png in Resources */,
 				B2749CC41FF37811007516BF /* 1_r2_c48.png in Resources */,
 				B2749D3F1FF37811007516BF /* r_r39_c24.png in Resources */,
 				B232ADE51FD0FC7300ABBA1D /* btn_dynamic_select.png in Resources */,
@@ -2167,6 +2265,7 @@
 				B2749D341FF37811007516BF /* r_r23_c6.png in Resources */,
 				B2749D3B1FF37811007516BF /* r_r3_c28.png in Resources */,
 				B262F7CD1FD907D100EF887A /* bk_step3.png in Resources */,
+				B23529E41FF63F4200737DFD /* btn_addCase_add.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				B20EA4F71FEBADD700C38518 /* bk_appearance.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
@@ -2209,6 +2308,7 @@
 				B2749D6B1FF37811007516BF /* btn_sickroom_add.png in Resources */,
 				B2749CEB1FF37811007516BF /* l_r17_c20.png in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
+				B23529DA1FF6239D00737DFD /* btn_caselist_add.png in Resources */,
 				B2749CA41FF37811007516BF /* btn_sickInfo_account.png in Resources */,
 				B2749D0F1FF37811007516BF /* l_r19_c16.png in Resources */,
 				B2749D301FF37811007516BF /* r_r29_c6.png in Resources */,
@@ -2284,6 +2384,7 @@
 				B223F13F1FCEAB0E00DA0315 /* select_sure.png in Resources */,
 				B2749CEC1FF37811007516BF /* l_r21_c22.png in Resources */,
 				B2749D5D1FF37811007516BF /* btn_welcome_next.png in Resources */,
+				B23529D01FF61DAB00737DFD /* btn_caseSearch_next.png in Resources */,
 				B2749D5C1FF37811007516BF /* r_r15_c4.png in Resources */,
 				B2749D8A1FF4E886007516BF /* btn_group_member_join.png in Resources */,
 				B2749D091FF37811007516BF /* l_r3_c3.png in Resources */,
@@ -2295,11 +2396,13 @@
 				B20C29AD1FE8E91F00149DCB /* btn_search.png in Resources */,
 				C49D38471FC542E90092C808 /* login_bk.png in Resources */,
 				B262F8241FDFF36B00EF887A /* bk_search.png in Resources */,
+				B23066551FFB460C00E85600 /* import_complete_info.png in Resources */,
 				B2749D331FF37811007516BF /* r_r15_c6.png in Resources */,
 				B2749CBD1FF37811007516BF /* 1_r12_c36.png in Resources */,
 				B223F1401FCEAB0E00DA0315 /* message_select_man.png in Resources */,
 				B2749D4D1FF37811007516BF /* r_r46_c4.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
+				B23529D91FF6239D00737DFD /* bk_case_list.png in Resources */,
 				B2749D3A1FF37811007516BF /* r_r62_c12.png in Resources */,
 				B2749CE11FF37811007516BF /* l_r14_c19.png in Resources */,
 				B262F7A61FD7C27900EF887A /* btn_userInfo_back.png in Resources */,
@@ -2345,6 +2448,7 @@
 				B2749D8D1FF4E886007516BF /* bk_group_leader_prompt.png in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
 				B28993CD1FE12E120047C9E6 /* bk_sureExit.png in Resources */,
+				B23529E21FF63ED300737DFD /* bk_caseHistory.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2369,11 +2473,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				B23529E71FF63F7F00737DFD /* CaseHistoryScene.cpp in Sources */,
 				B262F80D1FDE608300EF887A /* ChatUserDetailScene.cpp in Sources */,
 				B262F7D11FD9081200EF887A /* SelectStep2Scene.cpp in Sources */,
 				B262F79B1FD7BE8000EF887A /* RegisterScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				B2749D991FF4E928007516BF /* GroupLeaderScene.cpp in Sources */,
+				B23529CA1FF60B8B00737DFD /* CaseSearchScene.cpp in Sources */,
 				C45025511FCE9E7300596F38 /* NetWrokMangerData.cpp in Sources */,
 				B20C29B31FE9053400149DCB /* AppearanceAbnormalScene.cpp in Sources */,
 				C427CF7E1FF3646B00127931 /* QR_Encode.cpp in Sources */,
@@ -2384,6 +2490,8 @@
 				B262F7951FD7BE7700EF887A /* PerfectCaseScene.cpp in Sources */,
 				B262F79C1FD7BE8000EF887A /* RegisterMessageScene.cpp in Sources */,
 				B262F78E1FD7B9C200EF887A /* LoginScene.cpp in Sources */,
+				B23529D51FF621FF00737DFD /* CaseListScene.cpp in Sources */,
+				B23529C61FF5EBF000737DFD /* GroupMemberScene.cpp in Sources */,
 				B262F80A1FDE604800EF887A /* UserCaseScene.cpp in Sources */,
 				B262F7DC1FD91C6C00EF887A /* SelectStep3Scene.cpp in Sources */,
 				B262F81B1FDFEDD600EF887A /* ChatScene.cpp in Sources */,

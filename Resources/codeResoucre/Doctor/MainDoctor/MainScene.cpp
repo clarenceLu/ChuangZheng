@@ -10,6 +10,9 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "AccountManageScene.hpp"
+#include "GroupLeaderScene.hpp"
+#include "GroupMemberScene.hpp"
+#include "CaseListScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -333,7 +336,10 @@ Layer* MainScene::createSickInfoLayer(){
     caseBtn->setScale(0.9);
     caseBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED: {
+            auto caseScene= CaseListScene::createScene();
+            Director::getInstance()->pushScene(caseScene);
+        }
         default:
             break;
     }
@@ -348,6 +354,11 @@ Layer* MainScene::createSickInfoLayer(){
     groupBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+        {
+#pragma -在这里判断他是组长还是组员
+            auto groupScene= GroupLeaderScene::createScene();
+            Director::getInstance()->pushScene(groupScene);
+        }
         default:
             break;
     }

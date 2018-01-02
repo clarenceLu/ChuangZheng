@@ -6,7 +6,8 @@
 #include "SpineTendernessScene.hpp"
 #include "AppearanceAbnormalScene.hpp"
 #include "SenseAbnormalScene.hpp"
-#include "AccountManageScene.hpp"
+#include "GroupMemberScene.hpp"
+#include "CaseHistoryScene.hpp"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -163,7 +164,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
    */
 //    auto scene = LoginScene::createScene();
    auto scene = WelcomeScene::createScene();
-//    auto scene=AccountManageScene::createScene();
+//    auto scene=CaseHistoryScene::createScene();
     director->runWithScene(scene);
 
 

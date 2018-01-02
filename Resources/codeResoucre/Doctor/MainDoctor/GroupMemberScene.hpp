@@ -5,17 +5,17 @@
 //  Created by 工作 on 2017/12/28.
 //
 
-#ifndef GroupLeaderScene_hpp
-#define GroupLeaderScene_hpp
+#ifndef GroupMemberScene_hpp
+#define GroupMemberScene_hpp
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
 USING_NS_CC;
-class GroupLeaderScene:public cocos2d::Scene{
+class GroupMemberScene:public cocos2d::Scene{
 public:
     static  cocos2d::Scene* createScene();
     virtual bool init();
-    CREATE_FUNC(GroupLeaderScene);
+    CREATE_FUNC(GroupMemberScene);
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     void menuLoginCallback(cocos2d::Ref* pSender);
     
