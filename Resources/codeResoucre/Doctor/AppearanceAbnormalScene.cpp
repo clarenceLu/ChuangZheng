@@ -91,7 +91,7 @@ bool AppearanceAbnormalScene::init(){
     bkView->addChild(sureBtn);
     
     
-   scrollV=createTableView(Vec2(0, 20), Size(visibleSize.width, visibleSize.height-170));
+   scrollV=createTableView(Vec2(0, visibleSize.height-150), Size(visibleSize.width, visibleSize.height-170));
     this->addChild(scrollV);
     
     return true;
@@ -100,6 +100,7 @@ bool AppearanceAbnormalScene::init(){
 ScrollView* AppearanceAbnormalScene::createTableView(Vec2 origin,Size visibleSize){
     auto scrollView=cocos2d::ui::ScrollView::create();
     scrollView->setPosition(Vec2(origin.x, origin.y));
+    scrollView->setAnchorPoint(Vec2(0, 1));
     scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
     scrollView->setScrollBarEnabled(true);//是否显示滚动条
     scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
@@ -122,7 +123,15 @@ ScrollView* AppearanceAbnormalScene::createTableView(Vec2 origin,Size visibleSiz
     float pointY8 = createPopUpView(Vec2(40, pointY7+60*3), moveView, "双侧不对称",20,1);
     
 #warning -在这里设置没有用，因为当innerSize<contentSize，以contentSize为准
-    scrollView->setInnerContainerSize(Size(visibleSize.width, 600));
+    if (visibleSize.height>visibleSize.height-20-pointY7) {
+        scrollView->setContentSize(Size(visibleSize.width,visibleSize.height-20-pointY7));
+        scrollView->setInnerContainerSize(Size(visibleSize.width, visibleSize.height-20-pointY7));
+        moveView->setPosition(Vec2(0, scrollView->getInnerContainerSize().height));
+    }else{
+        scrollView->setContentSize(Size(visibleSize.width,visibleSize.height));
+        scrollView->setInnerContainerSize(Size(visibleSize.width, visibleSize.height-20-pointY7));
+        moveView->setPosition(Vec2(0, scrollView->getInnerContainerSize().height));
+    }
     log("%f",scrollView->getInnerContainerSize().height);
     return scrollView;
 }
@@ -213,13 +222,19 @@ void AppearanceAbnormalScene::menuLoginCallback(Ref* pSender)
         }
         //                log("原先的%f",scrollV->getInnerContainerSize().height);
         scrollV->setInnerContainerSize(Size(visibleSize.width,scrollV->getInnerContainerSize().height+whiteV->getContentSize().height-60));
-        //                log("现在的%f",scrollV->getInnerContainerSize().height);
+                        log("现在的%f",scrollV->getInnerContainerSize().height);
         moveView->setPosition(Vec2(0, scrollV->getInnerContainerSize().height));
-        if (scrollV->getInnerContainerSize().height>visibleSize.height-150) {
+#pragma -调整scrollView的contentSize
+        scrollV->setInnerContainerPosition(Vec2(0, 60-whiteV->getContentSize().height));
+        log("%f",scrollV->getInnerContainerPosition().y);
+
+        if (scrollV->getInnerContainerSize().height<visibleSize.height-170) {
             //用于调整scrollView的contentOffset
-            scrollV->setInnerContainerPosition(Vec2(0, 60-whiteV->getContentSize().height));
-            log("%f",scrollV->getInnerContainerPosition().y);
+            scrollV->setContentSize(Size(visibleSize.width, scrollV->getInnerContainerSize().height));
+        }else{
+            scrollV->setContentSize(Size(visibleSize.width, visibleSize.height-170));
         }
+        
     }else if (index==0){
         auto wholeV = (Sprite*)wholeDic.at(tag-100);
         auto whiteV=wholeV->getChildByTag(tag+100);
@@ -236,6 +251,7 @@ void AppearanceAbnormalScene::menuLoginCallback(Ref* pSender)
                 nextWholeV->setPosition(Vec2(nextWholeV->getPosition().x, nextWholeV->getPosition().y+whiteV->getContentSize().height-60));
             }
         }
+        scrollV->setContentSize(Size(visibleSize.width, scrollV->getInnerContainerSize().height-whiteV->getContentSize().height+60));
         scrollV->setInnerContainerSize(Size(visibleSize.width,scrollV->getInnerContainerSize().height-whiteV->getContentSize().height+60));
         moveView->setPosition(Vec2(0, scrollV->getInnerContainerSize().height));
     }

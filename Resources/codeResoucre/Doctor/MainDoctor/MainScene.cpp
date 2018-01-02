@@ -9,6 +9,10 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "AccountManageScene.hpp"
+#include "GroupLeaderScene.hpp"
+#include "GroupMemberScene.hpp"
+#include "CaseListScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -180,7 +184,7 @@ ScrollView* MainScene::createScrollV(){
 
 Menu*   MainScene::createRectButton(Vec2 point,int i){
     Size visibleSize=Director::getInstance()->getVisibleSize();
-    auto menuItem  = MenuItemImage::create("bk_bed.png","bk_bed.png",CC_CALLBACK_1(MainScene::menuLoginCallback, this));
+    auto menuItem  = MenuItemImage::create("bk_bed.png","bk_bed.png",CC_CALLBACK_1(MainScene::menuBedNumCallback, this));
     menuItem->setAnchorPoint(Vec2(0,0));
     menuItem->setPosition(Vec2(0,0));
     menuItem->setTag(i+100);
@@ -236,6 +240,47 @@ Layer* MainScene::createOutPatientLayer(){
     bkView->setContentSize(visibleSize);
     layer->addChild(bkView);
     
+    
+    auto waitBtn=Button::create();
+    waitBtn->loadTextures("btn_outpatient_content.png", "btn_outpatient_content.png");
+    waitBtn->setPosition(Vec2(20, 849));
+    waitBtn->setAnchorPoint(Vec2(0, 0));
+    waitBtn->setScale(0.86);
+    waitBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+//候诊病人
+        default:
+            break;
+    }
+    });
+    bkView->addChild(waitBtn);
+    auto waitLB=Label::createWithSystemFont("候诊病人","Arial",50,Size(300,100),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    waitLB->setPosition(Vec2(20,15));
+    waitLB->setTextColor(Color4B(0, 0, 0, 255/3*2));
+    waitLB->setAnchorPoint(Vec2(0, 0));
+    waitBtn->addChild(waitLB);
+    
+    auto receiveBtn=Button::create();
+    receiveBtn->loadTextures("btn_outpatient_content.png", "btn_outpatient_content.png");
+    receiveBtn->setPosition(Vec2(20, 710));
+    receiveBtn->setAnchorPoint(Vec2(0, 0));
+    receiveBtn->setScale(0.86);
+    receiveBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+//接诊病人
+        default:
+            break;
+    }
+    });
+    bkView->addChild(receiveBtn);
+    auto receiveLB=Label::createWithSystemFont("接诊病人","Arial",50,Size(300,100),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    receiveLB->setPosition(Vec2(20,15));
+    receiveLB->setTextColor(Color4B(0, 0, 0, 255/3*2));
+    receiveLB->setAnchorPoint(Vec2(0, 0));
+    receiveBtn->addChild(receiveLB);
+    
     return layer;
 }
 //日历
@@ -284,9 +329,253 @@ Layer* MainScene::createSickInfoLayer(){
     bkView->setContentSize(visibleSize);
     layer->addChild(bkView);
     
+    auto caseBtn=Button::create();
+    caseBtn->loadTextures("btn_sickInfo_case.png", "btn_sickInfo_case.png");
+    caseBtn->setPosition(Vec2(30, 840));
+    caseBtn->setAnchorPoint(Vec2(0, 0));
+    caseBtn->setScale(0.9);
+    caseBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED: {
+            auto caseScene= CaseListScene::createScene();
+            Director::getInstance()->pushScene(caseScene);
+        }
+        default:
+            break;
+    }
+    });
+    bkView->addChild(caseBtn);
+    
+    auto groupBtn=Button::create();
+    groupBtn->loadTextures("btn_sickInfo_group.png", "btn_sickInfo_group.png");
+    groupBtn->setPosition(Vec2(30, 690));
+    groupBtn->setAnchorPoint(Vec2(0, 0));
+    groupBtn->setScale(0.9);
+    groupBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        {
+#pragma -在这里判断他是组长还是组员
+            auto groupScene= GroupLeaderScene::createScene();
+            Director::getInstance()->pushScene(groupScene);
+        }
+        default:
+            break;
+    }
+    });
+    bkView->addChild(groupBtn);
+    
+    auto messageBtn=Button::create();
+    messageBtn->loadTextures("btn_sickInfo_message.png", "btn_sickInfo_message.png");
+    messageBtn->setPosition(Vec2(30, 540));
+    messageBtn->setAnchorPoint(Vec2(0, 0));
+    messageBtn->setScale(0.9);
+    messageBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    bkView->addChild(messageBtn);
+    
+    auto accountBtn=Button::create();
+    accountBtn->loadTextures("btn_sickInfo_account.png", "btn_sickInfo_account.png");
+    accountBtn->setPosition(Vec2(30, 390));
+    accountBtn->setAnchorPoint(Vec2(0, 0));
+    accountBtn->setScale(0.9);
+    accountBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            auto accountScene= AccountManageScene::createScene();
+            Director::getInstance()->pushScene(accountScene);
+        }
+        default:
+            break;
+    }
+    });
+    bkView->addChild(accountBtn);
+    
+    auto sponsorBtn=Button::create();
+    sponsorBtn->loadTextures("btn_sickInfo_addSponsor.png", "btn_sickInfo_addSponsor.png");
+    sponsorBtn->setPosition(Vec2(30, 240));
+    sponsorBtn->setAnchorPoint(Vec2(0, 0));
+    sponsorBtn->setScale(0.9);
+    sponsorBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            Layer *layer= createSponsorLayer();
+            layer->setTag(1000);
+            this->addChild(layer);
+        }
+        default:
+            break;
+    }
+    });
+    bkView->addChild(sponsorBtn);
+    return layer;
+}
+Layer* MainScene::createSponsorLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("bk_sickInfo_writeName.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setPosition(Vec2(57,454));
+    contentV->setContentSize(Size(526,300));
+    layer->addChild(contentV);
+    
+    //必须写在textfield之前才能释放textfield响应者
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_register_delete.png", "btn_register_delete.png");
+    deleteBtn->setPosition(Vec2(465, 240));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(1000);
+        default:
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
+    
+    auto sureBtn=Button::create();
+    sureBtn->loadTextures("btn_register_sure.png", "btn_register_sure.png");
+    sureBtn->setPosition(Vec2(163, 15));
+    sureBtn->setAnchorPoint(Vec2(0,0));
+    sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        {
+            Layer *codeLayer= createSQCodeLayer();
+            codeLayer->setTag(1001);
+            this->addChild(codeLayer);
+            this->removeChildByTag(1000);
+        }
+        default:
+            break;
+    }
+    });
+    contentV->addChild(sureBtn);
+    
+    auto textFieldCase = TextField::create("在此填写","Arial",40);
+    textFieldCase->setMaxLength(40);
+    textFieldCase->setTouchSize(Size(400, 42));
+    textFieldCase->setAnchorPoint(Vec2(0.5,0));
+    textFieldCase->setPosition(Vec2(264,123));
+    textFieldCase->setContentSize(Size(400,42));
+    textFieldCase->setTextColor(Color4B(0, 0, 0, 255/3*2));
+    textFieldCase->setTextHorizontalAlignment(TextHAlignment::CENTER);
+    textFieldCase->addEventListener(CC_CALLBACK_2(MainScene::eventCallBack, this));
+    contentV->addChild(textFieldCase);
+    
+    auto lineSp=Sprite::create("userInfo_line.png");
+    lineSp->setPosition(Vec2(150, 120));
+    lineSp->setAnchorPoint(Vec2(0, 0));
+    lineSp->setContentSize(Size(226, 1));
+    contentV->addChild(lineSp);
+    
+    return layer;
+}
+Layer* MainScene::createSQCodeLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("bk_sickInfo_QRCode.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setPosition(Vec2(57,344));
+    contentV->setContentSize(Size(526,410));
+    layer->addChild(contentV);
+    
+    //必须写在textfield之前才能释放textfield响应者
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_register_delete.png", "btn_register_delete.png");
+    deleteBtn->setPosition(Vec2(465, 350));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(1001);
+        default:
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
+    
+    auto sendBtn=Button::create();
+    sendBtn->loadTextures("btn_sickInfo_send.png", "btn_sickInfo_send.png");
+    sendBtn->setPosition(Vec2(38, 15));
+    sendBtn->setAnchorPoint(Vec2(0,0));
+    sendBtn->setScale(0.87);
+    sendBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(1001);
+        default:
+            break;
+    }
+    });
+    contentV->addChild(sendBtn);
+    
+    auto saveBtn=Button::create();
+    saveBtn->loadTextures("btn_sickInfo_save.png", "btn_sickInfo_save.png");
+    saveBtn->setPosition(Vec2(302, 15));
+    saveBtn->setAnchorPoint(Vec2(0,0));
+    saveBtn->setScale(0.87);
+    saveBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+            this->removeChildByTag(1001);
+        default:
+            break;
+    }
+    });
+    contentV->addChild(saveBtn);
+    
+    auto SQCode=Sprite::create("example.png");
+    SQCode->setPosition(Vec2(164, 100));
+    SQCode->setAnchorPoint(Vec2(0, 0));
+    SQCode->setContentSize(Size(200, 200));
+    contentV->addChild(SQCode);
+    
     return layer;
 }
 
+
+void MainScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
+{
+    switch (type){
+        case cocos2d::ui::TextField::EventType::INSERT_TEXT:
+            CCLOG("INSERT_TEXT");
+        break;
+        case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
+            CCLOG("DELETE_BACKWARD");
+        case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
+            CCLOG("DETACH_WITH_IME");
+            break;
+    }
+}
 
 //实现CheckBox回调函数
 void MainScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
@@ -333,7 +622,7 @@ void MainScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
     }
 }
 
-void MainScene::menuLoginCallback(Ref* pSender)
+void MainScene::menuBedNumCallback(Ref* pSender)
 {
     MenuItem* item = (MenuItem*)pSender;
     int tag= item->getTag();

@@ -15,7 +15,6 @@
 
 
 #include "ui/CocosGUI.h"
-
 USING_NS_CC;
 class SenseAbnormalScene:public cocos2d::Scene{
 public:

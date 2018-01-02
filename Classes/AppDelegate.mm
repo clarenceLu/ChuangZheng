@@ -1,13 +1,19 @@
 #include "AppDelegate.h"
 #include "LoginScene.h"
+#include "WelcomeScene.hpp"
+
+
 #include "SpineTendernessScene.hpp"
 #include "AppearanceAbnormalScene.hpp"
 #include "SenseAbnormalScene.hpp"
+
 #include "WelcomeScene.hpp"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 //#import "platform/ios/CCEAGLView-ios.h"
 
+#include "GroupMemberScene.hpp"
+#include "CaseHistoryScene.hpp"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -112,17 +118,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-//     create a scene. it's an autorelease object
-
-    
+  /*
     auto testScene = Scene::create();
-    
     director->runWithScene(testScene);
-    
     bool bRet = m_QREncode.EncodeData(0, 0, 1, -1, "autor:johance qq:421465201");
-    
-    // ÃÌº”…˙≥…ÕºœÒ¥˙¬Î, ’‚±ﬂŒ“≤…”√µƒ «CCDrawNode’‚∏ˆ¿‡÷±Ω”ªÊ÷∆
-    
     if(bRet)
     {
         int nSize = 5;
@@ -169,6 +168,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         pQRNode->setScaleY(-1);
         testScene->addChild(pQRNode);
     }
+<<<<<<< HEAD:Classes/AppDelegate.mm
     
     NSLog(@"%f",[UIScreen mainScreen].bounds.size.width);
     NSLog(@"%f",[UIScreen mainScreen].bounds.size.height);
@@ -182,14 +182,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     
     
+=======
+   */
 //    auto scene = LoginScene::createScene();
-////auto scene = SpineTendernessScene::createScene();
-//    // run
-//    director->runWithScene(scene);
-//    auto scene = LoginScene::createScene();
-//   auto scene = WelcomeScene::createScene();
-//    // run
-//    director->runWithScene(scene);
+   auto scene = WelcomeScene::createScene();
+//    auto scene=CaseHistoryScene::createScene();
+    director->runWithScene(scene);
 
 
     return true;

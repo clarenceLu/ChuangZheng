@@ -19,11 +19,14 @@ public:
     
     //声明CheckBox回调函数
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
-    void menuLoginCallback(cocos2d::Ref* pSender);
+    void menuBedNumCallback(cocos2d::Ref* pSender);
+    void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
 
     cocos2d::Layer* createSickRoomLayer();
     cocos2d::Layer* createOutPatientLayer();
     cocos2d::Layer* createSickInfoLayer();
+                          cocos2d::Layer* createSponsorLayer();
+    cocos2d::Layer* createSQCodeLayer();
      cocos2d::Layer* createCalendarLayer();
     
     cocos2d::ui::ScrollView* createTableView(cocos2d::Vec2 point,cocos2d::Size size);
