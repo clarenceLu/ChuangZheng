@@ -13,6 +13,10 @@
 #include "GroupLeaderScene.hpp"
 #include "GroupMemberScene.hpp"
 #include "CaseListScene.hpp"
+#include "ReceiveChatScene.hpp"
+#include "WaitChatScene.hpp"
+#include "SetTemporaryRoom.hpp"
+#include "SickRoomScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -42,7 +46,7 @@ bool MainScene::init(){
     bottom->setContentSize(Size(visibleSize.width, 100));
     this->addChild(bottom);
     
-    auto sickRoomBox = CheckBox::create("btn_case_unselect.png","btn_case_select.png");
+    auto sickRoomBox = CheckBox::create("box_sickRoom_unselect.png","box_sickRoom_select.png");
     //设置CheckBox的位置
     sickRoomBox->setPosition(Vec2(50,10));
     sickRoomBox->setTag(0);
@@ -55,7 +59,7 @@ bool MainScene::init(){
     //获取checkbox的选中状态
     addChild(sickRoomBox);
     
-    auto outPatientBox = CheckBox::create("btn_inform_unselect.png","btn_inform_select.png");
+    auto outPatientBox = CheckBox::create("box_outpatient_unselect.png","box_outpatient_select.png");
     //设置CheckBox的位置
     outPatientBox->setPosition(Vec2(200,10));
     outPatientBox->setTag(1);
@@ -67,9 +71,9 @@ bool MainScene::init(){
     //获取checkbox的选中状态
     addChild(outPatientBox);
     
-    auto calendarBox = CheckBox::create("btn_dynamic_unselect.png","btn_dynamic_select.png");
+    auto calendarBox = CheckBox::create("box_calendar_unselect.png","box_calendar_select.png");
     //设置CheckBox的位置
-    calendarBox->setPosition(Vec2(340,10));
+    calendarBox->setPosition(Vec2(370,10));
     calendarBox->setTag(2);
     calendarBox->setAnchorPoint(Vec2(0, 0));
     calendarBox->setScale(0.87);
@@ -79,7 +83,7 @@ bool MainScene::init(){
     //获取checkbox的选中状态
     addChild(calendarBox);
     
-    auto sickInfoBox = CheckBox::create("btn_user_unselect.png","btn_user_select.png");
+    auto sickInfoBox = CheckBox::create("box_sickInfo_unselelct.png","box_sickInfo_selelct.png");
     //设置CheckBox的位置
     sickInfoBox->setPosition(Vec2(520,10));
     sickInfoBox->setTag(3);
@@ -114,6 +118,21 @@ Layer* MainScene::createSickRoomLayer(){
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(visibleSize);
     layer->addChild(bkView);
+    
+    auto addBtn=Button::create();
+    addBtn->loadTextures("btn_addCase_add.png", "btn_addCase_add.png");
+    addBtn->setPosition(Vec2(visibleSize.width-100, visibleSize.height-85));
+    addBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            auto temporaryRoomSC=SetTemporaryRoom::createScene();
+            Director::getInstance()->pushScene(temporaryRoomSC);
+        }
+        default:
+            break;
+    }
+    });
+    bkView->addChild(addBtn);
     
     auto tempBedBox=CheckBox::create("box_tempBed_unselect.png","box_tempBed_select.png");
     //设置CheckBox的位置
@@ -207,7 +226,7 @@ Menu*   MainScene::createRectButton(Vec2 point,int i){
     num->setPosition(Vec2(3, 30));
     num->setAnchorPoint(Vec2(0, 0));
     num->setScale(1.2);
-    auto numLB = Label::createWithSystemFont(CCString::createWithFormat("%d",i)->getCString(),"Arial",35,Size(num->getContentSize().width,num->getContentSize().width),TextHAlignment::CENTER,TextVAlignment::CENTER);
+    auto numLB = Label::createWithSystemFont(CCString::createWithFormat("%d",i+1)->getCString(),"Arial",35,Size(num->getContentSize().width,num->getContentSize().width),TextHAlignment::CENTER,TextVAlignment::CENTER);
     numLB->setPosition(Vec2(0,0));
     numLB->setTextColor(Color4B(255, 255, 255, 255));
     numLB->setAnchorPoint(Vec2(0, 0));
@@ -248,8 +267,11 @@ Layer* MainScene::createOutPatientLayer(){
     waitBtn->setScale(0.86);
     waitBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:{
+            auto chatScene=WaitChatScene::createScene();
+            Director::getInstance()->pushScene(chatScene);
 //候诊病人
+        }
         default:
             break;
     }
@@ -268,8 +290,11 @@ Layer* MainScene::createOutPatientLayer(){
     receiveBtn->setScale(0.86);
     receiveBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:{
+            auto chatScene=ReceiveChatScene::createScene();
+            Director::getInstance()->pushScene(chatScene);
 //接诊病人
+        }
         default:
             break;
     }
@@ -626,5 +651,8 @@ void MainScene::menuBedNumCallback(Ref* pSender)
 {
     MenuItem* item = (MenuItem*)pSender;
     int tag= item->getTag();
+    auto sickroomSC=(SickRoomScene*)SickRoomScene::createScene();
+    sickroomSC->bedNum=tag-99;
+    Director::getInstance()->pushScene(sickroomSC);
     
 }

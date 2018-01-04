@@ -53,7 +53,10 @@ bool SelectStep4Scene::init(){
     sureBtn->setPosition(Vec2(visibleSize.width-70, visibleSize.height-85));
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:{
+            log("确认选择医生");
+            Director::getInstance()->popScene();
+        }
 
         default:
             break;

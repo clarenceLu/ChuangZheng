@@ -20,7 +20,10 @@ public:
     void createScrollDetailView(cocos2d::ui::ScrollView* superV);
     float createLabel(cocos2d::Vec2 point,std::string name1,std::string name2,cocos2d::Sprite* superV);
     
+    //用于上传影像
     cocos2d::Layer* createUpdateImageLayer();
+    //用于上传头像
+    cocos2d::Layer* createAlbumLayer();
     
 };
 

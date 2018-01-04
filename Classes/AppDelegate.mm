@@ -13,7 +13,7 @@
 //#import "platform/ios/CCEAGLView-ios.h"
 
 #include "GroupMemberScene.hpp"
-#include "CaseHistoryScene.hpp"
+#include "SickRoomScene.hpp"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -185,8 +185,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 =======
    */
 //    auto scene = LoginScene::createScene();
-   auto scene = WelcomeScene::createScene();
-//    auto scene=CaseHistoryScene::createScene();
+//   auto scene = WelcomeScene::createScene();
+    auto scene=SickRoomScene::createScene();
     director->runWithScene(scene);
 
 

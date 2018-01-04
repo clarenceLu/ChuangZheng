@@ -74,6 +74,9 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
     headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
         if (type == Widget::TouchEventType::ENDED){
             log("点击上传头像");
+            Layer *layer= createAlbumLayer();
+            layer->setTag(200);
+            this->addChild(layer);
         }
     });
 
@@ -138,6 +141,71 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
     
 }
 
+Layer* ChatUserDetailScene::createAlbumLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("update_album.png");
+    contentV->setAnchorPoint(Vec2(0,1));
+    contentV->setPosition(Vec2(57,visibleSize.height-300));
+    contentV->setContentSize(Size(508,349));
+    layer->addChild(contentV);
+    
+    auto cameraBtn=Button::create();
+    cameraBtn->setScale9Enabled(true);
+    cameraBtn->setPosition(Vec2(0, 88));
+    cameraBtn->setAnchorPoint(Vec2(0,0));
+    cameraBtn->setContentSize(Size(contentV->getContentSize().width, 80));
+    cameraBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    contentV->addChild(cameraBtn);
+    
+    auto albumBtn=Button::create();
+    albumBtn->setScale9Enabled(true);
+    albumBtn->setPosition(Vec2(0, 168));
+    albumBtn->setAnchorPoint(Vec2(0,0));
+    albumBtn->setContentSize(Size(contentV->getContentSize().width, 80));
+    albumBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            break;
+    }
+    });
+    contentV->addChild(albumBtn);
+    
+    auto deleteBtn=Button::create();
+    deleteBtn->loadTextures("btn_message_cancel.png", "btn_message_cancel.png");
+    deleteBtn->setPosition(Vec2(111, 15));
+    deleteBtn->setAnchorPoint(Vec2(0,0));
+    deleteBtn->cocos2d::Node::setScale(0.87);
+    deleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:
+        default:
+            this->removeChildByTag(200);
+            break;
+    }
+    });
+    contentV->addChild(deleteBtn);
+    
+    return layer;
+}
 Layer* ChatUserDetailScene::createUpdateImageLayer(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
