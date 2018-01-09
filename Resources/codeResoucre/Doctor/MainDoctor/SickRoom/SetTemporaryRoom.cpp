@@ -20,7 +20,7 @@ bool SetTemporaryRoom::init(){
         return false;
     }
     Size visibleSize=Director::getInstance()->getVisibleSize();
-    auto bkView=Sprite::create("bk_welcome.png");
+    auto bkView=Sprite::create("bk_set_temporary_room.png");
     bkView->setPosition(Vec2(0, 0));
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(visibleSize);

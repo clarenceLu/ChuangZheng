@@ -4,7 +4,7 @@
 
 
 #include "SpineTendernessScene.hpp"
-#include "AppearanceAbnormalScene.hpp"
+#include "UserCaseScene.hpp"
 #include "SenseAbnormalScene.hpp"
 
 #include "WelcomeScene.hpp"
@@ -13,7 +13,7 @@
 //#import "platform/ios/CCEAGLView-ios.h"
 
 #include "GroupMemberScene.hpp"
-#include "SickRoomScene.hpp"
+#include "DocUserInfoScene.hpp"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -184,9 +184,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
 =======
    */
-//    auto scene = LoginScene::createScene();
+ //  auto scene = LoginScene::createScene();
 //   auto scene = WelcomeScene::createScene();
-    auto scene=SickRoomScene::createScene();
+    auto scene=DocUserInfoScene::createScene();
     director->runWithScene(scene);
 
 

@@ -20,7 +20,7 @@ bool ActionAbnormalScene::init(){
         return false;
     }
     Size visibleSize=Director::getInstance()->getVisibleSize();
-    auto bkView=Sprite::create("bk_appearance.png");
+    auto bkView=Sprite::create("bk_action_abnormal.png");
     bkView->setPosition(Vec2(0, 0));
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(visibleSize);

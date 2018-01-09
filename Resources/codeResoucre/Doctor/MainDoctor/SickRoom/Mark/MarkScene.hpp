@@ -1,25 +1,21 @@
 //
-//  SickRoomScene.hpp
+//  MarkScene.hpp
 //  Chuangzheng-mobile
 //
-//  Created by 工作 on 2018/1/4.
+//  Created by 工作 on 2018/1/5.
 //
 
-#ifndef SickRoomScene_hpp
-#define SickRoomScene_hpp
+#ifndef MarkScene_hpp
+#define MarkScene_hpp
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
 USING_NS_CC;
-class SickRoomScene:public cocos2d::Scene{
+class MarkScene:public cocos2d::Scene{
 public:
-    void onEnter();
-    int bedNum;
     static  cocos2d::Scene* createScene();
     virtual bool init();
-    CREATE_FUNC(SickRoomScene);
-    
-    cocos2d::Layer* addCalendarLayer();
+    CREATE_FUNC(MarkScene);
     
     void selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::EventType type);
     void selectedItemEventScrollView(Ref* pSender, cocos2d::ui::ScrollView::EventType type);
@@ -27,7 +23,6 @@ public:
     cocos2d::ui::Layout *createMessageLayout(int i,std::string title,std::string content);
     
 private:
-    cocos2d::ui::ListView* lv;
 };
 
-#endif /* SickRoomScene_hpp */
+#endif /* MarkScene_hpp */
