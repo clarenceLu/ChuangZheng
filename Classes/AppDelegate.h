@@ -35,6 +35,10 @@ public:
     */
     virtual void applicationWillEnterForeground();
     
+    
+    void ImageSavePath(std::string str);
+    
+    
     CQR_Encode m_QREncode;
 };
 

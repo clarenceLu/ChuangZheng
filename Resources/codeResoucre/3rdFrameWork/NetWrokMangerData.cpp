@@ -35,7 +35,6 @@ NetWorkManger::~NetWorkManger()
     
 
 }
-
 NetWorkManger * NetWorkManger::sharedWorkManger()
 {
     static NetWorkManger instance;
@@ -45,9 +44,6 @@ NetWorkManger * NetWorkManger::sharedWorkManger()
 void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr)
 {
     
-    
-
-    
     HttpRequest* request = new  HttpRequest();
 
     
@@ -56,8 +52,6 @@ void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callb
     request->setRequestType(HttpRequest::Type::POST);
     
     request->setUserData(requestDataStr);
-    
-
     
     request->setResponseCallback(callback);
 

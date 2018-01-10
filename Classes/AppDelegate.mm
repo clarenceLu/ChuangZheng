@@ -14,6 +14,39 @@
 
 #include "GroupMemberScene.hpp"
 #include "CaseHistoryScene.hpp"
+#include "RootViewController.h"
+#import "QRViewController.h"
+
+static AppDelegate *delegateA;
+
+
+@interface callBack:NSObject<QRViewDelegate>{
+    
+    
+    
+}
+
+
+@end
+
+@implementation callBack
+
+-(void)imageDelegateUrl:(NSString*)ImageUrl{
+    
+   //this->
+    
+     delegateA->ImageSavePath([ImageUrl cStringUsingEncoding: NSUTF8StringEncoding]);
+}
+
+
+
+@end
+
+
+
+
+
+
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -44,6 +77,9 @@ static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate()
 {
+    
+    delegateA = this;
+    
 }
 
 AppDelegate::~AppDelegate() 
@@ -185,13 +221,42 @@ bool AppDelegate::applicationDidFinishLaunching() {
 =======
    */
 //    auto scene = LoginScene::createScene();
-   auto scene = WelcomeScene::createScene();
+    auto scene = WelcomeScene::createScene();
 //    auto scene=CaseHistoryScene::createScene();
     director->runWithScene(scene);
+    
+    
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+//    [view setBackgroundColor:[UIColor blueColor]];
+    
+    callBack *callObj = [[callBack alloc] init];
+    
+    
 
-
+    
+    
+    QRViewController *QRViewC = [[QRViewController alloc] init];
+    QRViewC.delegate = callObj;
+    
+    
+    auto rootViewController = (RootViewController*) [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    [rootViewController.view addSubview:QRViewC.view];
+    
+    [QRViewC LocalPhoto];
+    
+    this->ImageSavePath("dadadadad");
+    
     return true;
 }
+
+
+void AppDelegate::ImageSavePath(std::string str){
+        
+    CCLOG("%s",str.c_str());
+    
+}
+
+
 
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground() {
