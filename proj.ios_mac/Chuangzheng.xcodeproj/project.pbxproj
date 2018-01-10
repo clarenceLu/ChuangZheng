@@ -311,6 +311,20 @@
 		B27FFF782004AAAD0034DAA4 /* ReflectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFF762004AAAD0034DAA4 /* ReflectScene.cpp */; };
 		B27FFF7B2004AEB80034DAA4 /* bk_doctor_userInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF7A2004AEB80034DAA4 /* bk_doctor_userInfo.png */; };
 		B27FFF7E2004AEF20034DAA4 /* DocUserInfoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFF7C2004AEF20034DAA4 /* DocUserInfoScene.cpp */; };
+		B27FFF812004C3BD0034DAA4 /* bk_symptom.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF802004C3BD0034DAA4 /* bk_symptom.png */; };
+		B27FFF852004C4650034DAA4 /* SymptomScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFF832004C4650034DAA4 /* SymptomScene.cpp */; };
+		B27FFF892004DF540034DAA4 /* ImpressionScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFF872004DF540034DAA4 /* ImpressionScene.cpp */; };
+		B27FFF8F2005C95C0034DAA4 /* btn_impression_sure.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF8B2005C95C0034DAA4 /* btn_impression_sure.png */; };
+		B27FFF902005C95C0034DAA4 /* bk_impress_rect_white.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF8C2005C95C0034DAA4 /* bk_impress_rect_white.png */; };
+		B27FFF912005C95C0034DAA4 /* bk_impression.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF8D2005C95C0034DAA4 /* bk_impression.png */; };
+		B27FFF922005C95C0034DAA4 /* bk_impress_rect_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF8E2005C95C0034DAA4 /* bk_impress_rect_blue.png */; };
+		B27FFF952005D9550034DAA4 /* box_select_rect.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF932005D9540034DAA4 /* box_select_rect.png */; };
+		B27FFF962005D9550034DAA4 /* box_select_sure.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF942005D9550034DAA4 /* box_select_sure.png */; };
+		B27FFF9A2005EF0D0034DAA4 /* TreatScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFF982005EF0D0034DAA4 /* TreatScene.cpp */; };
+		B27FFF9C200609220034DAA4 /* bk_operation.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFF9B200609220034DAA4 /* bk_operation.png */; };
+		B27FFF9F20060CD70034DAA4 /* OperationScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFF9D20060CD70034DAA4 /* OperationScene.cpp */; };
+		B27FFFA22006153B0034DAA4 /* VisitCaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFFA02006153B0034DAA4 /* VisitCaseScene.cpp */; };
+		B27FFFA5200615560034DAA4 /* OutpatientCaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFFA3200615560034DAA4 /* OutpatientCaseScene.cpp */; };
 		B28993C31FE1079A0047C9E6 /* bk_registerDetail.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993C11FE107990047C9E6 /* bk_registerDetail.png */; };
 		B28993C71FE1152F0047C9E6 /* btn_change_password_save.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993C51FE1152F0047C9E6 /* btn_change_password_save.png */; };
 		B28993C81FE1152F0047C9E6 /* bk_change_password.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993C61FE1152F0047C9E6 /* bk_change_password.png */; };
@@ -745,6 +759,26 @@
 		B27FFF7A2004AEB80034DAA4 /* bk_doctor_userInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_doctor_userInfo.png; sourceTree = "<group>"; };
 		B27FFF7C2004AEF20034DAA4 /* DocUserInfoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DocUserInfoScene.cpp; sourceTree = "<group>"; };
 		B27FFF7D2004AEF20034DAA4 /* DocUserInfoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DocUserInfoScene.hpp; sourceTree = "<group>"; };
+		B27FFF802004C3BD0034DAA4 /* bk_symptom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_symptom.png; sourceTree = "<group>"; };
+		B27FFF832004C4650034DAA4 /* SymptomScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SymptomScene.cpp; sourceTree = "<group>"; };
+		B27FFF842004C4650034DAA4 /* SymptomScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SymptomScene.hpp; sourceTree = "<group>"; };
+		B27FFF872004DF540034DAA4 /* ImpressionScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImpressionScene.cpp; sourceTree = "<group>"; };
+		B27FFF882004DF540034DAA4 /* ImpressionScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ImpressionScene.hpp; sourceTree = "<group>"; };
+		B27FFF8B2005C95C0034DAA4 /* btn_impression_sure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_impression_sure.png; sourceTree = "<group>"; };
+		B27FFF8C2005C95C0034DAA4 /* bk_impress_rect_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_impress_rect_white.png; sourceTree = "<group>"; };
+		B27FFF8D2005C95C0034DAA4 /* bk_impression.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_impression.png; sourceTree = "<group>"; };
+		B27FFF8E2005C95C0034DAA4 /* bk_impress_rect_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_impress_rect_blue.png; sourceTree = "<group>"; };
+		B27FFF932005D9540034DAA4 /* box_select_rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = box_select_rect.png; sourceTree = "<group>"; };
+		B27FFF942005D9550034DAA4 /* box_select_sure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = box_select_sure.png; sourceTree = "<group>"; };
+		B27FFF982005EF0D0034DAA4 /* TreatScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TreatScene.cpp; sourceTree = "<group>"; };
+		B27FFF992005EF0D0034DAA4 /* TreatScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TreatScene.hpp; sourceTree = "<group>"; };
+		B27FFF9B200609220034DAA4 /* bk_operation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_operation.png; sourceTree = "<group>"; };
+		B27FFF9D20060CD70034DAA4 /* OperationScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationScene.cpp; sourceTree = "<group>"; };
+		B27FFF9E20060CD70034DAA4 /* OperationScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationScene.hpp; sourceTree = "<group>"; };
+		B27FFFA02006153B0034DAA4 /* VisitCaseScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VisitCaseScene.cpp; sourceTree = "<group>"; };
+		B27FFFA12006153B0034DAA4 /* VisitCaseScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VisitCaseScene.hpp; sourceTree = "<group>"; };
+		B27FFFA3200615560034DAA4 /* OutpatientCaseScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OutpatientCaseScene.cpp; sourceTree = "<group>"; };
+		B27FFFA4200615560034DAA4 /* OutpatientCaseScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OutpatientCaseScene.hpp; sourceTree = "<group>"; };
 		B28993C11FE107990047C9E6 /* bk_registerDetail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_registerDetail.png; sourceTree = "<group>"; };
 		B28993C51FE1152F0047C9E6 /* btn_change_password_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_change_password_save.png; sourceTree = "<group>"; };
 		B28993C61FE1152F0047C9E6 /* bk_change_password.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_change_password.png; sourceTree = "<group>"; };
@@ -1180,6 +1214,9 @@
 		B23066AB1FFCCF1000E85600 /* SickRoom */ = {
 			isa = PBXGroup;
 			children = (
+				B27FFF972005EECB0034DAA4 /* TreatWay */,
+				B27FFF862004DF3C0034DAA4 /* Impression */,
+				B27FFF822004C4420034DAA4 /* Symptom */,
 				B27FFF452004782B0034DAA4 /* Character */,
 				B23066AD1FFCCF3A00E85600 /* SetTemporaryRoom.hpp */,
 				B23066AC1FFCCF3A00E85600 /* SetTemporaryRoom.cpp */,
@@ -1343,6 +1380,10 @@
 				B230665B1FFB59B800E85600 /* AddVisitCaseScene.cpp */,
 				B230666B1FFB746200E85600 /* AddOutpatientCaseScene.hpp */,
 				B230666A1FFB746200E85600 /* AddOutpatientCaseScene.cpp */,
+				B27FFFA12006153B0034DAA4 /* VisitCaseScene.hpp */,
+				B27FFFA02006153B0034DAA4 /* VisitCaseScene.cpp */,
+				B27FFFA4200615560034DAA4 /* OutpatientCaseScene.hpp */,
+				B27FFFA3200615560034DAA4 /* OutpatientCaseScene.cpp */,
 			);
 			path = Case;
 			sourceTree = "<group>";
@@ -1648,6 +1689,8 @@
 		B2749C961FF37810007516BF /* SickRoom */ = {
 			isa = PBXGroup;
 			children = (
+				B27FFF8A2005C95C0034DAA4 /* impression */,
+				B27FFF7F2004C3BD0034DAA4 /* Symptom */,
 				B27FFF792004AEB80034DAA4 /* UserInfo */,
 				B27FFF4C20047A1A0034DAA4 /* Character */,
 				B27FFF492004799C0034DAA4 /* RecoverWay */,
@@ -1766,6 +1809,7 @@
 		B27FFF492004799C0034DAA4 /* RecoverWay */ = {
 			isa = PBXGroup;
 			children = (
+				B27FFF9B200609220034DAA4 /* bk_operation.png */,
 				B27FFF4A2004799C0034DAA4 /* bk_recoverway.png */,
 			);
 			path = RecoverWay;
@@ -1843,6 +1887,56 @@
 				B27FFF7A2004AEB80034DAA4 /* bk_doctor_userInfo.png */,
 			);
 			path = UserInfo;
+			sourceTree = "<group>";
+		};
+		B27FFF7F2004C3BD0034DAA4 /* Symptom */ = {
+			isa = PBXGroup;
+			children = (
+				B27FFF802004C3BD0034DAA4 /* bk_symptom.png */,
+			);
+			path = Symptom;
+			sourceTree = "<group>";
+		};
+		B27FFF822004C4420034DAA4 /* Symptom */ = {
+			isa = PBXGroup;
+			children = (
+				B27FFF842004C4650034DAA4 /* SymptomScene.hpp */,
+				B27FFF832004C4650034DAA4 /* SymptomScene.cpp */,
+			);
+			path = Symptom;
+			sourceTree = "<group>";
+		};
+		B27FFF862004DF3C0034DAA4 /* Impression */ = {
+			isa = PBXGroup;
+			children = (
+				B27FFF882004DF540034DAA4 /* ImpressionScene.hpp */,
+				B27FFF872004DF540034DAA4 /* ImpressionScene.cpp */,
+			);
+			path = Impression;
+			sourceTree = "<group>";
+		};
+		B27FFF8A2005C95C0034DAA4 /* impression */ = {
+			isa = PBXGroup;
+			children = (
+				B27FFF932005D9540034DAA4 /* box_select_rect.png */,
+				B27FFF942005D9550034DAA4 /* box_select_sure.png */,
+				B27FFF8B2005C95C0034DAA4 /* btn_impression_sure.png */,
+				B27FFF8C2005C95C0034DAA4 /* bk_impress_rect_white.png */,
+				B27FFF8D2005C95C0034DAA4 /* bk_impression.png */,
+				B27FFF8E2005C95C0034DAA4 /* bk_impress_rect_blue.png */,
+			);
+			path = impression;
+			sourceTree = "<group>";
+		};
+		B27FFF972005EECB0034DAA4 /* TreatWay */ = {
+			isa = PBXGroup;
+			children = (
+				B27FFF992005EF0D0034DAA4 /* TreatScene.hpp */,
+				B27FFF982005EF0D0034DAA4 /* TreatScene.cpp */,
+				B27FFF9E20060CD70034DAA4 /* OperationScene.hpp */,
+				B27FFF9D20060CD70034DAA4 /* OperationScene.cpp */,
+			);
+			path = TreatWay;
 			sourceTree = "<group>";
 		};
 		B28993C01FE107990047C9E6 /* RegisterDetail */ = {
@@ -2118,6 +2212,11 @@
 				B2749D631FF37811007516BF /* bedNum3.png in Resources */,
 				B2749D621FF37811007516BF /* bedNum2.png in Resources */,
 				B2749D7E1FF4D4EC007516BF /* btn_head_account.png in Resources */,
+				B27FFF902005C95C0034DAA4 /* bk_impress_rect_white.png in Resources */,
+				B2749D411FF37811007516BF /* r_r32_c4.png in Resources */,
+				B2749CE61FF37811007516BF /* l_r20_c21.png in Resources */,
+				B2749D251FF37811007516BF /* r_r35_c8.png in Resources */,
+
 				B2749D611FF37811007516BF /* bk_bed.png in Resources */,
 				B2749CA51FF37811007516BF /* bk_sickInfo_QRCode.png in Resources */,
 				B262F7F71FDA82B700EF887A /* btn_QRCode_close.png in Resources */,
@@ -2187,6 +2286,16 @@
 				B232ADEF1FD0FC7300ABBA1D /* btn_case_select.png in Resources */,
 				B23066671FFB5A4E00E85600 /* bk_add_hospital.png in Resources */,
 				B2749CAE1FF37811007516BF /* btn_outpatient_content.png in Resources */,
+
+				B2749D321FF37811007516BF /* r_r21_c6.png in Resources */,
+				B2749D021FF37811007516BF /* l_r32_c16.png in Resources */,
+				B27FFF8F2005C95C0034DAA4 /* btn_impression_sure.png in Resources */,
+				B2749D581FF37811007516BF /* r_r40_c10.png in Resources */,
+				B2749D011FF37811007516BF /* l_r59_c29.png in Resources */,
+				B2749D471FF37811007516BF /* r_r27_c4.png in Resources */,
+				B2749CBF1FF37811007516BF /* 1_r8_c33.png in Resources */,
+				B2749D531FF37811007516BF /* r_r17_c4.png in Resources */,
+
 				B223F12B1FCE6B5500DA0315 /* register_SQCode.png in Resources */,
 				B2749D5F1FF37811007516BF /* bk_welcome.png in Resources */,
 				B2749CAD1FF37811007516BF /* btn_sickInfo_save.png in Resources */,
@@ -2205,6 +2314,7 @@
 				B2749CA91FF37811007516BF /* btn_sickInfo_addSponsor.png in Resources */,
 				B262F7BF1FD907D100EF887A /* btn_step4_sure.png in Resources */,
 				B262F7F51FDA82B700EF887A /* bk_QRCode.png in Resources */,
+				B27FFF922005C95C0034DAA4 /* bk_impress_rect_blue.png in Resources */,
 				B232ADE61FD0FC7300ABBA1D /* step4.png in Resources */,
 				B232AE041FD13A0100ABBA1D /* usercase_bluerect.png in Resources */,
 				B262F7EA1FD935E000EF887A /* bk_tableView_white.png in Resources */,
@@ -2301,13 +2411,19 @@
 				B262F7AA1FD7D92300EF887A /* userInfo_line.png in Resources */,
 				B262F7841FD7B95100EF887A /* select_circle.png in Resources */,
 				B2749CA81FF37811007516BF /* btn_sickInfo_message.png in Resources */,
+				B27FFF812004C3BD0034DAA4 /* bk_symptom.png in Resources */,
 				B230668D1FFCA57900E85600 /* btn_waitDetail_recommend.png in Resources */,
 				B27FFF67200484F50034DAA4 /* bk_strength_abnormal.png in Resources */,
 				B223F13F1FCEAB0E00DA0315 /* select_sure.png in Resources */,
 				B2749D5D1FF37811007516BF /* btn_welcome_next.png in Resources */,
 				B23529D01FF61DAB00737DFD /* btn_caseSearch_next.png in Resources */,
 				B23066E11FFF494400E85600 /* bk_set_temporary_room.png in Resources */,
+				B27FFF9C200609220034DAA4 /* bk_operation.png in Resources */,
 				B2749D8A1FF4E886007516BF /* btn_group_member_join.png in Resources */,
+
+				B2749D091FF37811007516BF /* l_r3_c3.png in Resources */,
+				B27FFF962005D9550034DAA4 /* box_select_sure.png in Resources */,
+
 				B20EA5011FEBAE8200C38518 /* btn_spine_white.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				C43E9E301FC843F300CFB6EC /* btn_register.png in Resources */,
@@ -2316,6 +2432,11 @@
 				C49D38471FC542E90092C808 /* login_bk.png in Resources */,
 				B262F8241FDFF36B00EF887A /* bk_search.png in Resources */,
 				B23066551FFB460C00E85600 /* import_complete_info.png in Resources */,
+
+				B2749D331FF37811007516BF /* r_r15_c6.png in Resources */,
+				B2749CBD1FF37811007516BF /* 1_r12_c36.png in Resources */,
+				B27FFF952005D9550034DAA4 /* box_select_rect.png in Resources */,
+
 				B23066791FFB826F00E85600 /* btn_receive_unselect.png in Resources */,
 				B223F1401FCEAB0E00DA0315 /* message_select_man.png in Resources */,
 				B23066941FFCB8D600E85600 /* bk_refuse_layer.png in Resources */,
@@ -2353,6 +2474,7 @@
 				B2749D8D1FF4E886007516BF /* bk_group_leader_prompt.png in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
 				B28993CD1FE12E120047C9E6 /* bk_sureExit.png in Resources */,
+				B27FFF912005C95C0034DAA4 /* bk_impression.png in Resources */,
 				B23529E21FF63ED300737DFD /* bk_caseHistory.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2378,8 +2500,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C405CBE61FFB5281003BC597 /* AppDelegate.mm in Sources */,
+				B27FFF9F20060CD70034DAA4 /* OperationScene.cpp in Sources */,
 				B23066AE1FFCCF3A00E85600 /* SetTemporaryRoom.cpp in Sources */,
+
 				C44E91FD200666510029476C /* SGQRCodeGenerateManager.m in Sources */,
+
+				B27FFF892004DF540034DAA4 /* ImpressionScene.cpp in Sources */,
+
 				B23066841FFC7CF100E85600 /* WaitChatDetailScene.cpp in Sources */,
 				B27FFF752004A20E0034DAA4 /* ReflectAbnormalScene.cpp in Sources */,
 				B27FFF44200351790034DAA4 /* OPLLScene.cpp in Sources */,
@@ -2406,8 +2533,13 @@
 				B2749D731FF38105007516BF /* MainScene.cpp in Sources */,
 				B23066811FFBA30000E85600 /* WaitChatScene.cpp in Sources */,
 				B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */,
+
 				C44E91F9200666510029476C /* UIImage+ImageSize.m in Sources */,
+
+				B27FFF852004C4650034DAA4 /* SymptomScene.cpp in Sources */,
+
 				B27FFF722004901B0034DAA4 /* MuscleStrengthScene.cpp in Sources */,
+				B27FFFA22006153B0034DAA4 /* VisitCaseScene.cpp in Sources */,
 				B27FFF782004AAAD0034DAA4 /* ReflectScene.cpp in Sources */,
 				B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */,
 				C44E91FE200666510029476C /* SGQRCodeAlbumManager.m in Sources */,
@@ -2438,10 +2570,12 @@
 				B23066EA1FFF89B000E85600 /* ASIAScene.cpp in Sources */,
 				B20EA5081FECFAE800C38518 /* SenseAbnormalScene.cpp in Sources */,
 				C44E9205200666690029476C /* SGQRCodeScanningVC.m in Sources */,
+				B27FFFA5200615560034DAA4 /* OutpatientCaseScene.cpp in Sources */,
 				B230667E1FFB82C400E85600 /* ReceiveChatScene.cpp in Sources */,
 				B2749D781FF4D2C9007516BF /* AccountManageScene.cpp in Sources */,
 				C44E91FA200666510029476C /* SGQRCodeHelperTool.m in Sources */,
 				B23066E41FFF548900E85600 /* NeckJOAScene.cpp in Sources */,
+				B27FFF9A2005EF0D0034DAA4 /* TreatScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

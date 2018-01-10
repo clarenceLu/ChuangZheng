@@ -28,7 +28,6 @@ void WaitChatDetailScene::onEnter()
 {
     
     log("%d",type);
-    //原谅我用的是layerColor和layer一样的
     Scene::onEnter();
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();

@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 //#import "platform/ios/CCEAGLView-ios.h"
 
+
 #include "GroupMemberScene.hpp"
 #include "CaseHistoryScene.hpp"
 #include "RootViewController.h"
@@ -49,6 +50,9 @@ static AppDelegate *delegateA;
 
 
 #include "DocUserInfoScene.hpp"
+#include "CaseHistoryScene.hpp"
+#include "TreatScene.hpp"
+
 
 
 // #define USE_AUDIO_ENGINE 1
@@ -223,8 +227,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
 =======
    */
+
 //    auto scene = LoginScene::createScene();
   //  auto scene = WelcomeScene::createScene();
+
+ //  auto scene = LoginScene::createScene();
+//   auto scene = WelcomeScene::createScene();
+  //  auto scene=CaseHistoryScene::createScene();
+  // director->runWithScene(scene);
+
 
  // auto scene = LoginScene::createScene();
    auto scene = WelcomeScene::createScene();

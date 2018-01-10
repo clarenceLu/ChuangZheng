@@ -12,6 +12,9 @@
 #include "MarkScene.hpp"
 #include "CharacterScene.hpp"
 #include "DocUserInfoScene.hpp"
+#include "SymptomScene.hpp"
+#include "ImpressionScene.hpp"
+#include "TreatScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -304,6 +307,15 @@ void SickRoomScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::Event
                 Director::getInstance()->pushScene(charSC);
             }else if(index==0){
                 auto SC=DocUserInfoScene::createScene();
+                Director::getInstance()->pushScene(SC);
+            }else if(index==3){
+                auto SC=SymptomScene::createScene();
+                Director::getInstance()->pushScene(SC);
+            }else if(index==2){
+                auto SC=ImpressionScene::createScene();
+                Director::getInstance()->pushScene(SC);
+            }else if(index==7){
+                auto SC=TreatScene::createScene();
                 Director::getInstance()->pushScene(SC);
             }
             

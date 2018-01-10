@@ -29,6 +29,7 @@ public:
     
     void sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr);
     
+    void upLoadData(string UrlStr,const ccHttpRequestCallback& callback,char *requestData,size_t len);
     
     void onHttpRequestCompleted(HttpClient* sender,HttpResponse* response);
     

@@ -12,6 +12,9 @@
 #include "AddHospitalCaseScene.hpp"
 #include "AddVisitCaseScene.hpp"
 #include "AddOutpatientCaseScene.hpp"
+#include "WaitChatDetailScene.hpp"
+#include "SickRoomScene.hpp"
+#include "VisitCaseScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -244,7 +247,19 @@ void CaseHistoryScene::buttonCallback(Ref* pSender, cocos2d::ui::Widget::TouchEv
             Button* item = (Button*)pSender;
             int tag= item->getTag();
             log("%d",tag);
-//1~5
+            if (tag==1) {
+                auto chatSC=(WaitChatDetailScene*)WaitChatDetailScene::createScene();
+                chatSC->type=1;
+                Director::getInstance()->pushScene(chatSC);
+            }
+            if (tag==4) {
+                auto sickroomSC=(SickRoomScene*)SickRoomScene::createScene();
+                Director::getInstance()->pushScene(sickroomSC);
+            }if (tag==2) {
+                auto SC=(VisitCaseScene*)VisitCaseScene::createScene();
+                Director::getInstance()->pushScene(SC);
+            }
+            
         }
         default:
             break;

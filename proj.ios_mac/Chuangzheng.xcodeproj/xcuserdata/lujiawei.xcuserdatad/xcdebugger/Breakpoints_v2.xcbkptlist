@@ -14,7 +14,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
-            endingLineNumber = "92">
+            endingLineNumber = "92"
+            landmarkName = "NetWorkManger::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -28,7 +30,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
-            endingLineNumber = "92">
+            endingLineNumber = "92"
+            landmarkName = "NetWorkManger::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,7 +46,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
-            endingLineNumber = "92">
+            endingLineNumber = "92"
+            landmarkName = "NetWorkManger::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -56,7 +62,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
-            endingLineNumber = "92">
+            endingLineNumber = "92"
+            landmarkName = "NetWorkManger::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -183,7 +191,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "47"
             endingLineNumber = "47"
-            landmarkName = "NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback&amp; callback,char *requestDataStr)"
+            landmarkName = "NetWorkManger::upLoadData(string UrlStr,const ccHttpRequestCallback&amp; callback,char *requestData,size_t len)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -215,7 +223,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "54"
             endingLineNumber = "54"
-            landmarkName = "NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback&amp; callback,char *requestDataStr)"
+            landmarkName = "NetWorkManger::upLoadData(string UrlStr,const ccHttpRequestCallback&amp; callback,char *requestData,size_t len)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -306,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/AppDelegate.mm"
-            timestampString = "537293453.011179"
+            timestampString = "537294023.2507319"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "AppDelegate::applicationDidFinishLaunching()"
             landmarkType = "7">
          </BreakpointContent>
@@ -338,7 +346,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/AppDelegate.mm"
-            timestampString = "537293453.011645"
+            timestampString = "537294023.251251"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "33"
@@ -354,13 +362,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/AppDelegate.mm"
-            timestampString = "537293453.011701"
+            timestampString = "537294023.251433"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "262"
-            endingLineNumber = "262"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "AppDelegate::applicationDidFinishLaunching()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -482,12 +490,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/AppDelegate.mm"
-            timestampString = "537293453.01289"
+            timestampString = "537294023.251683"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "259"
-            endingLineNumber = "259"
-            landmarkName = "AppDelegate::QRWithString(std::string str)"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
+            landmarkName = "AppDelegate::applicationDidFinishLaunching()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
