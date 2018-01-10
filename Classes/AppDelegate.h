@@ -38,6 +38,8 @@ public:
     
     void ImageSavePath(std::string str);
     
+    void QRWithString(std::string str);
+    
     
     CQR_Encode m_QREncode;
 };

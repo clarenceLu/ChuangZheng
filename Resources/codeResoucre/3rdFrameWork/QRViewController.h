@@ -12,6 +12,8 @@
 @protocol QRViewDelegate // 代理传值方法
 -(void)imageDelegateUrl:(NSString*)ImageUrl;
 
+-(void)QRWithString:(NSString*)QRStr;
+
 @end
 
 

@@ -13,7 +13,6 @@
 //#import "platform/ios/CCEAGLView-ios.h"
 
 #include "GroupMemberScene.hpp"
-<<<<<<< HEAD
 #include "CaseHistoryScene.hpp"
 #include "RootViewController.h"
 #import "QRViewController.h"
@@ -39,18 +38,18 @@ static AppDelegate *delegateA;
      delegateA->ImageSavePath([ImageUrl cStringUsingEncoding: NSUTF8StringEncoding]);
 }
 
-
+-(void)QRWithString:(NSString*)QRStr{
+    
+    //this->
+    
+    delegateA->QRWithString([QRStr cStringUsingEncoding: NSUTF8StringEncoding]);
+}
 
 @end
 
 
-
-
-
-
-=======
 #include "DocUserInfoScene.hpp"
->>>>>>> a9d24b883dd21a3ec8ca4349b09e270d0622650e
+
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -224,25 +223,19 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
 =======
    */
-<<<<<<< HEAD
 //    auto scene = LoginScene::createScene();
-    auto scene = WelcomeScene::createScene();
-//    auto scene=CaseHistoryScene::createScene();
-=======
- //  auto scene = LoginScene::createScene();
-//   auto scene = WelcomeScene::createScene();
-    auto scene=DocUserInfoScene::createScene();
->>>>>>> a9d24b883dd21a3ec8ca4349b09e270d0622650e
-    director->runWithScene(scene);
-    
+  //  auto scene = WelcomeScene::createScene();
+
+ // auto scene = LoginScene::createScene();
+   auto scene = WelcomeScene::createScene();
+   // auto scene=DocUserInfoScene::createScene();
+
+ director->runWithScene(scene);
     
 //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 //    [view setBackgroundColor:[UIColor blueColor]];
     
     callBack *callObj = [[callBack alloc] init];
-    
-    
-
     
     
     QRViewController *QRViewC = [[QRViewController alloc] init];
@@ -252,7 +245,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto rootViewController = (RootViewController*) [[[UIApplication sharedApplication] keyWindow] rootViewController];
     [rootViewController.view addSubview:QRViewC.view];
     
-    [QRViewC LocalPhoto];
+    [QRViewC scanQRImage];
     
     this->ImageSavePath("dadadadad");
     
@@ -260,14 +253,17 @@ bool AppDelegate::applicationDidFinishLaunching() {
 }
 
 
-void AppDelegate::ImageSavePath(std::string str){
-        
-    CCLOG("%s",str.c_str());
+void AppDelegate::QRWithString(std::string str){
+    
+    
+     CCLOG("%s",str.c_str());
     
 }
 
-
-
+void AppDelegate::ImageSavePath(std::string str){
+        
+    CCLOG("%s",str.c_str());
+}
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
@@ -291,3 +287,4 @@ void AppDelegate::applicationWillEnterForeground() {
     SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
 }
+
