@@ -4,7 +4,7 @@
 
 
 #include "SpineTendernessScene.hpp"
-#include "AppearanceAbnormalScene.hpp"
+#include "UserCaseScene.hpp"
 #include "SenseAbnormalScene.hpp"
 
 #include "WelcomeScene.hpp"
@@ -13,6 +13,7 @@
 //#import "platform/ios/CCEAGLView-ios.h"
 
 #include "GroupMemberScene.hpp"
+<<<<<<< HEAD
 #include "CaseHistoryScene.hpp"
 #include "RootViewController.h"
 #import "QRViewController.h"
@@ -47,6 +48,9 @@ static AppDelegate *delegateA;
 
 
 
+=======
+#include "DocUserInfoScene.hpp"
+>>>>>>> a9d24b883dd21a3ec8ca4349b09e270d0622650e
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -220,9 +224,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
 =======
    */
+<<<<<<< HEAD
 //    auto scene = LoginScene::createScene();
     auto scene = WelcomeScene::createScene();
 //    auto scene=CaseHistoryScene::createScene();
+=======
+ //  auto scene = LoginScene::createScene();
+//   auto scene = WelcomeScene::createScene();
+    auto scene=DocUserInfoScene::createScene();
+>>>>>>> a9d24b883dd21a3ec8ca4349b09e270d0622650e
     director->runWithScene(scene);
     
     
