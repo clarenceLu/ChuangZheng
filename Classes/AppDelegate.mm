@@ -185,8 +185,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 =======
    */
  //  auto scene = LoginScene::createScene();
-//   auto scene = WelcomeScene::createScene();
-    auto scene=CaseHistoryScene::createScene();
+   auto scene = WelcomeScene::createScene();
+//    auto scene=CaseHistoryScene::createScene();
     director->runWithScene(scene);
 
 

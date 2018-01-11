@@ -22,7 +22,14 @@ public:
     
     cocos2d::ui::Layout *createMessageLayout(int i,std::string title,std::string content);
     
+    void createTextFieldView(cocos2d::ui::Layout* contentV);
+    void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
+    
+    
+    Size calculateFontSize(const char *str );
+    
 private:
+    cocos2d::ui::ListView* lv;
 };
 
 #endif /* VisitCaseScene_hpp */

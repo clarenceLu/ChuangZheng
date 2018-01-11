@@ -12,7 +12,7 @@
 #include "AccountManageScene.hpp"
 #include "GroupLeaderScene.hpp"
 #include "GroupMemberScene.hpp"
-#include "CaseListScene.hpp"
+#include "CaseSearchScene.hpp"
 #include "ReceiveChatScene.hpp"
 #include "WaitChatScene.hpp"
 #include "SetTemporaryRoom.hpp"
@@ -362,7 +362,7 @@ Layer* MainScene::createSickInfoLayer(){
     caseBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED: {
-            auto caseScene= CaseListScene::createScene();
+            auto caseScene= CaseSearchScene::createScene();
             Director::getInstance()->pushScene(caseScene);
         }
         default:

@@ -10,6 +10,9 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "CaseHistoryScene.hpp"
+#include "AddHospitalCaseScene.hpp"
+#include "AddVisitCaseScene.hpp"
+#include "AddOutpatientCaseScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -136,7 +139,8 @@ Layer* CaseListScene::addCaseLayer(){
     hospitalBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            
+            auto hospitalCase=AddHospitalCaseScene::createScene();
+            Director::getInstance()->pushScene(hospitalCase);
         }
         default:
             break;
@@ -156,7 +160,8 @@ Layer* CaseListScene::addCaseLayer(){
     outpatientBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            
+            auto outpatientCase=AddOutpatientCaseScene::createScene();
+            Director::getInstance()->pushScene(outpatientCase);
         }
         default:
             break;
@@ -176,7 +181,8 @@ Layer* CaseListScene::addCaseLayer(){
     visitBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            
+            auto visitCase=AddVisitCaseScene::createScene();
+            Director::getInstance()->pushScene(visitCase);
         }
         default:
             break;
