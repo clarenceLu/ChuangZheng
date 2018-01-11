@@ -35,18 +35,33 @@ NetWorkManger::~NetWorkManger()
     
 
 }
-
 NetWorkManger * NetWorkManger::sharedWorkManger()
 {
     static NetWorkManger instance;
     return  &instance;
 }
 
-void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr)
+
+void NetWorkManger::upLoadData(string UrlStr,const ccHttpRequestCallback& callback,char *requestData,size_t len)
 {
     
+    HttpRequest* request = new  HttpRequest();
     
+    
+    request->setUrl(UrlStr);
+    
+    request->setRequestType(HttpRequest::Type::POST);
+    
+    request->setRequestData((char*)requestData,len);
+    
+    request->setResponseCallback(callback);
+    
+    HttpClient::getInstance()->sendImmediate(request);
+    request->release();
+}
 
+void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr)
+{
     
     HttpRequest* request = new  HttpRequest();
 
@@ -56,8 +71,6 @@ void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callb
     request->setRequestType(HttpRequest::Type::POST);
     
     request->setUserData(requestDataStr);
-    
-
     
     request->setResponseCallback(callback);
 

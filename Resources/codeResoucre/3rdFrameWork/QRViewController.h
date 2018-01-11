@@ -7,6 +7,28 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QRViewController : UIViewController
+
+
+@protocol QRViewDelegate // 代理传值方法
+-(void)imageDelegateUrl:(NSString*)ImageUrl;
+
+-(void)QRWithString:(NSString*)QRStr;
+
+@end
+
+
+@interface QRViewController : UIViewController  <UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
+    
+    
+    
+    
+    
+}
+@property (weak, nonatomic) id delegate;
+
+-(void)LocalPhoto;
+-(void)takePhoto;
+
+-(NSString*)scanQRImage;
 
 @end

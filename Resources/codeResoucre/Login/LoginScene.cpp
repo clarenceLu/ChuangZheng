@@ -133,10 +133,6 @@ void LoginScene::createHudView(){
     
     CCLOG("%s", buffer.GetString());
     
-
-
-    
-    
     CCDictionary * pDict = CCDictionary::create();
     
     pDict->setObject(CCString::create("value1"), "key1");
@@ -156,8 +152,7 @@ void LoginScene::createHudView(){
         
         CCLOG("%s",pDict->valueForKey(str->getCString())->getCString());
     }
-    
-    
+
 //    netManeger->sendMessage("http://api2.innfinityar.com/web/getArtist",CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),(char *)buffer.GetString());
     
     userName = TextField::create("请输入账户名","Arial",30);
@@ -220,9 +215,6 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
 //        }
         auto userCaseSC=UserCaseScene::create();
         Director::getInstance()->replaceScene(userCaseSC);
-        
-      
-        
     }else{
         Size visibleSize= Director::getInstance()->getVisibleSize();
         auto judgeV = Label::createWithSystemFont("登录失败","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
@@ -275,7 +267,7 @@ void LoginScene::menuLoginCallback(Ref* pSender)
     int tag= item->getTag();
     if (tag==101) {
         auto registerScene=RegisterScene::createScene();
-        Director::getInstance()->pushScene(registerScene);
+        Director::getInstance()->pushScene(registerScene); 
     }
     if (tag==100) {
          Size visibleSize=Director::getInstance()->getVisibleSize();
