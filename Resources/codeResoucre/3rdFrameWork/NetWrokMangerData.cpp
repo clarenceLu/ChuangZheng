@@ -48,6 +48,7 @@ void NetWorkManger::upLoadData(string UrlStr,const ccHttpRequestCallback& callba
     HttpRequest* request = new  HttpRequest();
     
     
+    
     request->setUrl(UrlStr);
     
     request->setRequestType(HttpRequest::Type::POST);
