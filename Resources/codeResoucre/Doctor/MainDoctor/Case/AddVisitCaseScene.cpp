@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "VisitCaseScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -61,7 +62,8 @@ bool AddVisitCaseScene::init(){
     importCompleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            //跳转住院病历页面
+                auto SC=(VisitCaseScene*)VisitCaseScene::createScene();
+                Director::getInstance()->pushScene(SC);
         }
         default:
             break;

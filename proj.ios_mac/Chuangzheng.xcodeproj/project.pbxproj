@@ -325,12 +325,16 @@
 		B27FFF9F20060CD70034DAA4 /* OperationScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFF9D20060CD70034DAA4 /* OperationScene.cpp */; };
 		B27FFFA22006153B0034DAA4 /* VisitCaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFFA02006153B0034DAA4 /* VisitCaseScene.cpp */; };
 		B27FFFA5200615560034DAA4 /* OutpatientCaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B27FFFA3200615560034DAA4 /* OutpatientCaseScene.cpp */; };
+		B27FFFAB20071F0D0034DAA4 /* bk_visit_case.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFFA720071F0C0034DAA4 /* bk_visit_case.png */; };
+		B27FFFAC20071F0D0034DAA4 /* bk_outpatient_case.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFFA920071F0D0034DAA4 /* bk_outpatient_case.png */; };
+		B27FFFAD20071F0D0034DAA4 /* bk_textField.png in Resources */ = {isa = PBXBuildFile; fileRef = B27FFFAA20071F0D0034DAA4 /* bk_textField.png */; };
 		B28993C31FE1079A0047C9E6 /* bk_registerDetail.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993C11FE107990047C9E6 /* bk_registerDetail.png */; };
 		B28993C71FE1152F0047C9E6 /* btn_change_password_save.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993C51FE1152F0047C9E6 /* btn_change_password_save.png */; };
 		B28993C81FE1152F0047C9E6 /* bk_change_password.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993C61FE1152F0047C9E6 /* bk_change_password.png */; };
 		B28993CD1FE12E120047C9E6 /* bk_sureExit.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993CB1FE12E120047C9E6 /* bk_sureExit.png */; };
 		B28993CE1FE12E120047C9E6 /* btn_sureExit_sure.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993CC1FE12E120047C9E6 /* btn_sureExit_sure.png */; };
 		B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B28993D01FE267500047C9E6 /* MedicalRecordScene.cpp */; };
+		B2986B7A20073B4D00DA57DC /* TreatWayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2986B7820073B4D00DA57DC /* TreatWayScene.cpp */; };
 		B2E1449D1FEB786300DA7307 /* ActionAbnormalScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2E1449B1FEB786300DA7307 /* ActionAbnormalScene.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -779,6 +783,9 @@
 		B27FFFA12006153B0034DAA4 /* VisitCaseScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VisitCaseScene.hpp; sourceTree = "<group>"; };
 		B27FFFA3200615560034DAA4 /* OutpatientCaseScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OutpatientCaseScene.cpp; sourceTree = "<group>"; };
 		B27FFFA4200615560034DAA4 /* OutpatientCaseScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OutpatientCaseScene.hpp; sourceTree = "<group>"; };
+		B27FFFA720071F0C0034DAA4 /* bk_visit_case.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_visit_case.png; sourceTree = "<group>"; };
+		B27FFFA920071F0D0034DAA4 /* bk_outpatient_case.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_outpatient_case.png; sourceTree = "<group>"; };
+		B27FFFAA20071F0D0034DAA4 /* bk_textField.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_textField.png; sourceTree = "<group>"; };
 		B28993C11FE107990047C9E6 /* bk_registerDetail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_registerDetail.png; sourceTree = "<group>"; };
 		B28993C51FE1152F0047C9E6 /* btn_change_password_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_change_password_save.png; sourceTree = "<group>"; };
 		B28993C61FE1152F0047C9E6 /* bk_change_password.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_change_password.png; sourceTree = "<group>"; };
@@ -786,6 +793,8 @@
 		B28993CC1FE12E120047C9E6 /* btn_sureExit_sure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_sureExit_sure.png; sourceTree = "<group>"; };
 		B28993D01FE267500047C9E6 /* MedicalRecordScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MedicalRecordScene.cpp; sourceTree = "<group>"; };
 		B28993D11FE267500047C9E6 /* MedicalRecordScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MedicalRecordScene.hpp; sourceTree = "<group>"; };
+		B2986B7820073B4D00DA57DC /* TreatWayScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TreatWayScene.cpp; sourceTree = "<group>"; };
+		B2986B7920073B4D00DA57DC /* TreatWayScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TreatWayScene.hpp; sourceTree = "<group>"; };
 		B2E1449B1FEB786300DA7307 /* ActionAbnormalScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ActionAbnormalScene.cpp; sourceTree = "<group>"; };
 		B2E1449C1FEB786300DA7307 /* ActionAbnormalScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ActionAbnormalScene.hpp; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1391,6 +1400,8 @@
 		B23529CB1FF60D6B00737DFD /* Case */ = {
 			isa = PBXGroup;
 			children = (
+				B27FFFA820071F0D0034DAA4 /* OutpatientScene */,
+				B27FFFA620071F0C0034DAA4 /* VisitCase */,
 				B23066611FFB5A4D00E85600 /* AddHospitalCase */,
 				B23066651FFB5A4D00E85600 /* AddOutpatientCase */,
 				B23066631FFB5A4D00E85600 /* AddVisitCase */,
@@ -1935,8 +1946,27 @@
 				B27FFF982005EF0D0034DAA4 /* TreatScene.cpp */,
 				B27FFF9E20060CD70034DAA4 /* OperationScene.hpp */,
 				B27FFF9D20060CD70034DAA4 /* OperationScene.cpp */,
+				B2986B7920073B4D00DA57DC /* TreatWayScene.hpp */,
+				B2986B7820073B4D00DA57DC /* TreatWayScene.cpp */,
 			);
 			path = TreatWay;
+			sourceTree = "<group>";
+		};
+		B27FFFA620071F0C0034DAA4 /* VisitCase */ = {
+			isa = PBXGroup;
+			children = (
+				B27FFFA720071F0C0034DAA4 /* bk_visit_case.png */,
+			);
+			path = VisitCase;
+			sourceTree = "<group>";
+		};
+		B27FFFA820071F0D0034DAA4 /* OutpatientScene */ = {
+			isa = PBXGroup;
+			children = (
+				B27FFFA920071F0D0034DAA4 /* bk_outpatient_case.png */,
+				B27FFFAA20071F0D0034DAA4 /* bk_textField.png */,
+			);
+			path = OutpatientScene;
 			sourceTree = "<group>";
 		};
 		B28993C01FE107990047C9E6 /* RegisterDetail */ = {
@@ -2268,6 +2298,8 @@
 				B23066751FFB826F00E85600 /* bk_wait.png in Resources */,
 				B232ADF41FD0FC7300ABBA1D /* btn_user_unselect.png in Resources */,
 				B20EA4F51FEBADD700C38518 /* btn_appearance_unsure_rect.png in Resources */,
+				B27FFFAC20071F0D0034DAA4 /* bk_outpatient_case.png in Resources */,
+				B2749CEE1FF37811007516BF /* l_r30_c25.png in Resources */,
 				B23066BB1FFDF76200E85600 /* btn_sickroom_cancel.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				B262F7741FD7AB8B00EF887A /* alpha.png in Resources */,
@@ -2417,6 +2449,8 @@
 				B223F13F1FCEAB0E00DA0315 /* select_sure.png in Resources */,
 				B2749D5D1FF37811007516BF /* btn_welcome_next.png in Resources */,
 				B23529D01FF61DAB00737DFD /* btn_caseSearch_next.png in Resources */,
+				B27FFFAB20071F0D0034DAA4 /* bk_visit_case.png in Resources */,
+				B2749D5C1FF37811007516BF /* r_r15_c4.png in Resources */,
 				B23066E11FFF494400E85600 /* bk_set_temporary_room.png in Resources */,
 				B27FFF9C200609220034DAA4 /* bk_operation.png in Resources */,
 				B2749D8A1FF4E886007516BF /* btn_group_member_join.png in Resources */,
@@ -2450,6 +2484,9 @@
 				B232ADE81FD0FC7300ABBA1D /* step3.png in Resources */,
 				B23066BA1FFDF76200E85600 /* btn_sickroom_calendar.png in Resources */,
 				B2749D681FF37811007516BF /* bk_sickRoom.png in Resources */,
+				B27FFFAD20071F0D0034DAA4 /* bk_textField.png in Resources */,
+				B2749D181FF37811007516BF /* Thumbs.db in Resources */,
+				B2749D0E1FF37811007516BF /* l_r54_c6.png in Resources */,
 				B262F7A51FD7C27900EF887A /* btn_userInfo_code.png in Resources */,
 				B28993C81FE1152F0047C9E6 /* bk_change_password.png in Resources */,
 				B23066DE1FFF492500E85600 /* bk_NDI.png in Resources */,
@@ -2502,11 +2539,9 @@
 				C405CBE61FFB5281003BC597 /* AppDelegate.mm in Sources */,
 				B27FFF9F20060CD70034DAA4 /* OperationScene.cpp in Sources */,
 				B23066AE1FFCCF3A00E85600 /* SetTemporaryRoom.cpp in Sources */,
-
+				B2986B7A20073B4D00DA57DC /* TreatWayScene.cpp in Sources */,
 				C44E91FD200666510029476C /* SGQRCodeGenerateManager.m in Sources */,
-
 				B27FFF892004DF540034DAA4 /* ImpressionScene.cpp in Sources */,
-
 				B23066841FFC7CF100E85600 /* WaitChatDetailScene.cpp in Sources */,
 				B27FFF752004A20E0034DAA4 /* ReflectAbnormalScene.cpp in Sources */,
 				B27FFF44200351790034DAA4 /* OPLLScene.cpp in Sources */,

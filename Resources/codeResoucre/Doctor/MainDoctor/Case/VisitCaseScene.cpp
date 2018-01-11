@@ -24,7 +24,7 @@ bool VisitCaseScene::init(){
         return false;
     }
     Size visibleSize=Director::getInstance()->getVisibleSize();
-    auto bkView=Sprite::create("bk_character.png");
+    auto bkView=Sprite::create("bk_visit_case.png");
     bkView->setPosition(Vec2(0, 0));
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(visibleSize);
@@ -43,7 +43,7 @@ bool VisitCaseScene::init(){
     });
     this->addChild(backBtn);
     
-    ListView* lv = ListView::create();
+    lv = ListView::create();
     lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
     lv->setBounceEnabled(true);
     lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
@@ -70,26 +70,64 @@ bool VisitCaseScene::init(){
     layout->setBackGroundImageScale9Enabled(true);
     layout->setBackGroundImage("alpha.png");
     layout->setTouchEnabled(true);
+    auto textFieldTop=Sprite::create("textfield_top.png");
+    textFieldTop->setPosition(Vec2(0,0));
+    textFieldTop->setContentSize(Size(visibleSize.width-40, 30));
+    textFieldTop->setAnchorPoint(Vec2(0, 0));
+    layout->addChild(textFieldTop);
+    auto titleLB = Label::createWithSystemFont("说明","Arial",38,Size(300,50),TextHAlignment::LEFT,TextVAlignment::TOP);
+    titleLB->setPosition(Point(37,10+textFieldTop->getContentSize().height));
+    titleLB->setTextColor(Color4B(91, 144, 229, 255));
+    titleLB->setAnchorPoint(Vec2(0, 0));
+    layout->addChild(titleLB);
+    layout->setContentSize(Size(visibleSize.width, textFieldTop->getContentSize().height+70));
+    lv->insertCustomItem(layout,5);
     
+    auto layout2 = Layout::create();
+    layout2->setBackGroundImageScale9Enabled(true);
+    layout2->setBackGroundImage("textfield_center.png");
+    layout2->setTouchEnabled(true);
+    auto textFieldContent= TextField::create("一百字以内","Arial",35);
+    textFieldContent->setMaxLength(240);
+    //用于多行输入
+    textFieldContent->ignoreContentAdaptWithSize(false);
+    textFieldContent->setTouchSize(Size(visibleSize.width-80,300));
+    textFieldContent->setPosition(Vec2(20,0));
+    textFieldContent->setAnchorPoint(Vec2(0,0));
+    textFieldContent->setContentSize(Size(visibleSize.width-80,300));
+    textFieldContent->setTextColor(Color4B::BLACK);
+    textFieldContent->setPlaceHolderColor(Color4B::GRAY);
+    textFieldContent->setTextHorizontalAlignment(TextHAlignment::LEFT);
+    textFieldContent->setTag(110);
+    textFieldContent->addEventListener(CC_CALLBACK_2(VisitCaseScene::eventCallBack, this));
+    layout2->addChild(textFieldContent);
+     layout2->setContentSize(Size(visibleSize.width-40, 300));
+    lv->insertCustomItem(layout2,6);
     
-    
-    
-    
-//    auto titleLB = Label::createWithSystemFont("说明","Arial",38,Size(300,50),TextHAlignment::LEFT,TextVAlignment::TOP);
-//    titleLB->setPosition(Point(37,height+10));
-//    titleLB->setTextColor(Color4B(91, 144, 229, 255));
-//    titleLB->setAnchorPoint(Vec2(0, 0));
-//    layout->addChild(titleLB);
-    
-    
-    
-    
-     layout->setContentSize(Size(visibleSize.width, 100));
+    auto layout3 = Layout::create();
+    layout3->setBackGroundImageScale9Enabled(true);
+    layout3->setBackGroundImage("alpha.png");
+    layout3->setTouchEnabled(true);
+    auto textFieldBottom=Sprite::create("textfield_bottom.png");
+    textFieldBottom->setPosition(Vec2(0, 0));
+    textFieldBottom->setAnchorPoint(Vec2(0, 0));
+    textFieldBottom->setContentSize(Size(visibleSize.width-40, 30));
+    layout3->addChild(textFieldBottom);
+    layout3->setContentSize(Size(visibleSize.width, textFieldBottom->getContentSize().height));
+    lv->insertCustomItem(layout3,7);
     
     
     return true;
-    
 }
+void VisitCaseScene::createTextFieldView(Layout* contentV){
+    Size visibleSize=Director::getInstance()->getVisibleSize();
+    auto textFieldBottom=Sprite::create("textfield_bottom.png");
+    textFieldBottom->setPosition(Vec2(23, 0));
+    textFieldBottom->setAnchorPoint(Vec2(0, 0));
+    textFieldBottom->setScale(0.87);
+    contentV->addChild(textFieldBottom);
+}
+
 
 Layout *VisitCaseScene::createMessageLayout(int i,string title,string content){
     auto visibleSize=Director::getInstance()->getVisibleSize();
@@ -111,7 +149,7 @@ Layout *VisitCaseScene::createMessageLayout(int i,string title,string content){
     }
     
     auto titleLB = Label::createWithSystemFont(title,"Arial",38,Size(visibleSize.width-150,50),TextHAlignment::LEFT,TextVAlignment::TOP);
-    titleLB->setPosition(Point(37,height+10));
+    titleLB->setPosition(Point(37,height));
     titleLB->setTextColor(Color4B(91, 144, 229, 255));
     titleLB->setAnchorPoint(Vec2(0, 0));
     layout->addChild(titleLB);
@@ -123,11 +161,11 @@ Layout *VisitCaseScene::createMessageLayout(int i,string title,string content){
     layout->addChild(lineV);
     //必须执行一下允许点击
     layout->setTouchEnabled(true);
-    layout->setContentSize(Size(visibleSize.width, height+80));
+    layout->setContentSize(Size(visibleSize.width, height+70));
     
     auto judgeBtn=Sprite::create("btn_doctor_judge.png");
     judgeBtn->setAnchorPoint(Vec2(0, 0));
-    judgeBtn->setPosition(Vec2(visibleSize.width-90, height+20));
+    judgeBtn->setPosition(Vec2(visibleSize.width-90, height+10));
     layout->addChild(judgeBtn);
     
     
@@ -184,4 +222,83 @@ void VisitCaseScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::E
         default:
             break;
     }
+}
+void VisitCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    TextField*textField=(TextField*)pSender;
+    string  text=textField->getString();
+    Size size=calculateFontSize(text.c_str());
+    switch (type){
+        case cocos2d::ui::TextField::EventType::INSERT_TEXT:{
+            CCLOG("INSERT_TEXT");
+//            if (size.height>=270) {
+#pragma-调整输入框的高度
+            Layout*  layout=(Layout*)lv->getItem(6);
+                layout->setContentSize(Size(visibleSize.width-40, size.height));
+                
+//                layout->setPosition(Vec2(0, 270- size.height));
+//            }
+        }
+            break;
+        case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
+            CCLOG("DELETE_BACKWARD");
+        case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
+            CCLOG("DETACH_WITH_IME");
+            
+            break;
+    }
+}
+Size VisitCaseScene::calculateFontSize(const char *str )
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    std::string tempString = str;
+    log("tempString = %s",tempString.c_str());
+    size_t computeCount = tempString.size();       //如果字符串很长每次抽取100个字符来计算size；
+    Size size = Size(0,0);
+    for (int i = 0; i<computeCount ;)  
+    {
+        std::string substring =  tempString.substr(i,1);
+        if ((substring.c_str()[0] & 0x80 )!=0) //是汉字
+        {
+            substring = tempString.substr(i , 3);
+            i += 3;
+        }
+        else
+        {
+            i++;
+        }
+        //CCLog("subString  = %s ",substring.c_str());
+        auto tempLabel = LabelTTF::create(substring.c_str(),"",25);
+        tempLabel->setHorizontalAlignment(cocos2d::TextHAlignment::LEFT);
+        Size tmpLsize = tempLabel->getContentSize();
+        size.width+=tmpLsize.width;
+    }
+    
+    float fHeight= 0;
+    float chartWidth=visibleSize.width-80;
+    if( size.width > chartWidth)//大于容器的宽度
+    {
+        fHeight = (size.width / 200 );//计算需要多少行
+    }
+    int nHeight =  ceil(fHeight);
+    
+    if (nHeight == 0)
+    {
+        nHeight = 1;
+    }
+    
+    Size labelSize ;
+    if (size.width < chartWidth)
+    {
+        labelSize = Size(size.width,nHeight*32);//计算容器的Size
+    }
+    else
+    {
+        labelSize = Size(chartWidth,nHeight*28);
+    }
+    
+    //CCLog("labelSize = (%f, %f)",labelSize.width ,labelSize.height);
+    //CCLog("fHeight = %f  nHeight = %d " ,fHeight ,nHeight);
+    return labelSize;
 }

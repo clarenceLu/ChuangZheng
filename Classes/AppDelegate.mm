@@ -228,20 +228,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 =======
    */
 
-//    auto scene = LoginScene::createScene();
-  //  auto scene = WelcomeScene::createScene();
-
- //  auto scene = LoginScene::createScene();
+   auto scene = LoginScene::createScene();
 //   auto scene = WelcomeScene::createScene();
-  //  auto scene=CaseHistoryScene::createScene();
-  // director->runWithScene(scene);
-
-
- // auto scene = LoginScene::createScene();
-   auto scene = WelcomeScene::createScene();
-   // auto scene=DocUserInfoScene::createScene();
-
- director->runWithScene(scene);
+//    auto scene=CaseHistoryScene::createScene();
+    director->runWithScene(scene);
     
 //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
 //    [view setBackgroundColor:[UIColor blueColor]];
