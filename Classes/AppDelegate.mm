@@ -23,8 +23,7 @@ static AppDelegate *delegateA;
 
 @interface callBack:NSObject<QRViewDelegate>{
     
-    
-    
+
 }
 
 

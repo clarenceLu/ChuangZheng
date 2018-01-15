@@ -227,7 +227,6 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
 
 //    this->printLog();
 }
-
 #pragma-用于加载网络数据
 
 void LoginScene::pushDataToNetWork(string username,string passwd){

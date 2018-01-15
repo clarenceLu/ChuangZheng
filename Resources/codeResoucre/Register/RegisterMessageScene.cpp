@@ -382,7 +382,7 @@ Layer* RegisterMessageScene::createAlbumLayer(){
 void RegisterMessageScene::pushDataToNetWork(string username,string passwd,string name,string sex,string age,string phone,string phone1,string idCardNo,string address,string headUrl,string caseNo){
      NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
         char strtest[500] = {0};
-        sprintf(strtest,"http://czapi.looper.pro/web/createUser?userId=%s&passwd=%s&name=%s&sex=%s&number=%s&phone=%s&idCardNo=%s", username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),age.c_str(),phone.c_str(),idCardNo.c_str());
+        sprintf(strtest,"http://c.looper.pro/web/createUser?userId=%s&passwd=%s&name=%s&sex=%s&number=%s&phone=%s&idCardNo=%s", username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),age.c_str(),phone.c_str(),idCardNo.c_str());
         string url=strtest;
         
     netManeger->sendMessage(url,CC_CALLBACK_2(RegisterMessageScene::onHttpRequestCompleted, this),nullptr);
