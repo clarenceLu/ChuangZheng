@@ -335,6 +335,7 @@
 		B28993CE1FE12E120047C9E6 /* btn_sureExit_sure.png in Resources */ = {isa = PBXBuildFile; fileRef = B28993CC1FE12E120047C9E6 /* btn_sureExit_sure.png */; };
 		B28993D21FE267500047C9E6 /* MedicalRecordScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B28993D01FE267500047C9E6 /* MedicalRecordScene.cpp */; };
 		B2986B7A20073B4D00DA57DC /* TreatWayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2986B7820073B4D00DA57DC /* TreatWayScene.cpp */; };
+		B2986B7F200887A300DA57DC /* recover_rect_green.png in Resources */ = {isa = PBXBuildFile; fileRef = B2986B7D200887A300DA57DC /* recover_rect_green.png */; };
 		B2E1449D1FEB786300DA7307 /* ActionAbnormalScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2E1449B1FEB786300DA7307 /* ActionAbnormalScene.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -795,6 +796,7 @@
 		B28993D11FE267500047C9E6 /* MedicalRecordScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MedicalRecordScene.hpp; sourceTree = "<group>"; };
 		B2986B7820073B4D00DA57DC /* TreatWayScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TreatWayScene.cpp; sourceTree = "<group>"; };
 		B2986B7920073B4D00DA57DC /* TreatWayScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TreatWayScene.hpp; sourceTree = "<group>"; };
+		B2986B7D200887A300DA57DC /* recover_rect_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recover_rect_green.png; sourceTree = "<group>"; };
 		B2E1449B1FEB786300DA7307 /* ActionAbnormalScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ActionAbnormalScene.cpp; sourceTree = "<group>"; };
 		B2E1449C1FEB786300DA7307 /* ActionAbnormalScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ActionAbnormalScene.hpp; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1820,6 +1822,7 @@
 		B27FFF492004799C0034DAA4 /* RecoverWay */ = {
 			isa = PBXGroup;
 			children = (
+				B2986B7D200887A300DA57DC /* recover_rect_green.png */,
 				B27FFF9B200609220034DAA4 /* bk_operation.png */,
 				B27FFF4A2004799C0034DAA4 /* bk_recoverway.png */,
 			);
@@ -2362,6 +2365,7 @@
 				B262F7CD1FD907D100EF887A /* bk_step3.png in Resources */,
 				B23529E41FF63F4200737DFD /* btn_addCase_add.png in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
+				B2986B7F200887A300DA57DC /* recover_rect_green.png in Resources */,
 				B20EA4F71FEBADD700C38518 /* bk_appearance.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				B262F7821FD7B95100EF887A /* select_line.png in Resources */,

@@ -5,7 +5,7 @@
 
 #include "SpineTendernessScene.hpp"
 #include "UserCaseScene.hpp"
-#include "SenseAbnormalScene.hpp"
+#include "TreatWayScene.hpp"
 
 #include "WelcomeScene.hpp"
 #import <Foundation/Foundation.h>
@@ -227,9 +227,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 =======
    */
 
-   auto scene = LoginScene::createScene();
+//   auto scene = LoginScene::createScene();
 //   auto scene = WelcomeScene::createScene();
-//    auto scene=CaseHistoryScene::createScene();
+    auto scene=TreatWayScene::createScene();
     director->runWithScene(scene);
     
 //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];

@@ -232,13 +232,13 @@ void VisitCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventTyp
     switch (type){
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:{
             CCLOG("INSERT_TEXT");
-//            if (size.height>=270) {
+            if (size.height>=300) {
 #pragma-调整输入框的高度
             Layout*  layout=(Layout*)lv->getItem(6);
                 layout->setContentSize(Size(visibleSize.width-40, size.height));
-                
-//                layout->setPosition(Vec2(0, 270- size.height));
-//            }
+               textField->setContentSize(Size(visibleSize.width-80,size.height));
+                onEnter();
+            }
         }
             break;
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
