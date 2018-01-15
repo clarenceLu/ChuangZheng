@@ -378,7 +378,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Doctor/MainDoctor/GroupLeaderScene.cpp"
-            timestampString = "537264752.865894"
+            timestampString = "537696959.8067451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "109"
@@ -394,7 +394,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Doctor/MainDoctor/GroupLeaderScene.cpp"
-            timestampString = "537264752.865959"
+            timestampString = "537696959.806811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "251"
@@ -410,7 +410,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Doctor/MainDoctor/GroupLeaderScene.cpp"
-            timestampString = "537264752.866007"
+            timestampString = "537696959.806859"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "259"
@@ -426,7 +426,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Doctor/MainDoctor/GroupLeaderScene.cpp"
-            timestampString = "537264752.866053"
+            timestampString = "537696959.806903"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "257"
@@ -458,12 +458,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Resources/codeResoucre/Doctor/MainDoctor/Case/VisitCaseScene.cpp"
-            timestampString = "537442899.960755"
+            timestampString = "537443221.056062"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "242"
             endingLineNumber = "242"
             landmarkName = "VisitCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Resources/codeResoucre/Doctor/MainDoctor/SickRoom/TreatWay/TreatScene.cpp"
+            timestampString = "537696959.807"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
+            landmarkName = "TreatScene::menuLoginCallback(Ref* pSender)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

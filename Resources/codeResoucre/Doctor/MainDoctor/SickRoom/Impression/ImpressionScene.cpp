@@ -253,7 +253,7 @@ void ImpressionScene::createSelectBox(Vec2 origin,string name,int tag,float widt
     acceptLB->setTextColor(Color4B(0,0,0, 255/3*2));
     acceptLB->setAnchorPoint(Vec2(1, 0));
     bkView->addChild(acceptLB);
-    auto acceptBox = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+    auto acceptBox = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     acceptBox->setPosition(Vec2(origin.x+5,origin.y));
     acceptBox->setAnchorPoint(Vec2(0, 0));
     acceptBox->setScale(0.9);

@@ -291,7 +291,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
     bkView->addChild(userName);
     
     if (type==1) {
-    auto box = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+    auto box = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     //设置CheckBox的位置
     box->setPosition(Vec2(bkView->getContentSize().width-60,point.y+10));
     box->setScale(0.87);
@@ -303,7 +303,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
     //获取checkbox的选中状态
     bkView->addChild(box);
     }else if (type==2){
-        auto box = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+        auto box = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
         //设置CheckBox的位置
         box->setPosition(Vec2(bkView->getContentSize().width-60,point.y+10));
         box->setScale(0.87);
@@ -320,7 +320,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         boxName->setAnchorPoint(Vec2(0, 0));
         bkView->addChild(boxName);
         
-        auto box2 = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+        auto box2 = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
         //设置CheckBox的位置
         box2->setPosition(Vec2(bkView->getContentSize().width-180,point.y+10));
         box2->setScale(0.87);
@@ -337,7 +337,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         boxName2->setAnchorPoint(Vec2(0, 0));
         bkView->addChild(boxName2);
     }else if (type==3){
-        auto box = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+        auto box = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
         //设置CheckBox的位置
         box->setPosition(Vec2(bkView->getContentSize().width-60,point.y+10));
         box->setScale(0.87);
@@ -354,7 +354,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         boxName->setAnchorPoint(Vec2(0, 0));
         bkView->addChild(boxName);
         
-        auto box2 = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+        auto box2 = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
         //设置CheckBox的位置
         box2->setPosition(Vec2(bkView->getContentSize().width-200,point.y+10));
         box2->setScale(0.87);
@@ -371,7 +371,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         boxName2->setAnchorPoint(Vec2(0, 0));
         bkView->addChild(boxName2);
         
-        auto box3 = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+        auto box3 = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
         //设置CheckBox的位置
         box3->setPosition(Vec2(bkView->getContentSize().width-340,point.y+10));
         box3->setScale(0.87);
@@ -407,7 +407,7 @@ float AppearanceAbnormalScene::creatLabelView(Vec2 point,Sprite* bkView,string n
     userName->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(userName);
     
-    auto box = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+    auto box = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     //设置CheckBox的位置
     box->setPosition(Vec2(visibleSize.width-100,point.y+2));
     box->setScale(0.87);

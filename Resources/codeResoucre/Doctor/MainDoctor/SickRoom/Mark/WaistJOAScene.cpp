@@ -179,7 +179,7 @@ float WaistJOAScene::creatBlueLabelView(Vec2 point,Sprite* bkView,string name,in
     bkView->addChild(userName);
     
     if (type==1) {
-        auto box = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+        auto box = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
         //设置CheckBox的位置
         box->setPosition(Vec2(bkView->getContentSize().width-60,point.y+10));
         box->setScale(0.87);

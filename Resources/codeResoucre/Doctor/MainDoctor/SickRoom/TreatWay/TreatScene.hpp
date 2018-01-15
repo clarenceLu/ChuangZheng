@@ -33,7 +33,20 @@ public:
     Map<int, cocos2d::ui::CheckBox*> boxDic;
     
     
+    
+    
+    cocos2d::ui::Layout *createBlueView(std::string name,int tag);
+    void menuLoginCallback(cocos2d::Ref* pSender);
+    
+    cocos2d::Sprite *createWhiteView(int type,int tag);
+    Map<int, cocos2d::Sprite*> whiteViewDic;
+    
+    
+    float createMessage(cocos2d::Vec2 origin,std::string title,std::string content,cocos2d::Sprite*whiteV);
+    Map<int, cocos2d::ui::Layout*> layoutDic;
+    
 private:
+    cocos2d::ui::ListView* lv;
 
 };
 

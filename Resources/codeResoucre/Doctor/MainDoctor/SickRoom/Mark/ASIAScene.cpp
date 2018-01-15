@@ -114,7 +114,7 @@ Layout *ASIAScene::createMessageLayout(int i,string title,string content){
     layout->setTouchEnabled(true);
     layout->setContentSize(Size(visibleSize.width, height+80));
     
-    auto box = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+    auto box = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     //设置CheckBox的位置
     box->setPosition(Vec2(visibleSize.width-100,height+20));
     box->setScale(0.87);
