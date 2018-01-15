@@ -2077,6 +2077,13 @@
 			path = 3rdFrameWork;
 			sourceTree = "<group>";
 		};
+		C472E6692007819600B6A635 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		C49D38441FC542E90092C808 /* Image */ = {
 			isa = PBXGroup;
 			children = (
@@ -2120,6 +2127,7 @@
 		C49D38481FC542F10092C808 /* codeResoucre */ = {
 			isa = PBXGroup;
 			children = (
+				C472E6692007819600B6A635 /* Data */,
 				B20C29AB1FE8E79E00149DCB /* Doctor */,
 				B28993CF1FE267340047C9E6 /* medicalRecord */,
 				B262F7961FD7BE8000EF887A /* Register */,
@@ -2243,10 +2251,6 @@
 				B2749D621FF37811007516BF /* bedNum2.png in Resources */,
 				B2749D7E1FF4D4EC007516BF /* btn_head_account.png in Resources */,
 				B27FFF902005C95C0034DAA4 /* bk_impress_rect_white.png in Resources */,
-				B2749D411FF37811007516BF /* r_r32_c4.png in Resources */,
-				B2749CE61FF37811007516BF /* l_r20_c21.png in Resources */,
-				B2749D251FF37811007516BF /* r_r35_c8.png in Resources */,
-
 				B2749D611FF37811007516BF /* bk_bed.png in Resources */,
 				B2749CA51FF37811007516BF /* bk_sickInfo_QRCode.png in Resources */,
 				B262F7F71FDA82B700EF887A /* btn_QRCode_close.png in Resources */,
@@ -2299,7 +2303,6 @@
 				B232ADF41FD0FC7300ABBA1D /* btn_user_unselect.png in Resources */,
 				B20EA4F51FEBADD700C38518 /* btn_appearance_unsure_rect.png in Resources */,
 				B27FFFAC20071F0D0034DAA4 /* bk_outpatient_case.png in Resources */,
-				B2749CEE1FF37811007516BF /* l_r30_c25.png in Resources */,
 				B23066BB1FFDF76200E85600 /* btn_sickroom_cancel.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				B262F7741FD7AB8B00EF887A /* alpha.png in Resources */,
@@ -2318,16 +2321,7 @@
 				B232ADEF1FD0FC7300ABBA1D /* btn_case_select.png in Resources */,
 				B23066671FFB5A4E00E85600 /* bk_add_hospital.png in Resources */,
 				B2749CAE1FF37811007516BF /* btn_outpatient_content.png in Resources */,
-
-				B2749D321FF37811007516BF /* r_r21_c6.png in Resources */,
-				B2749D021FF37811007516BF /* l_r32_c16.png in Resources */,
 				B27FFF8F2005C95C0034DAA4 /* btn_impression_sure.png in Resources */,
-				B2749D581FF37811007516BF /* r_r40_c10.png in Resources */,
-				B2749D011FF37811007516BF /* l_r59_c29.png in Resources */,
-				B2749D471FF37811007516BF /* r_r27_c4.png in Resources */,
-				B2749CBF1FF37811007516BF /* 1_r8_c33.png in Resources */,
-				B2749D531FF37811007516BF /* r_r17_c4.png in Resources */,
-
 				B223F12B1FCE6B5500DA0315 /* register_SQCode.png in Resources */,
 				B2749D5F1FF37811007516BF /* bk_welcome.png in Resources */,
 				B2749CAD1FF37811007516BF /* btn_sickInfo_save.png in Resources */,
@@ -2450,14 +2444,10 @@
 				B2749D5D1FF37811007516BF /* btn_welcome_next.png in Resources */,
 				B23529D01FF61DAB00737DFD /* btn_caseSearch_next.png in Resources */,
 				B27FFFAB20071F0D0034DAA4 /* bk_visit_case.png in Resources */,
-				B2749D5C1FF37811007516BF /* r_r15_c4.png in Resources */,
 				B23066E11FFF494400E85600 /* bk_set_temporary_room.png in Resources */,
 				B27FFF9C200609220034DAA4 /* bk_operation.png in Resources */,
 				B2749D8A1FF4E886007516BF /* btn_group_member_join.png in Resources */,
-
-				B2749D091FF37811007516BF /* l_r3_c3.png in Resources */,
 				B27FFF962005D9550034DAA4 /* box_select_sure.png in Resources */,
-
 				B20EA5011FEBAE8200C38518 /* btn_spine_white.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				C43E9E301FC843F300CFB6EC /* btn_register.png in Resources */,
@@ -2466,11 +2456,7 @@
 				C49D38471FC542E90092C808 /* login_bk.png in Resources */,
 				B262F8241FDFF36B00EF887A /* bk_search.png in Resources */,
 				B23066551FFB460C00E85600 /* import_complete_info.png in Resources */,
-
-				B2749D331FF37811007516BF /* r_r15_c6.png in Resources */,
-				B2749CBD1FF37811007516BF /* 1_r12_c36.png in Resources */,
 				B27FFF952005D9550034DAA4 /* box_select_rect.png in Resources */,
-
 				B23066791FFB826F00E85600 /* btn_receive_unselect.png in Resources */,
 				B223F1401FCEAB0E00DA0315 /* message_select_man.png in Resources */,
 				B23066941FFCB8D600E85600 /* bk_refuse_layer.png in Resources */,
@@ -2485,8 +2471,6 @@
 				B23066BA1FFDF76200E85600 /* btn_sickroom_calendar.png in Resources */,
 				B2749D681FF37811007516BF /* bk_sickRoom.png in Resources */,
 				B27FFFAD20071F0D0034DAA4 /* bk_textField.png in Resources */,
-				B2749D181FF37811007516BF /* Thumbs.db in Resources */,
-				B2749D0E1FF37811007516BF /* l_r54_c6.png in Resources */,
 				B262F7A51FD7C27900EF887A /* btn_userInfo_code.png in Resources */,
 				B28993C81FE1152F0047C9E6 /* bk_change_password.png in Resources */,
 				B23066DE1FFF492500E85600 /* bk_NDI.png in Resources */,
@@ -2568,11 +2552,8 @@
 				B2749D731FF38105007516BF /* MainScene.cpp in Sources */,
 				B23066811FFBA30000E85600 /* WaitChatScene.cpp in Sources */,
 				B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */,
-
 				C44E91F9200666510029476C /* UIImage+ImageSize.m in Sources */,
-
 				B27FFF852004C4650034DAA4 /* SymptomScene.cpp in Sources */,
-
 				B27FFF722004901B0034DAA4 /* MuscleStrengthScene.cpp in Sources */,
 				B27FFFA22006153B0034DAA4 /* VisitCaseScene.cpp in Sources */,
 				B27FFF782004AAAD0034DAA4 /* ReflectScene.cpp in Sources */,
