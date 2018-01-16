@@ -16,6 +16,7 @@
 #include "SickRoomScene.hpp"
 #include "VisitCaseScene.hpp"
 #include "OutpatientCaseScene.hpp"
+#include "PerfectCaseScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -261,6 +262,9 @@ void CaseHistoryScene::buttonCallback(Ref* pSender, cocos2d::ui::Widget::TouchEv
                 Director::getInstance()->pushScene(SC);
             }if (tag==3) {
                 auto SC=(OutpatientCaseScene*)OutpatientCaseScene::createScene();
+                Director::getInstance()->pushScene(SC);
+            }if (tag==5) {
+                auto SC=PerfectCaseScene::createScene();
                 Director::getInstance()->pushScene(SC);
             }
             

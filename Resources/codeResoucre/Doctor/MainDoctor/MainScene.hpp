@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "QR_Encode.h"
 class MainScene:public cocos2d::Scene{
 public:
     static cocos2d::Scene* createScene();
@@ -39,5 +40,8 @@ public:
     cocos2d::Menu*   createRectButton(cocos2d::Vec2 point,int i);
     cocos2d::ui::ScrollView* createScrollV();
     
+    cocos2d::DrawNode * createSQCodeImage(std::string content,cocos2d::Vec2 origin);
+    private:
+    CQR_Encode m_QREncode;
 };
 #endif /* MainScene_hpp */

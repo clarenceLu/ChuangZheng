@@ -578,14 +578,66 @@ Layer* MainScene::createSQCodeLayer(){
     });
     contentV->addChild(saveBtn);
     
-    auto SQCode=Sprite::create("example.png");
-    SQCode->setPosition(Vec2(164, 100));
-    SQCode->setAnchorPoint(Vec2(0, 0));
-    SQCode->setContentSize(Size(200, 200));
+//加入二维码
+    DrawNode *SQCode=createSQCodeImage("www.baidu.com",Vec2(164, 100));
     contentV->addChild(SQCode);
-    
     return layer;
 }
+
+cocos2d::DrawNode * MainScene::createSQCodeImage(std::string content,Vec2 origin){
+    char* contentStr=(char*)content.c_str();
+    bool bRet = m_QREncode.EncodeData(0, 0, 1, -1, contentStr);
+    if(bRet)
+    {
+        int nSize = 5;
+        int originalSize = m_QREncode.m_nSymbleSize + (QR_MARGIN * 2);
+        CCDrawNode *pQRNode = CCDrawNode::create();
+        
+        CCPoint pt[6];
+        ccColor4F color;
+        
+        pt[0] = ccp(0, 0);
+        pt[1] = ccp((m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize, (m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize);
+        pt[2] = ccp((m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize, 0);
+        
+        pt[3] = pt[0];
+        pt[4] = ccp(0, (m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize);
+        pt[5] = pt[1];
+        color = ccc4f(1, 1, 1, 1);
+        pQRNode->drawPolygon(pt, 6, color, 0, color);
+        
+        for (int i = 0; i < m_QREncode.m_nSymbleSize; ++i)
+        {
+            for (int j = 0; j < m_QREncode.m_nSymbleSize; ++j)
+            {
+                pt[0] = ccp((i + QR_MARGIN)*nSize, (j + QR_MARGIN)*nSize);
+                pt[1] = ccp(((i + QR_MARGIN) + 1)*nSize, ((j + QR_MARGIN) + 1)*nSize);
+                pt[2] = ccp(((i + QR_MARGIN) + 1)*nSize, ((j + QR_MARGIN) + 0)*nSize);
+                
+                pt[3] = pt[0];
+                pt[4] = ccp(((i + QR_MARGIN) + 0)*nSize, ((j + QR_MARGIN) + 1)*nSize);
+                pt[5] = pt[1];
+                if (m_QREncode.m_byModuleData[i][j] == 1)
+                {
+                    color = ccc4f(0, 0, 0, 1);
+                }
+                else
+                {
+                    color = ccc4f(1, 1, 1, 1);
+                }
+                pQRNode->drawPolygon(pt, 6, color, 0, color);
+            }
+        }
+//        CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+//        pQRNode->setPosition(ccp((winSize.width - nSize*m_QREncode.m_nSymbleSize) / 2, winSize.height - (winSize.height - nSize*m_QREncode.m_nSymbleSize) / 2));
+        pQRNode->setAnchorPoint(Vec2(0, 0));
+        pQRNode->setPosition(origin);
+        pQRNode->setScale(1.70);
+//        pQRNode->setScaleY(-1);
+        return pQRNode;
+}
+}
+
 
 
 void MainScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
