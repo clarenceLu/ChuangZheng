@@ -40,7 +40,7 @@ bool SenseAbnormalScene::init(){
     });
     this->addChild(backBtn);
     
-    imageV=Sprite::create("l_r8_c14.png");
+    imageV=Sprite::create("example.png");
     imageV->setPosition(Vec2(20, 20));
     imageV->setColor(Color3B::RED);
     imageV->setContentSize(Size(visibleSize.width-40, visibleSize.height-200));
@@ -117,7 +117,7 @@ void SenseAbnormalScene::onTouchesMoved(const std::vector<Touch*>& touches, coco
     log("pos1 x: %f, y: %f",pos1.x,pos1.y);
     log("pos2 x: %f, y: %f",pos2.x,pos2.y);
     log("pos3 x: %f, y: %f",pos3.x,pos3.y);
-//    log("touch size %ld",touches.size());
+    log("touch size %ld",touches.size());
     if (touches.size()>1) {
         auto touch2=touches.at(1);
         //左指，从左往右为缩放，从右往左为扩大

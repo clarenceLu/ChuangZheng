@@ -215,9 +215,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 
 //   auto scene = LoginScene::createScene();
-//   auto scene = WelcomeScene::createScene();
+   auto scene = WelcomeScene::createScene();
 //    auto scene=TreatScene::createScene();
-    auto  scene=VisitTimeScene::createScene();
+//    auto  scene=VisitTimeScene::createScene();
     director->runWithScene(scene);
     
 //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
