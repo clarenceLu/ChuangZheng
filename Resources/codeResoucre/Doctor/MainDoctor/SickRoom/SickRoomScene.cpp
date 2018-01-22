@@ -130,21 +130,21 @@ void SickRoomScene::onEnter()
     
     auto layer1 = createMessageLayout(0,"张牧之","男    54    20171816");
     lv->insertCustomItem(layer1,0);
-    auto layer2 = createMessageLayout(0,"负责医生","元亨      张建华    熊青春");
+    auto layer2 = createMessageLayout(1,"负责医生","元亨      张建华    熊青春");
     lv->insertCustomItem(layer2,1);
-    auto layer3 = createMessageLayout(0,"印象","上肢发达  双臂麻木   双大腿抽筋    左前方脊椎疼痛  脑袋晕");
+    auto layer3 = createMessageLayout(2,"印象","上肢发达  双臂麻木   双大腿抽筋    左前方脊椎疼痛  脑袋晕");
     lv->insertCustomItem(layer3,2);
-    auto layer4 = createMessageLayout(0,"症状","上肢发达  双臂麻木   双大腿抽筋");
+    auto layer4 = createMessageLayout(3,"症状","上肢发达  双臂麻木   双大腿抽筋");
     lv->insertCustomItem(layer4,3);
-    auto layer5 = createMessageLayout(0,"体征","");
+    auto layer5 = createMessageLayout(4,"体征","");
     lv->insertCustomItem(layer5,4);
-    auto layer6 = createMessageLayout(0,"影像","");
+    auto layer6 = createMessageLayout(5,"影像","");
     lv->insertCustomItem(layer6,5);
-    auto layer7 = createMessageLayout(0,"评分","");
+    auto layer7 = createMessageLayout(6,"评分","");
     lv->insertCustomItem(layer7,6);
-    auto layer8 = createMessageLayout(0,"治疗方式","");
+    auto layer8 = createMessageLayout(7,"治疗方式","");
     lv->insertCustomItem(layer8,7);
-    auto layer9 = createMessageLayout(0,"备注","");
+    auto layer9 = createMessageLayout(8,"备注","");
     lv->insertCustomItem(layer9,8);
     }
     
@@ -167,6 +167,12 @@ Layout *SickRoomScene::createMessageLayout(int i,string title,string content){
     contentLB->setTextColor(Color4B(0,0,0, 255/3*2));
     contentLB->setAnchorPoint(Vec2(0, 0));
     layout->addChild(contentLB);
+    }
+    if (i==5) {
+//影像
+        ScrollView *imageScrol=createImageScroll(Vec2(35, 10), Size(visibleSize.width-150, 80));
+        height=imageScrol->getContentSize().height+10;
+        layout->addChild(imageScrol);
     }
     
     auto titleLB = Label::createWithSystemFont(title,"Arial",38,Size(visibleSize.width-200,50),TextHAlignment::LEFT,TextVAlignment::TOP);
@@ -191,6 +197,27 @@ Layout *SickRoomScene::createMessageLayout(int i,string title,string content){
 
 
     return layout;
+}
+
+ScrollView* SickRoomScene::createImageScroll(Vec2 origin,Size visibleSize){
+    auto scrollView=cocos2d::ui::ScrollView::create();
+    scrollView->setPosition(Vec2(origin.x, origin.y));
+    scrollView->setDirection(cocos2d::ui::ScrollView::Direction::HORIZONTAL);//方向
+    scrollView->setScrollBarEnabled(false);//是否显示滚动条
+    scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
+    scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
+    
+    for (int i=0; i<10; i++) {
+#pragma-修改影像的图片
+    auto imageV1=Sprite::create("HelloWorld.png");
+        imageV1->setPosition(Vec2((visibleSize.height+20)*i, 0));
+        imageV1->setAnchorPoint(Vec2(0, 0));
+        imageV1->setContentSize(Size(visibleSize.height, visibleSize.height));
+        scrollView->addChild(imageV1);
+    }
+    scrollView->setInnerContainerSize(Size((visibleSize.height+20)*10, visibleSize.height));
+    
+    return scrollView;
 }
 
 

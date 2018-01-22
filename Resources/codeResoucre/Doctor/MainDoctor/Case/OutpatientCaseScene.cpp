@@ -57,13 +57,13 @@ bool OutpatientCaseScene::init(){
     
     auto layer1 = createMessageLayout(0,"张牧之   男  60       856","");
     lv->insertCustomItem(layer1,0);
-    auto layer2 = createMessageLayout(0,"印象","");
+    auto layer2 = createMessageLayout(1,"印象","");
     lv->insertCustomItem(layer2,1);
-    auto layer3 = createMessageLayout(0,"影像","");
+    auto layer3 = createMessageLayout(2,"影像","");
     lv->insertCustomItem(layer3,2);
-    auto layer4 = createMessageLayout(0,"评分","");
+    auto layer4 = createMessageLayout(3,"评分","");
     lv->insertCustomItem(layer4,3);
-    auto layer5 = createMessageLayout(0,"治疗方式","");
+    auto layer5 = createMessageLayout(4,"治疗方式","");
     lv->insertCustomItem(layer5,4);
     
     auto layout = Layout::create();
@@ -147,6 +147,12 @@ Layout *OutpatientCaseScene::createMessageLayout(int i,string title,string conte
         contentLB->setAnchorPoint(Vec2(0, 0));
         layout->addChild(contentLB);
     }
+    if (i==2) {
+        //影像
+        ScrollView *imageScrol=createImageScroll(Vec2(35, 10), Size(visibleSize.width-150, 80));
+        height=imageScrol->getContentSize().height+10;
+        layout->addChild(imageScrol);
+    }
     
     auto titleLB = Label::createWithSystemFont(title,"Arial",38,Size(visibleSize.width-150,50),TextHAlignment::LEFT,TextVAlignment::TOP);
     titleLB->setPosition(Point(37,height));
@@ -172,6 +178,26 @@ Layout *OutpatientCaseScene::createMessageLayout(int i,string title,string conte
     return layout;
 }
 
+ScrollView* OutpatientCaseScene::createImageScroll(Vec2 origin,Size visibleSize){
+    auto scrollView=cocos2d::ui::ScrollView::create();
+    scrollView->setPosition(Vec2(origin.x, origin.y));
+    scrollView->setDirection(cocos2d::ui::ScrollView::Direction::HORIZONTAL);//方向
+    scrollView->setScrollBarEnabled(false);//是否显示滚动条
+    scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
+    scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
+    
+    for (int i=0; i<10; i++) {
+#pragma-修改影像的图片
+        auto imageV1=Sprite::create("HelloWorld.png");
+        imageV1->setPosition(Vec2((visibleSize.height+20)*i, 0));
+        imageV1->setAnchorPoint(Vec2(0, 0));
+        imageV1->setContentSize(Size(visibleSize.height, visibleSize.height));
+        scrollView->addChild(imageV1);
+    }
+    scrollView->setInnerContainerSize(Size((visibleSize.height+20)*10, visibleSize.height));
+    
+    return scrollView;
+}
 
 void OutpatientCaseScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::EventType type)
 {

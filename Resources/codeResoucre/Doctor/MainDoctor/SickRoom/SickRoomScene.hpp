@@ -26,6 +26,9 @@ public:
     
     cocos2d::ui::Layout *createMessageLayout(int i,std::string title,std::string content);
     
+    
+    cocos2d::ui::ScrollView* createImageScroll(cocos2d::Vec2 origin,Size visibleSize);
+    
 private:
     cocos2d::ui::ListView* lv;
 };

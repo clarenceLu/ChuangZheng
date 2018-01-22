@@ -7,6 +7,7 @@
 #include "UserCaseScene.hpp"
 #include "TreatScene.hpp"
 #include "VisitTimeScene.hpp"
+#include "DrawLineScene.hpp"
 
 #include "WelcomeScene.hpp"
 #import <Foundation/Foundation.h>
@@ -217,7 +218,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 //   auto scene = LoginScene::createScene();
    auto scene = WelcomeScene::createScene();
 //    auto scene=TreatScene::createScene();
-//    auto  scene=VisitTimeScene::createScene();
+//    auto  scene=DrawLineScene::createScene();
     director->runWithScene(scene);
     
 //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
@@ -256,7 +257,8 @@ void AppDelegate::ImageSavePath(std::string str){
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
-
+    auto  scene=DrawLineScene::createScene();
+    Director::getInstance()->pushScene(scene);
 #if USE_AUDIO_ENGINE
     AudioEngine::pauseAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
