@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "TreatWayScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -45,7 +46,10 @@ bool OperationScene::init(){
     sureBtn->setPosition(Vec2(visibleSize.width-80, visibleSize.height-85));
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:{
+            auto treatWaySC=TreatWayScene::createScene();
+            Director::getInstance()->pushScene(treatWaySC);
+        }
             
         default:
             break;

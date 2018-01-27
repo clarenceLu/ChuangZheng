@@ -47,7 +47,7 @@ bool TreatWayScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
-            
+          Director::getInstance()->popToSceneStackLevel(4);
         default:
             break;
     }
@@ -803,7 +803,7 @@ void TreatWayScene::createSelectBox(Vec2 origin,string name,int tag,float width,
     acceptLB->setTextColor(Color4B(0,0,0, 255/3*2));
     acceptLB->setAnchorPoint(Vec2(1, 0));
     bkView->addChild(acceptLB);
-    auto acceptBox = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+    auto acceptBox = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     acceptBox->setPosition(Vec2(origin.x+5,origin.y));
     acceptBox->setAnchorPoint(Vec2(0, 0));
     acceptBox->setScale(0.9);
@@ -811,6 +811,9 @@ void TreatWayScene::createSelectBox(Vec2 origin,string name,int tag,float width,
     acceptBox->setTouchEnabled(true);
     acceptBox->addEventListener(CC_CALLBACK_2(TreatWayScene::checkBoxCallback,this));
     bkView->addChild(acceptBox);
+    if (tag==0||tag==3||tag==6||tag==9||tag==12) {
+        acceptBox->setSelected(true);
+    }
     boxDic.insert(tag, acceptBox);
 }
 
@@ -821,7 +824,7 @@ void TreatWayScene::createOtherSelectBox(Vec2 origin,string name,int tag,Sprite*
     acceptLB->setTextColor(Color4B(0,0,0, 255/3*2));
     acceptLB->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(acceptLB);
-    auto acceptBox = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+    auto acceptBox = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     acceptBox->setPosition(Vec2(bkView->getContentSize().width-50,origin.y));
     acceptBox->setAnchorPoint(Vec2(0, 0));
     acceptBox->setScale(0.9);

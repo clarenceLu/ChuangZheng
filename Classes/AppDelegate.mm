@@ -5,7 +5,9 @@
 
 #include "SpineTendernessScene.hpp"
 #include "UserCaseScene.hpp"
-#include "TreatWayScene.hpp"
+#include "TreatScene.hpp"
+#include "VisitTimeScene.hpp"
+#include "DrawLineScene.hpp"
 
 #include "WelcomeScene.hpp"
 #import <Foundation/Foundation.h>
@@ -184,7 +186,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-  /*
+/*
     auto testScene = Scene::create();
     director->runWithScene(testScene);
     bool bRet = m_QREncode.EncodeData(0, 0, 1, -1, "autor:johance qq:421465201");
@@ -234,29 +236,21 @@ bool AppDelegate::applicationDidFinishLaunching() {
         pQRNode->setScaleY(-1);
         testScene->addChild(pQRNode);
     }
-<<<<<<< HEAD:Classes/AppDelegate.mm
-    
-    NSLog(@"%f",[UIScreen mainScreen].bounds.size.width);
-    NSLog(@"%f",[UIScreen mainScreen].bounds.size.height);
-    
-    
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    
-    
-   ///  [[CCEAGLView sharedEGLView] addSubview:view];
-    
-    
-    
-=======
-   */
+ */
+
 
 //   auto scene = LoginScene::createScene();
    auto scene = WelcomeScene::createScene();
+
   //  auto scene=TreatWayScene::createScene();
+
+//    auto scene=TreatScene::createScene();
+//    auto  scene=DrawLineScene::createScene();
+
     director->runWithScene(scene);
     
 //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    ///  [[CCEAGLView sharedEGLView] addSubview:view];
 //    [view setBackgroundColor:[UIColor blueColor]];
     
     callBack *callObj = [[callBack alloc] init];
@@ -305,7 +299,8 @@ void AppDelegate::ImageSavePath(std::string str){
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
-
+    auto  scene=DrawLineScene::createScene();
+    Director::getInstance()->pushScene(scene);
 #if USE_AUDIO_ENGINE
     AudioEngine::pauseAll();
 #elif USE_SIMPLE_AUDIO_ENGINE

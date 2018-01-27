@@ -28,6 +28,8 @@ public:
     
     Size calculateFontSize(const char *str );
     
+    cocos2d::ui::ScrollView* createImageScroll(cocos2d::Vec2 origin,Size visibleSize);
+    
 private:
     cocos2d::ui::ListView* lv;
 };

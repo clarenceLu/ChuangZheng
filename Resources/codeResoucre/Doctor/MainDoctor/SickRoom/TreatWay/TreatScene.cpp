@@ -40,7 +40,7 @@ bool TreatScene::init(){
     });
     this->addChild(backBtn);
     
-    ListView* lv = ListView::create();
+    lv = ListView::create();
     lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
     lv->setBounceEnabled(true);
     lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
@@ -82,9 +82,15 @@ bool TreatScene::init(){
     textfieldObserve->setTag(12);
     lv->insertCustomItem(layout2,1);
     
+#pragma-在这里需要加判断-如果数据
+    Layout *layout1=createBlueView("C3-C7", 0);
+    lv->insertCustomItem(layout1, 1);
+    Layout *layout3=createBlueView("C0-C2", 1);
+    lv->insertCustomItem(layout3, 1);
     return true;
     
 }
+
 
 TextField*  TreatScene::createBasicData(Layout* bkView,Vec2 point,string name1,string name2){
     auto visibleSize=Director::getInstance()->getVisibleSize();
@@ -118,27 +124,103 @@ TextField*  TreatScene::createBasicData(Layout* bkView,Vec2 point,string name1,s
 
 
 
-Layout *TreatScene::createItemLayout(int tag,int type,int index,string name){  //index指白色框里有几行数据
-    auto visibleSize=Director::getInstance()->getVisibleSize();
-    Vec2 origin=Director::getInstance()->getVisibleOrigin();
-    //Data
+cocos2d::ui::Layout *TreatScene::createBlueView(string name,int tag){
+    Size visibleSize=Director::getInstance()->getVisibleSize();
     auto layout = Layout::create();
     layout->setBackGroundImageScale9Enabled(true);
     layout->setBackGroundImage("alpha.png");
     layout->setTouchEnabled(true);
     //必须执行一下允许点击
     layout->setTouchEnabled(true);
-    layout->setContentSize(Size(visibleSize.width, 80+index*60));
+    layoutDic.insert(tag, layout);
     
+    auto whiteView=createWhiteView(0, tag);
+    layout->addChild(whiteView);
+    
+    layout->setContentSize(Size(visibleSize.width, 80));
+    auto blueV=Sprite::create("usercase_bluerect.png");
+    blueV->setPosition(Vec2(50, 70));
+    blueV->setAnchorPoint(Vec2(0, 1));
+    blueV->setContentSize(Size(visibleSize.width-100, 60));
+    blueV->setTag(tag);
+    layout->addChild(blueV);
+    auto userName = Label::createWithSystemFont(name,"Arial",35,Size(400,60),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    userName->setPosition(Vec2(20,0));
+    userName->setTextColor(Color4B(255, 255, 255, 255));
+    userName->setAnchorPoint(Vec2(0, 0));
+    blueV->addChild(userName);
+    //设置选中和未选中的弹出框button
+    auto start = MenuItemImage::create("btn_appearance_down.png","");  //显示为on
+    auto stop = MenuItemImage::create("btn_appearance_up.png","");  //显示为off
+    auto toggle = MenuItemToggle::createWithCallback(
+                                                     CC_CALLBACK_1(TreatScene::menuLoginCallback,this),
+                                                     start,
+                                                     stop,
+                                                     NULL);
+    toggle->setPosition(Vec2(blueV->getContentSize().width-60,20));  //设置坐标在屏幕居中
+    toggle->setAnchorPoint(Vec2(0, 0));
+    toggle->setTag(100+tag);
+    auto box = Menu::create(toggle,NULL);
+    box->setPosition(Point::ZERO);
+    blueV->addChild(box);
     return layout;
 }
+Sprite *TreatScene::createWhiteView(int type,int tag){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    auto whiteView=Sprite::create("alpha.png");
+    whiteView->setPosition(Vec2(0, 0));
+    whiteView->setAnchorPoint(Vec2(0, 0));
+    whiteView->setVisible(false);
+    whiteViewDic.insert(tag, whiteView);
+    float   height=createMessage(Vec2(0, 0), "植入", "Cage,前路钢板", whiteView);
+    float   height2=createMessage(Vec2(0, height), "切除", "锥体:C1-C3", whiteView);
+    float   height3=0;
+    if (tag==1) {
+    height3=createMessage(Vec2(0, height2), "前路", "", whiteView);
+    }else{
+        height3=createMessage(Vec2(0, height2), "前路", "我是传奇", whiteView);
+    }
+    whiteView->setContentSize(Size(visibleSize.width, height3));
+    whiteView->setTag(ceil(height3));
+    
+    return whiteView;
+}
+float TreatScene::createMessage(Vec2 origin,string title,string content,Sprite*whiteV){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    //Data
+    float height=10;
+    if (content.c_str()!=nullptr) {
+        auto contentLB = Label::createWithSystemFont(content,"Arial",32,Size(visibleSize.width-200,0),TextHAlignment::LEFT,TextVAlignment::CENTER);
+        height=contentLB->getContentSize().height+10;
+        contentLB->setPosition(Point(67,origin.y+10));
+        contentLB->setTextColor(Color4B(0,0,0, 255/3*2));
+        contentLB->setAnchorPoint(Vec2(0, 0));
+        whiteV->addChild(contentLB);
+    }
+    
+    auto titleLB = Label::createWithSystemFont(title,"Arial",32,Size(visibleSize.width-200,40),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    titleLB->setPosition(Point(67,height+origin.y));
+    titleLB->setTextColor(Color4B(91, 144, 229, 255));
+    titleLB->setAnchorPoint(Vec2(0, 0));
+    whiteV->addChild(titleLB);
+    
+    auto lineV=Sprite::create("userInfo_line.png");
+    lineV->setPosition(Vec2(60, origin.y));
+    lineV->setAnchorPoint(Vec2(0, 0));
+    lineV->setContentSize(Size(visibleSize.width-120, 1.5));
+    whiteV->addChild(lineV);
+    return height+origin.y+50;
+}
+
+
+
 void TreatScene::createSelectBox(Vec2 origin,string name,int tag,float width,Sprite*bkView){
     auto acceptLB= Label::createWithSystemFont(name,"Arial",32,Size(width,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
     acceptLB->setPosition(origin);
     acceptLB->setTextColor(Color4B(0,0,0, 255/3*2));
     acceptLB->setAnchorPoint(Vec2(1, 0));
     bkView->addChild(acceptLB);
-    auto acceptBox = CheckBox::create("select_circle.png","btn_appearance_sure.png");
+    auto acceptBox = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     acceptBox->setPosition(Vec2(origin.x+5,origin.y));
     acceptBox->setAnchorPoint(Vec2(0, 0));
     acceptBox->setScale(0.9);
@@ -308,4 +390,42 @@ void TreatScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::Event
         default:
             break;
     }
+}
+
+
+void TreatScene::menuLoginCallback(Ref* pSender)
+{
+    Size visibleSize=Director::getInstance()->getVisibleSize();
+    MenuItemToggle* item=(MenuItemToggle*)pSender;
+    int  index=item->getSelectedIndex();
+    int tag= item->getTag();
+    
+//    Layout*   layout=(Layout*)lv->getItem(tag-100);
+    Layout*   layout=layoutDic.at(tag-100);
+    Sprite* blueV=(Sprite*)layout->getChildByTag(tag-100);
+    log("index:%d,tag:%d",index,tag);
+    
+    Sprite*whiteV=whiteViewDic.at(tag-100);
+#pragma-用于获取到whiteV的height
+    float changeHeight=whiteV->getTag();
+    
+    if (index==1) {
+        //展开
+        layout->setContentSize(Size(visibleSize.width, layout->getContentSize().height+changeHeight));
+        blueV->setPosition(Vec2(blueV->getPosition().x, layout->getContentSize().height-10));
+        lv->setInnerContainerSize(Size(visibleSize.width, lv->getInnerContainerSize().height+changeHeight));
+        if (lv->getContentSize().height+changeHeight<visibleSize.height-190) {
+            lv->setContentSize(Size(visibleSize.width,  lv->getInnerContainerSize().height+changeHeight));
+        }else{ lv->setContentSize(Size(visibleSize.width, visibleSize.height-190));}
+        whiteV->setVisible(true);
+    }else{
+        //收拢
+        layout->setContentSize(Size(visibleSize.width, layout->getContentSize().height-changeHeight));
+        blueV->setPosition(Vec2(blueV->getPosition().x, layout->getContentSize().height-10));
+        if (lv->getInnerContainerSize().height-changeHeight<visibleSize.height-190) {
+            lv->setContentSize(Size(visibleSize.width, lv->getInnerContainerSize().height-changeHeight));}
+        lv->setInnerContainerSize(Size(visibleSize.width, lv->getInnerContainerSize().height-changeHeight));
+        whiteV->setVisible(false);
+    }
+    onEnter();
 }
