@@ -11,6 +11,7 @@
 #include <iostream>
 #include "WaitChatDetailScene.hpp"
 #include "SearchScene.hpp"
+#include "ChatViewScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -162,9 +163,18 @@ void ReceiveChatScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::Ev
             CC_UNUSED_PARAM(listView);
             CCLOG("select child end index = %ld", listView->getCurSelectedIndex());
 #pragma-在这里添加跳转聊天界面的接口
-            auto chatSC=(WaitChatDetailScene*)WaitChatDetailScene::createScene();
-            chatSC->type=1;
+            
+            
+            
+            auto chatSC=(ChatViewScene*)ChatViewScene::createScene();
+            chatSC->createHubView();
             Director::getInstance()->pushScene(chatSC);
+            
+            
+            
+//            auto chatSC=(WaitChatDetailScene*)WaitChatDetailScene::createScene();
+//            chatSC->type=1;
+//            Director::getInstance()->pushScene(chatSC);
             break;
         }
         default:

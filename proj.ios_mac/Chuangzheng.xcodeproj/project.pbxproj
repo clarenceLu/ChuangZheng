@@ -377,6 +377,7 @@
 		C49D38471FC542E90092C808 /* login_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = C49D38461FC542E90092C808 /* login_bk.png */; };
 		C4AE91D71FF5F6DD00D503EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4AE91D51FF5F6DD00D503EA /* UIKit.framework */; };
 		C4DF56971FC678FF0010307E /* btn_login.png in Resources */ = {isa = PBXBuildFile; fileRef = C4DF56951FC678FF0010307E /* btn_login.png */; };
+		C4F895A72011EFAE00C82285 /* ChatViewScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C4F895A52011EFAE00C82285 /* ChatViewScene.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -870,6 +871,8 @@
 		C49D38461FC542E90092C808 /* login_bk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_bk.png; sourceTree = "<group>"; };
 		C4AE91D51FF5F6DD00D503EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C4DF56951FC678FF0010307E /* btn_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_login.png; sourceTree = "<group>"; };
+		C4F895A52011EFAE00C82285 /* ChatViewScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChatViewScene.cpp; sourceTree = "<group>"; };
+		C4F895A62011EFAE00C82285 /* ChatViewScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChatViewScene.hpp; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -1214,6 +1217,8 @@
 				B230667F1FFBA2FF00E85600 /* WaitChatScene.cpp */,
 				B23066831FFC7CF100E85600 /* WaitChatDetailScene.hpp */,
 				B23066821FFC7CF100E85600 /* WaitChatDetailScene.cpp */,
+				C4F895A52011EFAE00C82285 /* ChatViewScene.cpp */,
+				C4F895A62011EFAE00C82285 /* ChatViewScene.hpp */,
 			);
 			path = Outpatient;
 			sourceTree = "<group>";
@@ -2644,6 +2649,7 @@
 				C46E366A1FF510A600186F52 /* QRViewController.m in Sources */,
 				B2E1449D1FEB786300DA7307 /* ActionAbnormalScene.cpp in Sources */,
 				B23066EA1FFF89B000E85600 /* ASIAScene.cpp in Sources */,
+				C4F895A72011EFAE00C82285 /* ChatViewScene.cpp in Sources */,
 				B20EA5081FECFAE800C38518 /* SenseAbnormalScene.cpp in Sources */,
 				C44E9205200666690029476C /* SGQRCodeScanningVC.m in Sources */,
 				B27FFFA5200615560034DAA4 /* OutpatientCaseScene.cpp in Sources */,

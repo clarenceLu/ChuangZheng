@@ -23,6 +23,9 @@
 static AppDelegate *delegateA;
 
 
+
+
+
 @interface callBack:NSObject<QRViewDelegate>{
     
 
@@ -54,7 +57,7 @@ static AppDelegate *delegateA;
 #include "CaseHistoryScene.hpp"
 #include "TreatScene.hpp"
 
-
+using namespace std;
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -97,6 +100,27 @@ AppDelegate::~AppDelegate()
 #elif USE_SIMPLE_AUDIO_ENGINE
     SimpleAudioEngine::end();
 #endif
+}
+
+
+class A{
+public:
+      void  display(){  cout<<"A"<<endl; }
+};
+class B :  public A{
+public:
+    void  display(){ cout<<"B"<<endl; }
+};
+void doDisplay(A *p)
+{
+    B *P1 = (B*)&(*p);
+
+    P1->display();
+    p->display();
+    
+    
+    
+    delete p;
 }
 
 // if you want a different context, modify the value of glContextAttrs
@@ -217,8 +241,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
    auto scene = LoginScene::createScene();
 //   auto scene = WelcomeScene::createScene();
+
+  //  auto scene=TreatWayScene::createScene();
 //    auto scene=TreatScene::createScene();
 //    auto  scene=DrawLineScene::createScene();
+
     director->runWithScene(scene);
     
 //    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
@@ -238,9 +265,23 @@ bool AppDelegate::applicationDidFinishLaunching() {
     [QRViewC scanQRImage];
     
     this->ImageSavePath("dadadadad");
+
+    doDisplay(new B());
+    
     
     return true;
 }
+
+
+
+
+//int main()
+//{
+//    Base *point=new Derived();
+//    point->print();
+//}
+
+
 
 
 void AppDelegate::QRWithString(std::string str){
