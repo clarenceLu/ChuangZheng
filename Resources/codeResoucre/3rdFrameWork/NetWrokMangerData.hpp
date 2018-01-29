@@ -32,7 +32,6 @@ public:
     void upLoadData(string UrlStr,const ccHttpRequestCallback& callback,char *requestData,size_t len);
     
     void onHttpRequestCompleted(HttpClient* sender,HttpResponse* response);
-    
 private:
 
     NetWorkManger();

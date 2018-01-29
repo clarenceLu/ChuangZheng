@@ -10,6 +10,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "LoginScene.h"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -21,12 +22,17 @@ bool AccountManageScene::init(){
         return false;
     }
     Size visibleSize=Director::getInstance()->getVisibleSize();
-    auto bkView=Sprite::create("bk_accountManage.png");
+    bkView=Sprite::create("bk_accountManage.png");
     bkView->setPosition(Vec2(0, 0));
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(visibleSize);
     this->addChild(bkView);
-    
+     pushDataToNetWork();
+    return true;
+}
+
+void AccountManageScene::createMainView(){
+    Size visibleSize=Director::getInstance()->getVisibleSize();
     auto backBtn=Button::create();
     backBtn->loadTextures("btn_register_return.png", "btn_register_return.png");
     backBtn->setPosition(Vec2(80, visibleSize.height-85));
@@ -77,11 +83,12 @@ bool AccountManageScene::init(){
     });
     bkView->addChild(judgeBtn);
     //手势锁
-    auto keyCheckBox = CheckBox::create("btn_userInfo_OFF.png","btn_userInfo_ON.png");
+    keyCheckBox = CheckBox::create("btn_userInfo_OFF.png","btn_userInfo_ON.png");
     //设置CheckBox的位置
     keyCheckBox->setPosition(Vec2(visibleSize.width-200, 535));
     keyCheckBox->setTag(10);
     keyCheckBox->setAnchorPoint(Vec2(0, 0));
+    keyCheckBox->setSelectedState(atoi(infoData["data"]["isLock"].GetString()));
     //设置CheckBox是否可点击
     keyCheckBox->setTouchEnabled(true);
     keyCheckBox->addEventListener(CC_CALLBACK_2(AccountManageScene::checkBoxCallback,this));
@@ -89,11 +96,12 @@ bool AccountManageScene::init(){
     bkView->addChild(keyCheckBox);
     
     //手势锁
-    auto keyAccompanyBox = CheckBox::create("btn_userInfo_OFF.png","btn_userInfo_ON.png");
+    keyAccompanyBox = CheckBox::create("btn_userInfo_OFF.png","btn_userInfo_ON.png");
     //设置CheckBox的位置
     keyAccompanyBox->setPosition(Vec2(visibleSize.width-200, 455));
     keyAccompanyBox->setTag(11);
     keyAccompanyBox->setAnchorPoint(Vec2(0, 0));
+    keyAccompanyBox->setSelectedState(atoi(infoData["data"]["isRecieve"].GetString()));
     //设置CheckBox是否可点击
     keyAccompanyBox->setTouchEnabled(true);
     keyAccompanyBox->addEventListener(CC_CALLBACK_2(AccountManageScene::checkBoxCallback,this));
@@ -121,19 +129,48 @@ bool AccountManageScene::init(){
     });
     bkView->addChild(exitBtn);
     
+    textfieldName=createBasicData(bkView, Vec2(86, 768), "真实姓名：", infoData["data"]["name"].GetString());
+    textfieldPass=createBasicData(bkView, Vec2(86, 688), "身份：",getEducationFromRole(infoData["data"]["role"].GetString()));
     
+    auto userName = Label::createWithSystemFont("用户名：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    userName->setPosition(Vec2(86, 608));
+    userName->setTextColor(Color4B(91, 144, 229, 255));
+    userName->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(userName);
+    auto userName2 = Label::createWithSystemFont(infoData["data"]["userId"].GetString(),"Arial",35,Size(400,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    userName2->setPosition(Vec2(visibleSize.width-86,608));
+    userName2->setTextColor(Color4B(40, 40, 40, 255));
+    userName2->setAnchorPoint(Vec2(1, 0));
+    bkView->addChild(userName2);
+    auto lineV=Sprite::create("userInfo_line.png");
+    lineV->setPosition(Vec2(70, 602));
+    lineV->setAnchorPoint(Vec2(0, 0));
+    lineV->setContentSize(Size(visibleSize.width-140, 1.5));
+    bkView->addChild(lineV);
     
-    textfieldName=createBasicData(bkView, Vec2(86, 768), "真实姓名：", "张牧之");
-    textfieldPass=createBasicData(bkView, Vec2(86, 688), "身份：", "主治医生");
-    textfieldUser=createBasicData(bkView, Vec2(86, 608), "用户名：", "抵抗力");
     createLabelWithoutField(bkView, Vec2(86, 528), "手势锁");
     createLabelWithoutField(bkView, Vec2(86, 448), "随访提醒");
     createLabelWithoutField(bkView, Vec2(86, 368), "密码修改");
-    
-    
-    
-    return true;
 }
+/*
+1 => '带组教授',
+2 => '主治医生',
+3 => '住院医生',
+4 => '研究生',*/
+string AccountManageScene::getEducationFromRole(std::string role){
+    if (role=="1") {
+        return "带组教授";
+    }else if(role=="2"){
+        return "主治医生";
+    }else if (role=="3"){
+        return "住院医生";
+    }else{
+        return "研究生";
+    }
+    return "医生";
+}
+
+
 TextField*  AccountManageScene::createBasicData(Sprite* bkView,Vec2 point,string name1,string name2){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
@@ -368,6 +405,7 @@ Layer* AccountManageScene::createChangeKeyLayer(){
                 this->addChild(judgeV);
                 judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
             }else{
+                updateDataToNetWork();
                 this->removeChildByTag(1050);
             }
             break;
@@ -427,6 +465,8 @@ Layer* AccountManageScene::createChangeKeyLayer(){
 
 void AccountManageScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
+    TextField*textField=(TextField*)pSender;
+    string  text=textField->getString();
     switch (type){
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
             CCLOG("INSERT_TEXT");
@@ -453,6 +493,12 @@ void AccountManageScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventTyp
             log("SELECTED!");
             if (tag==10||tag==11) {
                 //手势锁
+                log("手势锁%s",UserDefault::getInstance()->getStringForKey("DrawPassWord").c_str());
+//                if (tag==10&&(UserDefault::getInstance()->getStringForKey("DrawPassWord"))) {//如果是第一次打开手势锁
+//#pragma-修改收拾密码
+//                    UserDefault::getInstance()->setStringForKey("DrawPassWord", "03678");
+//                    UserDefault::getInstance()->flush();
+//                }
             }
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
@@ -462,3 +508,99 @@ void AccountManageScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventTyp
             break;
     }
 }
+
+#pragma-用于加载网络数据
+void AccountManageScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getDocterById?userId=%s&doctorId=%s",UserDefault::getInstance()->getStringForKey("userId").c_str(),UserDefault::getInstance()->getStringForKey("id").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(AccountManageScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void AccountManageScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        if (this->infoData["status"].GetInt()==0) {
+            createMainView();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+#pragma-用于加载网络数据
+void AccountManageScene::updateDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    auto passwd=UserDefault::getInstance()->getStringForKey("passwd");
+    if (surePassword->getStringLength()>0) {
+        passwd=surePassword->getString();
+    }
+    auto name=UserDefault::getInstance()->getStringForKey("name");
+    if (textfieldName->getString().length()) {
+        name=textfieldName->getString();
+    }
+    auto role=UserDefault::getInstance()->getStringForKey("role");
+    if (textfieldPass->getString().length()) {
+        role=textfieldPass->getString();
+    }
+    sprintf(memberUrl,"http://czapi.looper.pro/web/updateDoctorInfo?doctorId=%s&name=%s&passwd=%s&role=%d&isLock=%d&isRecieve=%d",UserDefault::getInstance()->getStringForKey("id").c_str(),name.c_str(),passwd.c_str(),atoi(role.c_str()),keyCheckBox->getSelectedState(),keyAccompanyBox->getSelectedState());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(AccountManageScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void AccountManageScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        if (this->infoData["status"].GetInt()==0) {
+            log("修改成功");
+            bkView->removeAllChildren();
+            pushDataToNetWork();
+        }
+        
+        //        for(int i = 0; i < this->loginData["data"].Size(); i++) {
+        //            rapidjson::Value& object = this->loginData["data"];
+    }
+}
+
+

@@ -6,6 +6,7 @@
 //
 
 #include "GroupMemberScene.hpp"
+#include "NetWrokMangerData.hpp"
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
@@ -19,21 +20,6 @@ bool GroupMemberScene::init(){
     if (!Scene::init()) {
         return false;
     }
-#pragma-ValueVector加入数据
-    ValueVector vector1;
-    vector1.push_back(Value("小白"));
-    vector1.push_back(Value("老白"));
-    vector1.push_back(Value("小黑"));
-    vector1.push_back(Value("小小黑"));
-    string key1 = "医疗组成员";
-    ValueVector vector2;
-    vector2.push_back(Value("小黄"));
-    vector2.push_back(Value("小小白"));
-    vector2.push_back(Value("大白"));
-    string key2 = "选择一个医疗组";
-#pragma-ValueMap加入数据
-    map1[key1] = Value(vector1).asValueVector();
-    map1[key2]=Value(vector2).asValueVector();
 
     
     Size visibleSize=Director::getInstance()->getVisibleSize();
@@ -73,8 +59,7 @@ bool GroupMemberScene::init(){
     });
     this->addChild(sureBtn);
     
-    scrollV=createTableView(Vec2(0, visibleSize.height-170), Size(visibleSize.width, visibleSize.height-190));
-    this->addChild(scrollV);
+    pushDataToNetWork();
     return true;
 }
 ScrollView* GroupMemberScene::createTableView(Vec2 origin,Size visibleSize){
@@ -96,14 +81,16 @@ ScrollView* GroupMemberScene::createTableView(Vec2 origin,Size visibleSize){
     userName->setTextColor(Color4B(91, 144, 229, 255));
     userName->setAnchorPoint(Vec2(0, 1));
     moveView->addChild(userName);
-    auto userLB = Label::createWithSystemFont("忘为宋","Arial",38,Size(300,60),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    auto userLB = Label::createWithSystemFont(UserDefault::getInstance()->getStringForKey("name"),"Arial",38,Size(300,60),TextHAlignment::LEFT,TextVAlignment::CENTER);
     userLB->setPosition(Vec2(300,visibleSize.height));
     userLB->setTextColor(Color4B(0, 0, 0, 255/2));
     userLB->setAnchorPoint(Vec2(0, 1));
     moveView->addChild(userLB);
     
     float pointY1 =createPopUpView(Vec2(40, visibleSize.height-80), moveView, "医疗组成员",0,2);
-    float pointY2 =createPopUpView(Vec2(40, pointY1+60*4), moveView, "选择一个医疗组",5,1);
+    ValueVector vect=map1.at("医疗组成员").asValueVector();
+    int index=vect.size();
+    float pointY2 =createPopUpView(Vec2(40, pointY1+60*index), moveView, "选择一个医疗组",index,1);
     
 #warning -在这里设置没有用，因为当innerSize<contentSize，以contentSize为准
     if (visibleSize.height>visibleSize.height-20-pointY2) {
@@ -143,9 +130,9 @@ float GroupMemberScene::createPopUpView(Vec2 point,Sprite* bkView,string name,in
     whiteV->setVisible(false);
     wholeV->addChild(whiteV);
 #pragma-ValueVector取值
-    for (int i=0; i<index; i++) {
+    for (int i=index-1; i>=0; i--) {
         auto whiteStr= vect.at(i).asString();
-        creatBlueLabelView(Vec2(0,60*i), whiteV,whiteStr,tag+i,type);
+        creatBlueLabelView(Vec2(0,60*(index-1-i)), whiteV,whiteStr,tag+i,type);
     }
     
     auto blueV=Sprite::create("usercase_bluerect.png");
@@ -199,6 +186,7 @@ float GroupMemberScene::creatBlueLabelView(Vec2 point,Sprite* bkView,string name
         box->addEventListener(CC_CALLBACK_2(GroupMemberScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box);
+        boxDic.insert(tag, box);
     }
     auto lineV=Sprite::create("userInfo_line.png");
     lineV->setPosition(Vec2(0, point.y));
@@ -300,6 +288,14 @@ cocos2d::Layer* GroupMemberScene::createPromptLayer(std::string content){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
+            ValueVector vect=map1.at("医疗组成员").asValueVector();
+            int index=vect.size();
+            if (currentJoinIndex>=index) {
+                //发送加入请求
+                rapidjson::Value& object = this->applicationData["data"][currentJoinIndex-index];
+                log("groupID%s",object["id"].GetString());
+                pushJoinToNetWork(object["id"].GetString());
+            }
             this->removeChildByTag(2001);
             break;
         }
@@ -340,8 +336,19 @@ void GroupMemberScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
     int tag= item->getTag();
     switch (type)
     {
-        case cocos2d::ui::CheckBox::EventType::SELECTED:
+        case cocos2d::ui::CheckBox::EventType::SELECTED:{
             log("SELECTED!");
+            currentJoinIndex=tag;
+            ValueVector vect2=map1.at("医疗组成员").asValueVector();
+            int index=vect2.size();
+            log("总数%d 当前%d",index,tag);
+            for (int i=index; i<index+boxDic.size(); i++) {
+                CheckBox*box=boxDic.at(i);
+                if (box->getTag()!=tag) {
+                    box->setSelected(false);
+                }
+            }
+        }
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
             log("UNSELECTED!");
@@ -353,4 +360,136 @@ void GroupMemberScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
     }
 }
 
+#pragma-用于加载网络数据
+void GroupMemberScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //获取医疗组申请
+    char strtest[500] = {0};
+    sprintf(strtest,"http://czapi.looper.pro/web/getMediGroup?doctorId=%s",UserDefault::getInstance()->getStringForKey("id").c_str());
+    string url=strtest;
+    netManeger->sendMessage(url,CC_CALLBACK_2(GroupMemberScene::onHttpRequestCompleted, this),nullptr);
+}
 
+void GroupMemberScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->applicationData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->applicationData.HasParseError()) {
+        
+        return;
+    }
+    if(this->applicationData.HasMember("data")){
+        log("选择一个医疗组");
+        ValueVector vector2;
+        for(int i = 0; i < this->applicationData["data"].Size(); i++) {
+            rapidjson::Value& object = this->applicationData["data"][i];
+            vector2.push_back(Value(object["leaderName"].GetString()));
+        }
+        string key2 = "选择一个医疗组";
+        map1[key2]=Value(vector2).asValueVector();
+        pushMemberToNetWork();
+    }
+}
+#pragma-用于加载网络数据
+void GroupMemberScene::pushMemberToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，获取医疗组成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getGroupMember?groupId=%s",UserDefault::getInstance()->getStringForKey("groupId").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(GroupMemberScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void GroupMemberScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->memberData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->memberData.HasParseError()) {
+        
+        return;
+    }
+    if(this->memberData.HasMember("data")){
+        log("医疗组成员");
+        ValueVector vector2;
+        for(int i = 0; i < this->memberData["data"].Size(); i++) {
+            rapidjson::Value& object = this->memberData["data"][i];
+            vector2.push_back(Value(object["name"].GetString()));
+        }
+        string key2 = "医疗组成员";
+        map1[key2]=Value(vector2).asValueVector();
+        scrollV=createTableView(Vec2(0, visibleSize.height-170), Size(visibleSize.width, visibleSize.height-190));
+        this->addChild(scrollV);
+    }
+}
+
+#pragma-用于加载网络数据
+void GroupMemberScene::pushJoinToNetWork(string groupId){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/applyMediGroup?groupId=%s&doctorId=%s",groupId.c_str(),UserDefault::getInstance()->getStringForKey("id").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(GroupMemberScene::onHttpRequestCompleted3, this),nullptr);
+}
+
+void GroupMemberScene::onHttpRequestCompleted3(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->joinData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->joinData.HasParseError()) {
+        
+        return;
+    }
+    if(this->joinData.HasMember("status")){
+        if (this->joinData["status"].GetInt()==0) {
+            log("申请成功");
+            showServerMessage("申请成功");
+        }
+        
+        //        for(int i = 0; i < this->loginData["data"].Size(); i++) {
+        //            rapidjson::Value& object = this->loginData["data"];
+    }
+}
+void GroupMemberScene::showServerMessage( string ch )
+{
+    auto size = Director::getInstance()->getVisibleSize();
+    auto judgeV = Label::createWithSystemFont(ch,"Arial",40,Size(size.width,50),TextHAlignment::CENTER,TextVAlignment::CENTER);
+    judgeV->setPosition(Vec2(size.width/2, 400));
+    judgeV->setTextColor(Color4B(0, 0, 0, 255));
+    judgeV->setAnchorPoint(Vec2(0.5, 0.5));
+    this->addChild(judgeV);
+    judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+}

@@ -234,7 +234,7 @@ void DrawLineScene::onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::
     log("content%s",content);
 #pragma-核对结果是否正确
     string result=content;
-    if (result=="03678") {
+    if (result==UserDefault::getInstance()->getStringForKey("DrawPassWord")) {
         log("验证成功");
         showServerMessage("验证成功");
         Director::getInstance()->popScene();

@@ -58,7 +58,7 @@ bool WelcomeScene::init(){
     name->setTextColor(Color4B(91, 144, 229, 255));
     name->setAnchorPoint(Vec2(0, 0));
     contentV->addChild(name);
-    auto nameLB= Label::createWithSystemFont("赵抗议","Arial",40,Size(450,65),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    auto nameLB= Label::createWithSystemFont(UserDefault::getInstance()->getStringForKey("name"),"Arial",40,Size(450,65),TextHAlignment::LEFT,TextVAlignment::CENTER);
     nameLB->setPosition(Vec2(150,265));
     nameLB->setTextColor(Color4B(0, 0, 0, 255/3*2));
     nameLB->setAnchorPoint(Vec2(0, 0));
@@ -93,5 +93,8 @@ bool WelcomeScene::init(){
     }
     });
     this->addChild(nextBtn);
+    
+
+ 
     return true;
 }

@@ -380,9 +380,13 @@ Layer* MainScene::createSickInfoLayer(){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
-#pragma -在这里判断他是组长还是组员
+            if (UserDefault::getInstance()->getIntegerForKey("isleader")) {
             auto groupScene= GroupLeaderScene::createScene();
             Director::getInstance()->pushScene(groupScene);
+            }else{
+                auto groupScene= GroupMemberScene::createScene();
+                Director::getInstance()->pushScene(groupScene);
+            }
         }
         default:
             break;

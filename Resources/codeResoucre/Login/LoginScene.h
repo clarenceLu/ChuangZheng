@@ -44,6 +44,8 @@ private:
     void printLog();
     
     
+    void saveData(rapidjson::Value& object,int type);
+    
 };
 
 #endif // __HELLOWORLD_SCENE_H__

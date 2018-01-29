@@ -215,8 +215,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
  */
 
 
-//   auto scene = LoginScene::createScene();
-   auto scene = WelcomeScene::createScene();
+   auto scene = LoginScene::createScene();
+//   auto scene = WelcomeScene::createScene();
 //    auto scene=TreatScene::createScene();
 //    auto  scene=DrawLineScene::createScene();
     director->runWithScene(scene);

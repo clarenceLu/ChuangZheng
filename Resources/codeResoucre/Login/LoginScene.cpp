@@ -2,7 +2,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
-
+#include "WelcomeScene.hpp"
 
 using namespace rapidjson; // 命名空间
 
@@ -185,10 +185,25 @@ void LoginScene::createHudView(){
 //    webView->setPosition(Vec2(0,0));
 //    this->addChild(webView);
 //
-    
-    
-    
 }
+
+void LoginScene::saveData(rapidjson::Value& object,int type){
+    UserDefault::getInstance()->deleteValueForKey("DrawPassWord");
+    UserDefault::getInstance()->setStringForKey("id",object["id"].GetString());
+    UserDefault::getInstance()->setStringForKey("name",object["name"].GetString());
+    UserDefault::getInstance()->setStringForKey("userId",object["userId"].GetString());
+    UserDefault::getInstance()->setStringForKey("passwd",object["passwd"].GetString());
+    if (type==1) {
+       UserDefault::getInstance()->setStringForKey("groupId",object["groupId"].GetString());
+         if (!object["isleader"].IsNull()) {
+//             string isleader=CCString::createWithFormat("%d",object["isleader"].GetInt())->getCString();
+             UserDefault::getInstance()->setIntegerForKey("isleader",object["isleader"].GetInt());
+             UserDefault::getInstance()->setStringForKey("role",object["role"].GetString());
+             log("role:%s",object["role"].GetString());
+         }
+    }
+}
+
 void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
 {
     if (!response)
@@ -209,12 +224,22 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
     }
     if(this->loginData.HasMember("data")){
 //        for(int i = 0; i < this->loginData["data"].Size(); i++) {
-//
-//            rapidjson::Value& object = this->loginData["data"][i];
-//            CCLOG("%s", object["artistheaderimageurl"].GetString());
+            rapidjson::Value& object = this->loginData["data"];
+        if (!object.HasMember("groupId")) {
+//如果不存在此参数
+            log("没有此参数");
+            saveData(object,0);
+            auto userCaseSC=UserCaseScene::create();
+            Director::getInstance()->replaceScene(userCaseSC);
+        }
+      else  if (!object["groupId"].IsNull()) {
+//如果此参数不为空
+           CCLOG("%s", object["groupId"].GetString());
+          saveData(object,1);
+          auto doctorSC=WelcomeScene::create();
+          Director::getInstance()->replaceScene(doctorSC);
+        }
 //        }
-        auto userCaseSC=UserCaseScene::create();
-        Director::getInstance()->replaceScene(userCaseSC);
     }else{
         Size visibleSize= Director::getInstance()->getVisibleSize();
         auto judgeV = Label::createWithSystemFont("登录失败","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
@@ -277,14 +302,14 @@ void LoginScene::menuLoginCallback(Ref* pSender)
             judgeV->setAnchorPoint(Vec2(0.5, 0));
             this->addChild(judgeV,10);
 //            judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
-        }else if(password->getStringLength()<6){
+        }else if(password->getStringLength()<1){
             auto judgeV = Label::createWithSystemFont("请输入您的密码","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
             judgeV->setPosition(Vec2(visibleSize.width/2, 568));
             judgeV->setTextColor(Color4B(91, 144, 229, 255));
             judgeV->setAnchorPoint(Vec2(0.5, 0));
             this->addChild(judgeV,10);
             judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
-        }else if(password->getStringLength()>=6&&userName->getStringLength()>=2){
+        }else if(password->getStringLength()>=1&&userName->getStringLength()>=2){
      pushDataToNetWork(userName->getString(), password->getString());
         }else{
             auto judgeV = Label::createWithSystemFont("请输入账号和密码","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);

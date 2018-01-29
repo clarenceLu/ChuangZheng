@@ -9,6 +9,9 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+
+#include "NetWrokMangerData.hpp"
+
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -19,23 +22,22 @@ bool GroupLeaderScene::init(){
     if (!Scene::init()) {
         return false;
     }
-#pragma-ValueVector加入数据
-    ValueVector vector1;
-    vector1.push_back(Value("小白"));
-    vector1.push_back(Value("老白"));
-    vector1.push_back(Value("小黑"));
-    vector1.push_back(Value("小小黑"));
-    string key1 = "医疗组成员";
-    ValueVector vector2;
-    vector2.push_back(Value("小黄"));
-    vector2.push_back(Value("小小白"));
-    vector2.push_back(Value("大白"));
-    string key2 = "组员申请列表";
-#pragma-ValueMap加入数据
-    map1[key1] = Value(vector1).asValueVector();
-    map1[key2]=Value(vector2).asValueVector();
+//#pragma-ValueVector加入数据
+//    ValueVector vector1;
+//    vector1.push_back(Value("小白"));
+//    vector1.push_back(Value("老白"));
+//    vector1.push_back(Value("小黑"));
+//    vector1.push_back(Value("小小黑"));
+//    string key1 = "医疗组成员";
+//    ValueVector vector2;
+//    vector2.push_back(Value("小黄"));
+//    vector2.push_back(Value("小小白"));
+//    vector2.push_back(Value("大白"));
+//    string key2 = "组员申请列表";
+//#pragma-ValueMap加入数据
+//    map1[key1] = Value(vector1).asValueVector();
+//    map1[key2]=Value(vector2).asValueVector();
 
-    
     Size visibleSize=Director::getInstance()->getVisibleSize();
     auto bkView=Sprite::create("bk_group_leader.png");
     bkView->setPosition(Vec2(0, 0));
@@ -73,8 +75,7 @@ bool GroupLeaderScene::init(){
     });
     this->addChild(sureBtn);
     
-    scrollV=createTableView(Vec2(0, visibleSize.height-170), Size(visibleSize.width, visibleSize.height-190));
-    this->addChild(scrollV);
+    pushDataToNetWork();
     return true;
 }
 ScrollView* GroupLeaderScene::createTableView(Vec2 origin,Size visibleSize){
@@ -84,6 +85,7 @@ ScrollView* GroupLeaderScene::createTableView(Vec2 origin,Size visibleSize){
     scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
     scrollView->setScrollBarEnabled(true);//是否显示滚动条
     scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
+    scrollView->setTag(10000);
     scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
     
     moveView=Sprite::create("alpha.png");
@@ -96,14 +98,16 @@ ScrollView* GroupLeaderScene::createTableView(Vec2 origin,Size visibleSize){
     userName->setTextColor(Color4B(91, 144, 229, 255));
     userName->setAnchorPoint(Vec2(0, 1));
     moveView->addChild(userName);
-    auto userLB = Label::createWithSystemFont("忘为宋","Arial",38,Size(300,60),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    auto userLB = Label::createWithSystemFont(UserDefault::getInstance()->getStringForKey("name"),"Arial",38,Size(300,60),TextHAlignment::LEFT,TextVAlignment::CENTER);
     userLB->setPosition(Vec2(300,visibleSize.height));
     userLB->setTextColor(Color4B(0, 0, 0, 255/2));
     userLB->setAnchorPoint(Vec2(0, 1));
     moveView->addChild(userLB);
     
     float pointY1 =createPopUpView(Vec2(40, visibleSize.height-80), moveView, "医疗组成员",0,2);
-    float pointY2 =createPopUpView(Vec2(40, pointY1+60*4), moveView, "组员申请列表",5,1);
+    ValueVector vect=map1.at("医疗组成员").asValueVector();
+    int index=vect.size();
+    float pointY2 =createPopUpView(Vec2(40, pointY1+60*index), moveView, "组员申请列表",index,1);
     
 #warning -在这里设置没有用，因为当innerSize<contentSize，以contentSize为准
     if (visibleSize.height>visibleSize.height-20-pointY2) {
@@ -143,9 +147,9 @@ float GroupLeaderScene::createPopUpView(Vec2 point,Sprite* bkView,string name,in
     whiteV->setVisible(false);
     wholeV->addChild(whiteV);
 #pragma-ValueVector取值
-    for (int i=0; i<index; i++) {
+    for (int i=index-1; i>=0; i--) {
         auto whiteStr= vect.at(i).asString();
-        creatBlueLabelView(Vec2(0,60*i), whiteV,whiteStr,tag+i,type);
+        creatBlueLabelView(Vec2(0,60*(index-1-i)), whiteV,whiteStr,tag+i,type);
     }
     
     auto blueV=Sprite::create("usercase_bluerect.png");
@@ -174,7 +178,7 @@ float GroupLeaderScene::createPopUpView(Vec2 point,Sprite* bkView,string name,in
     auto box = Menu::create(toggle,NULL);
     box->setPosition(Point::ZERO);
     blueV->addChild(box);
-    
+    log("%f",point.y-(index+1)*60-20);
     return point.y-(index+1)*60-20;
     
 }
@@ -199,6 +203,7 @@ float GroupLeaderScene::creatBlueLabelView(Vec2 point,Sprite* bkView,string name
         box->addEventListener(CC_CALLBACK_2(GroupLeaderScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box);
+        boxDic.insert(tag, box);
     }else if (type==2){
         auto box = CheckBox::create("btn_group_leader_delete.png","btn_group_leader_delete.png");
         //设置CheckBox的位置
@@ -312,6 +317,22 @@ cocos2d::Layer* GroupLeaderScene::createPromptLayer(std::string content){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
+            ValueVector vect=map1.at("医疗组成员").asValueVector();
+            int index=vect.size();
+        if (currentDeleteIndex<index) {
+    //发送删除请求
+            rapidjson::Value& object = this->memberData["data"][currentDeleteIndex];
+            log("%s",object["name"].GetString());
+            pushDeleteToNetWork(object["id"].GetString());
+            }else {
+     //发送同意申请请求
+                    //发送加入请求
+                    rapidjson::Value& object = this->applicationData["data"][currentDeleteIndex-index];
+                    log("doctorId  %s",object["doctorId"].GetString());
+                    pushAffirmToNetWork(object["id"].GetString(),object["doctorId"].GetString());
+                
+                
+            }
             this->removeChildByTag(2001);
             break;
         }
@@ -350,15 +371,31 @@ void GroupLeaderScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
     Size visibleSize=Director::getInstance()->getVisibleSize();
     CheckBox* item = (CheckBox*)ref;
     int tag= item->getTag();
+    log("tag %d",tag);
     switch (type)
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
         {
-            if (tag<5) {
+            ValueVector vect=map1.at("医疗组成员").asValueVector();
+            int index=vect.size();
+            
+//            rapidjson::Value& obj = this->memberData["data"][tag];
+//             log("%s",obj["name"].GetString());
+            if (tag<index) {
+                currentDeleteIndex=tag;
                 auto layer=createPromptLayer("确认将该医生移出医疗组吗？");
                 layer->setTag(2001);
                 this->addChild(layer);
+            }else{
+                currentDeleteIndex=tag;
+                log("总数%d 当前%d",index,tag);
+                for (int i=index; i<index+boxDic.size(); i++) {
+                    CheckBox*box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
             }
         }
             break;
@@ -371,5 +408,190 @@ void GroupLeaderScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
             break;
     }
 }
+
+
+#pragma-用于加载网络数据
+void GroupLeaderScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+//获取医疗组申请
+    char strtest[500] = {0};
+    sprintf(strtest,"http://czapi.looper.pro/web/getGroupApplication?doctorId=%s",UserDefault::getInstance()->getStringForKey("id").c_str());
+    string url=strtest;
+    netManeger->sendMessage(url,CC_CALLBACK_2(GroupLeaderScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void GroupLeaderScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->applicationData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->applicationData.HasParseError()) {
+        
+        return;
+    }
+    if(this->applicationData.HasMember("data")){
+        log("获取医疗组申请");
+        ValueVector vector2;
+    for(int i = 0; i < this->applicationData["data"].Size(); i++) {
+        rapidjson::Value& object = this->applicationData["data"][i];
+        vector2.push_back(Value(object["name"].GetString()));
+        log("%s",object["id"].GetString());
+        }
+        string key2 = "组员申请列表";
+        map1[key2]=Value(vector2).asValueVector();
+         pushMemberToNetWork();
+    }
+}
+#pragma-用于加载网络数据
+void GroupLeaderScene::pushMemberToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+        //当type为2时，获取医疗组成员
+        char memberUrl[500]={0};
+        sprintf(memberUrl,"http://czapi.looper.pro/web/getGroupMember?groupId=%s",UserDefault::getInstance()->getStringForKey("groupId").c_str());
+        string memberURL=memberUrl;
+        netManeger->sendMessage(memberURL,CC_CALLBACK_2(GroupLeaderScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void GroupLeaderScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->memberData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->memberData.HasParseError()) {
+        
+        return;
+    }
+    if(this->memberData.HasMember("data")){
+            log("医疗组成员");
+            ValueVector vector2;
+            for(int i = 0; i < this->memberData["data"].Size(); i++) {
+                rapidjson::Value& object = this->memberData["data"][i];
+                vector2.push_back(Value(object["name"].GetString()));
+            }
+            string key2 = "医疗组成员";
+            map1[key2]=Value(vector2).asValueVector();
+            scrollV=createTableView(Vec2(0, visibleSize.height-170), Size(visibleSize.width, visibleSize.height-190));
+            this->addChild(scrollV);
+    }
+}
+#pragma-用于加载网络数据
+void GroupLeaderScene::pushDeleteToNetWork(string doctorId){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/removeGroupMember?groupId=%s&doctorId=%s",UserDefault::getInstance()->getStringForKey("groupId").c_str(),doctorId.c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(GroupLeaderScene::onHttpRequestCompleted3, this),nullptr);
+}
+
+void GroupLeaderScene::onHttpRequestCompleted3(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->deleteData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->deleteData.HasParseError()) {
+        
+        return;
+    }
+    if(this->deleteData.HasMember("status")){
+        if (this->deleteData["status"].GetInt()==0) {
+//删除数据
+            rapidjson::Value& object = this->memberData["data"][currentDeleteIndex];
+           memberData["data"].Erase(memberData["data"].Begin()+currentDeleteIndex);
+            for (int i=0; i<memberData["data"].Size(); i++) {
+                log("%s",memberData["data"][i]["name"].GetString());
+            }
+            ValueVector vect=map1.at("医疗组成员").asValueVector();
+            vect.erase(vect.begin() + currentDeleteIndex);
+            map1["医疗组成员"]=Value(vect).asValueVector();
+            for (int i=0; i<vect.size(); i++) {
+                log("%s",vect.at(i).asString().c_str());
+            }
+//需要重新刷新界面
+            this->removeChildByTag(10000);
+            scrollV=createTableView(Vec2(0, visibleSize.height-170), Size(visibleSize.width, visibleSize.height-190));
+            this->addChild(scrollV);
+            
+            log("%s",object["name"].GetString());
+          log("删除成功");
+        }
+        
+//        for(int i = 0; i < this->loginData["data"].Size(); i++) {
+//            rapidjson::Value& object = this->loginData["data"];
+    }
+}
+
+
+void GroupLeaderScene::pushAffirmToNetWork(string requestId,string doctorId){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/updateGroupApplication?groupId=%s&doctorId=%s&requestId=%s",UserDefault::getInstance()->getStringForKey("groupId").c_str(),doctorId.c_str(),requestId.c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(GroupLeaderScene::onHttpRequestCompleted4, this),nullptr);
+}
+
+void GroupLeaderScene::onHttpRequestCompleted4(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->affirmData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->affirmData.HasParseError()) {
+        
+        return;
+    }
+    if(this->affirmData.HasMember("status")){
+        if (this->affirmData["status"].GetInt()==0) {
+//同意申请
+            this->removeChildByTag(10000);
+            pushDataToNetWork();
+            log("同意申请");
+        }
+        
+        //        for(int i = 0; i < this->loginData["data"].Size(); i++) {
+        //            rapidjson::Value& object = this->loginData["data"];
+    }
+}
+
 
 

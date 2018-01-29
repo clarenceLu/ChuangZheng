@@ -120,9 +120,9 @@ bool RegisterDetailScene::init(){
     scanBtn->setTitleText("点击扫描");
     scanBtn->setTitleColor(Color3B(51, 145, 233/2));
     scanBtn->setTitleFontSize(33);
-    scanBtn->setPosition(Vec2(visibleSize.width-110, 215));
+    scanBtn->setPosition(Vec2(visibleSize.width-90, 215));
     scanBtn->setAnchorPoint(Vec2(1, 0));
-    scanBtn->setScale9Enabled(false);
+    scanBtn->setScale9Enabled(true);
     scanBtn->setContentSize(Size(100, 40));
     scanBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;

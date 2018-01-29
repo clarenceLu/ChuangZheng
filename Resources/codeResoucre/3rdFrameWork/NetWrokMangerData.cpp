@@ -16,7 +16,7 @@
 #include "json/writer.h"
 
 #include "json/stringbuffer.h"
-
+#include "iconv.h"
 
 using namespace rapidjson; // 命名空间
 using namespace std;
@@ -61,13 +61,14 @@ void NetWorkManger::upLoadData(string UrlStr,const ccHttpRequestCallback& callba
     request->release();
 }
 
+
 void NetWorkManger::sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr)
 {
     
     HttpRequest* request = new  HttpRequest();
-
     
     request->setUrl(UrlStr);
+    
     
     request->setRequestType(HttpRequest::Type::POST);
     
