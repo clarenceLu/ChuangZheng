@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -45,6 +46,7 @@ bool ASIAScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
+            pushDataToNetWork();
             log("ASIA sure");
         }
             
@@ -123,7 +125,7 @@ Layout *ASIAScene::createMessageLayout(int i,string title,string content){
     box->setTouchEnabled(true);
     //获取checkbox的选中状态
     layout->addChild(box);
-    
+    boxDic.insert(i, box);
     
     return layout;
 }
@@ -178,6 +180,103 @@ void ASIAScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::EventT
         default:
             break;
     }
+}
+
+
+std::string ASIAScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    document.SetArray();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        for (int i=0; i<5; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void ASIAScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    sprintf(jsonStr,"%s",getJsonData(0).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+#pragma-这边怎么存的数据
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"pf_ASIA",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(ASIAScene::onHttpRequestCompleted, this),url);
+    
+}
+
+void ASIAScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+string ASIAScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 0:
+            content="A";
+        case 1:
+            content="B";
+            break;
+        case 2:
+            content="C";
+            break;
+        case 3:
+            content="D";break;//神经根型颈椎病
+        case 4:
+            content="E";break;//神经根型颈椎病
+            
+            
+        default:
+            break;
+    }
+    return content;
 }
 
 

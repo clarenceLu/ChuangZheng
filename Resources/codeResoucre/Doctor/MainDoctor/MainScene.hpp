@@ -11,6 +11,13 @@
 #include <stdio.h>
 #include "ui/CocosGUI.h"
 #include "QR_Encode.h"
+
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 class MainScene:public cocos2d::Scene{
 public:
     static cocos2d::Scene* createScene();
@@ -24,6 +31,7 @@ public:
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
 
     cocos2d::Layer* createSickRoomLayer();
+    void createSickRoomWithBackView(cocos2d::Sprite* bkView);
     cocos2d::Layer* createOutPatientLayer();
     cocos2d::Layer* createSickInfoLayer();
                           cocos2d::Layer* createSponsorLayer();
@@ -38,10 +46,19 @@ public:
     std::shared_ptr<cocos2d::Vector<cocos2d::ui::CheckBox*>>  boxVec;
     
     cocos2d::Menu*   createRectButton(cocos2d::Vec2 point,int i);
-    cocos2d::ui::ScrollView* createScrollV();
+    cocos2d::ui::ScrollView* createScrollV(int index);
     
     cocos2d::DrawNode * createSQCodeImage(std::string content,cocos2d::Vec2 origin);
+    
+    
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
     private:
     CQR_Encode m_QREncode;
+    
+    rapidjson::Document infoData;
+//加入一个参数用来判断他是否是临时床位
+    int isTempBed;
 };
 #endif /* MainScene_hpp */

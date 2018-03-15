@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -48,6 +49,7 @@ bool WaistJOAScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
+            pushDataToNetWork();
             log("NeckJOA sure");
         }
             
@@ -242,9 +244,10 @@ void WaistJOAScene::menuLoginCallback(Ref* pSender)
         scrollV->setInnerContainerSize(Size(visibleSize.width,scrollV->getInnerContainerSize().height+whiteV->getContentSize().height-60));
         log("现在的%f",scrollV->getInnerContainerSize().height);
         moveView->setPosition(Vec2(0, scrollV->getInnerContainerSize().height));
+#pragma-自动往下移
         scrollV->setInnerContainerPosition(Vec2(0, 60-whiteV->getContentSize().height));
         log("%f",scrollV->getInnerContainerPosition().y);
-        if (scrollV->getInnerContainerSize().height<visibleSize.height-190) {
+      if (scrollV->getInnerContainerSize().height<visibleSize.height-190) {
             //用于调整scrollView的contentOffset
             scrollV->setContentSize(Size(visibleSize.width, scrollV->getInnerContainerSize().height));
         }else{
@@ -409,6 +412,236 @@ void WaistJOAScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
         default:
             break;
     }
+}
+
+
+std::string WaistJOAScene::getJsonData(int type)
+{
+    totalNum=0;
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        rapidjson::Value array(rapidjson::kArrayType);
+        rapidjson::Value array2(rapidjson::kArrayType);
+        rapidjson::Value array3(rapidjson::kArrayType);
+        rapidjson::Value array4(rapidjson::kArrayType);
+        rapidjson::Value array5(rapidjson::kArrayType);
+        rapidjson::Value array6(rapidjson::kArrayType);
+        rapidjson::Value array7(rapidjson::kArrayType);
+        rapidjson::Value array8(rapidjson::kArrayType);
+        rapidjson::Value array9(rapidjson::kArrayType);
+        rapidjson::Value array10(rapidjson::kArrayType);
+        rapidjson::Value array11(rapidjson::kArrayType);
+        rapidjson::Value array12(rapidjson::kArrayType);
+        rapidjson::Value array13(rapidjson::kArrayType);
+        rapidjson::Value array14(rapidjson::kArrayType);
+        for (int i=0; i<boxDic.size(); i++) {
+            CheckBox* box=(CheckBox*)boxDic.at(i);
+            int tag=box->getTag();
+            if (tag>=0&&tag<4) {
+                if (box->getSelectedState()) {
+                    totalNum+=3-tag;
+                    array.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=4&&tag<8) {
+                if (box->getSelectedState()) {
+                    totalNum+=7-tag;
+                    array2.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=8&&tag<12) {
+                if (box->getSelectedState()) {
+                    totalNum+=11-tag;
+                    array3.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=12&&tag<15) {
+                if (box->getSelectedState()) {
+                    totalNum+=14-tag;
+                    array4.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=15&&tag<18) {
+                if (box->getSelectedState()) {
+                    totalNum+=17-tag;
+                    array5.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=18&&tag<21) {
+                if (box->getSelectedState()) {
+                    totalNum+=20-tag;
+                    array6.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=21&&tag<24) {
+                if (box->getSelectedState()) {
+                    totalNum+=23-tag;
+                    array7.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=24&&tag<27) {
+                if (box->getSelectedState()) {
+                    totalNum+=26-tag;
+                    array8.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=27&&tag<30) {
+                if (box->getSelectedState()) {
+                    totalNum+=29-tag;
+                    array9.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=30&&tag<33) {
+                if (box->getSelectedState()) {
+                    totalNum+=32-tag;
+                    array10.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=33&&tag<36) {
+                if (box->getSelectedState()) {
+                    totalNum+=35-tag;
+                    array11.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=36&&tag<39) {
+                if (box->getSelectedState()) {
+                    totalNum+=38-tag;
+                    array12.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=39&&tag<42) {
+                if (box->getSelectedState()) {
+                    totalNum+=41-tag;
+                    array13.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=42&&tag<45) {
+                if (box->getSelectedState()) {
+                    totalNum+=((tag-42)*(-3));
+                    array14.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+        }
+        document.AddMember("下腰背痛-主观", array, allocator);
+        document.AddMember("腿痛兼/或麻刺痛", array2, allocator);
+        document.AddMember("步态-主观", array3, allocator);
+        document.AddMember("直腿抬高试验-临床", array4, allocator);
+        document.AddMember("感觉障碍-临床", array5, allocator);
+        document.AddMember("运动障碍-临床", array6, allocator);
+        document.AddMember("平卧翻身-日常", array7, allocator);
+        document.AddMember("站立一小时-日常", array8, allocator);
+        document.AddMember("洗簌-日常", array9, allocator);
+        document.AddMember("前屈-日常", array10, allocator);
+        document.AddMember("坐位-日常", array11, allocator);
+        document.AddMember("举重物-日常", array12, allocator);
+        document.AddMember("行走-日常", array13, allocator);
+        document.AddMember("膀胱功能", array14, allocator);
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void WaistJOAScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    string jsonData=getJsonData(0);
+    sprintf(jsonStr,"%s;%s",jsonData.c_str(),to_string(totalNum).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"pf_yJOA;pf_yJOA_total",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(WaistJOAScene::onHttpRequestCompleted, this),url);
+}
+
+void WaistJOAScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+string WaistJOAScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 0:case 4:
+            content="无任何疼痛";break;
+        case 1:case 5:
+            content="偶尔轻微疼痛";break;
+        case 2:case 6:
+            content="频发的轻微疼痛或偶发严重疼痛";break;
+        case 3:case 7:
+            content="频发或持续的严重疼痛";break;
+        case 8: case 12:case 15:
+            content="正常";break;
+        case 9:
+            content="即使感肌肉无力，也可步行超过500米";break;
+        case 10:
+            content="步行小于500米，即出现腿痛，刺痛，无力";break;
+        case 11:
+            content="步行小于100米，即出现腿痛，刺痛，无力";break;
+        case 14:
+            content="<30度";break;
+        case 13:
+            content="30度-70度";break;
+        case 16:
+            content="轻度障碍";break;
+        case 17:
+            content="明显障碍";break;
+        case 20:
+            content="明显无力(肌力0-3级)";break;
+        case 19:
+            content="轻度无力(肌力4级)";break;
+        case 18:
+            content="正常(肌力5级)";break;
+        case 21:case 24:case 27: case 30:case 33:case 36: case 39:case 42:
+            content="正常";break;//神经根型颈椎病
+        case 22:case 25:case 28:case 31:case 34:case 37:case 40:case 43:
+            content="轻度受限";break;
+        case 23:case 26:case 29:case 32:case 35:case 38:case 41:
+            content="明显受限";break;
+        case 44:
+            content="明显受限（尿失留，尿失禁）";break;
+        default:
+            break;
+    }
+    return content;
 }
 
 void  WaistJOAScene::createData(){

@@ -10,6 +10,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "VisitCaseScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -46,7 +47,11 @@ bool AddVisitCaseScene::init(){
     addBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            Director::getInstance()->popScene();
+        if (strcmp(textfieldName->getString().c_str(), "")!=0&&strcmp(textfieldAge->getString().c_str(), "")!=0&&strcmp(sexLB.c_str(), "")!=0) {
+                getUserDataToNetWork();
+            }
+//            auto SC=(VisitCaseScene*)VisitCaseScene::createScene();
+//            Director::getInstance()->pushScene(SC);
         }
         default:
             break;
@@ -62,8 +67,7 @@ bool AddVisitCaseScene::init(){
     importCompleteBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-                auto SC=(VisitCaseScene*)VisitCaseScene::createScene();
-                Director::getInstance()->pushScene(SC);
+            
         }
         default:
             break;
@@ -119,7 +123,7 @@ bool AddVisitCaseScene::init(){
     womanLB->setAnchorPoint(Vec2(0, 0));
     this->addChild(womanLB);
     
-    textfieldName=createBasicData(bkView, Vec2(59, 730), "年龄：", "32");
+    textfieldAge=createBasicData(bkView, Vec2(59, 730), "年龄：", "32");
     
     return true;
 }
@@ -174,6 +178,7 @@ void AddVisitCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType
             checkBox->setSelected(false);
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
+            sexLB="";
             log("UNSELECTED!");
             break;
         default:
@@ -185,20 +190,161 @@ void AddVisitCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType
 void AddVisitCaseScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
     switch (type){
-            
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
             CCLOG("INSERT_TEXT");
-            
             break;
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
-            
             CCLOG("DELETE_BACKWARD");
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
-            
             CCLOG("DETACH_WITH_IME");
-            
             break;
-            
     }
+}
+#pragma-个人资料界面
+void AddVisitCaseScene::getUserDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"userId=%s",textfieldName->getString().c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/getUserById";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(AddVisitCaseScene::onHttpRequestCompleted2, this),url);
+}
+
+void AddVisitCaseScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    // rapidjson::Document Jsondata;
+    userData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (userData.HasParseError()) {
+        return;
+    }
+    if(userData.HasMember("status")){
+        if (userData["status"].GetInt()==0) {
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            userData.Accept(writer);
+            CCLOG("病人个人资料：  %s", buffer.GetString());
+            if (userData["data"]!=false) {
+                createCaseToNetWork();
+            }else{
+                getUserInfoToNetWork();
+            }
+        }else{
+            getUserInfoToNetWork();
+        }
+    }
+}
+
+//新建用户
+std::string AddVisitCaseScene::getTimeForSystem(){
+    //获取系统时间
+    struct timeval now;
+    struct tm *time;
+    gettimeofday(&now, NULL);
+    time = localtime(&now.tv_sec);      //microseconds: 微秒
+    int year = time->tm_year +1900;
+    log("year = %d", year);         //显示年份
+    char date1[32] = {0};
+    sprintf(date1, "%d %02d %02d", (int)time->tm_year + 1900, (int)time->tm_mon + 1, (int)time->tm_mday);
+    log("%s", date1);        //显示年月日
+    char date2[50] = {0};
+    sprintf(date2, "%02d %02d %02d", (int)time->tm_hour, (int)time->tm_min, (int)time->tm_sec);
+    log("%s", date2);       //显示时分秒
+    char date[100] = {0};
+    sprintf(date, "%d%d%d%d%d%d", (int)time->tm_year + 1900, (int)time->tm_mon + 1, (int)time->tm_mday,(int)time->tm_hour, (int)time->tm_min, (int)time->tm_sec);
+    return date;
+}
+void AddVisitCaseScene::getUserInfoToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"userId=%s&passwd=%s&name=%s&sex=%s&age=%s&caseNo=%s",textfieldName->getString().c_str(),"123456",textfieldName->getString().c_str(),sexLB.c_str(),textfieldAge->getString().c_str(),getTimeForSystem().c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/createUser";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(AddVisitCaseScene::onHttpRequestCompleted, this),url);
+}
+
+void AddVisitCaseScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
     
+    // rapidjson::Document Jsondata;
+    
+    userData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (userData.HasParseError()) {
+        
+        return;
+    }
+    if(userData.HasMember("status")){
+        if (userData["status"].GetInt()==0) {
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        userData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+            createCaseToNetWork();
+        }
+    }
+}
+
+#pragma-新建病例
+void AddVisitCaseScene::createCaseToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    string keyValue="";
+    if (!userData["data"]["step2"].IsNull()) {
+        keyValue.append("&remark=");
+        keyValue.append(userData["data"]["step2"].GetString());
+    }
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"patientId=%s&doctorId=%s&type=%s&status=%s%s",userData["data"]["id"].GetString(),UserDefault::getInstance()->getStringForKey("id").c_str(),"new","followed",keyValue.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    UserDefault::getInstance()->setStringForKey("patientId",userData["data"]["id"].GetString());
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(AddVisitCaseScene::onHttpRequestCompleted3, this),url);
+}
+
+void AddVisitCaseScene::onHttpRequestCompleted3(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+     rapidjson::Document Jsondata;
+    
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (Jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(Jsondata.HasMember("status")){
+        if (Jsondata["status"].GetInt()==0) {
+            UserDefault::getInstance()->setStringForKey("caseId", Jsondata["recordId"].GetString());
+            auto SC=(VisitCaseScene*)VisitCaseScene::createScene();
+            Director::getInstance()->pushScene(SC);
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        Jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
 }

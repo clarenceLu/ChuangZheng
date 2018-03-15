@@ -10,6 +10,11 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
 USING_NS_CC;
 class OPLLScene:public cocos2d::Scene{
 public:
@@ -24,14 +29,28 @@ public:
     
     void createSelectView(int tag,cocos2d::Vec2 point,std::string title,cocos2d::Sprite*bkView);
     
+    
+    std::string getJsonData(int type);
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    std::string changeNumToString(int num);
+    
+    
+    void onHttpRequestCompleted2(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void getDataToNetWork();
+    void updateForInfoData();
+    
 private:
+    rapidjson::Document infoData;
     cocos2d::ui::ScrollView *scrollV;
-      cocos2d::ui::TextField* weightField;
+    cocos2d::ui::TextField* weightField;
     cocos2d::ui::TextField* timeField;
     cocos2d::ui::TextField* occupyField;
     cocos2d::ui::TextField* cobbsField;
+    cocos2d::ui::TextField* otherField;
     
     Map<int, cocos2d::ui::CheckBox*> boxDic;
+    Map<int, cocos2d::ui::TextField*> textFieldDic;
 };
 
 #endif /* OPLLScene_hpp */

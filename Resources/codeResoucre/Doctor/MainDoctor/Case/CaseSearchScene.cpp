@@ -10,6 +10,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "CaseListScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -46,8 +47,7 @@ bool CaseSearchScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            auto scene=CaseListScene::createScene();
-            Director::getInstance()->pushScene(scene);
+            pushDataToNetWork();
         }
             
         default:
@@ -75,7 +75,7 @@ bool CaseSearchScene::init(){
     
     
      textFiledName=createBasicData(bkView, Vec2(56, 910), "姓名：","未填写");
-    textFiledSex=createBasicData(bkView, Vec2(56, 820), "性别：","未填写");
+    textFiledSex=createBasicData(bkView, Vec2(56, 820), "性别：","男/女");
     textFiledAge=createBasicData(bkView, Vec2(56, 730), "年龄：","未填写");
     textFiledCase=createBasicData(bkView, Vec2(56, 640), "病案号：","未填写");
     
@@ -86,7 +86,7 @@ bool CaseSearchScene::init(){
     userName->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(userName);
     
-    auto textFiledDate1 = TextField::create("2017.08.05","Arial",35);
+    textFiledDate1 = TextField::create("2017/08/05","Arial",35);
     textFiledDate1->setMaxLength(40);
     textFiledDate1->setTouchSize(Size(visibleSize.width-300, 50));
     textFiledDate1->setPosition(Vec2(visibleSize.width-70,500));
@@ -104,7 +104,7 @@ bool CaseSearchScene::init(){
     separateLB->setAnchorPoint(Vec2(0.5, 0));
     bkView->addChild(separateLB);
     
-    auto textFiledDate2 = TextField::create("2017.06.05","Arial",35);
+    textFiledDate2 = TextField::create("2017/06/05","Arial",35);
     textFiledDate2->setMaxLength(40);
     textFiledDate2->setTouchSize(Size(visibleSize.width-300, 50));
     textFiledDate2->setPosition(Vec2(56,500));
@@ -188,9 +188,111 @@ void CaseSearchScene::eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField
                 
             }
             CCLOG("DETACH_WITH_IME");
-            
             break;
-            
     }
-    
 }
+#pragma-用于加载网络数据
+void CaseSearchScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    string content="";    int count=0;
+    if (strcmp( textFiledName->getString().c_str(), "")!=0) {
+        content.append("name=");  content.append(textFiledName->getString()); count++;
+    }
+    if (strcmp( textFiledSex->getString().c_str(), "")!=0) {
+        if (strcmp(textFiledSex->getString().c_str(), "男") ==0) {
+            if (count==0) {
+                content.append("gender=");  content.append("M");}else{content.append("&gender=");  content.append("M");}
+        }else if(strcmp(textFiledSex->getString().c_str(), "女") ==0){
+            if (count==0) {
+                content.append("gender=");  content.append("F");}else{content.append("&gender=");  content.append("F");}
+        } count++;
+    }
+    if (strcmp( textFiledAge->getString().c_str(), "")!=0) {
+        if (count==0) {content.append("age=");}else{content.append("&age=");}  content.append(textFiledAge->getString());count++;
+    }
+    if (strcmp( textFiledCase->getString().c_str(), "")!=0) {
+        if (count==0) {content.append("caseNum=");}else{content.append("&caseNum=");}  content.append(textFiledCase->getString());count++;
+    }
+    if (strcmp( textFiledDate1->getString().c_str(), "")!=0) {
+        if (count==0) {content.append("startTime=");}else{content.append("&startTime=");}  content.append(textFiledDate1->getString());count++;
+    }
+    if (strcmp( textFiledDate2->getString().c_str(), "")!=0) {
+        if (count==0) {content.append("endtime=");}else{content.append("&endtime=");}  content.append(textFiledDate2->getString());count++;
+    }
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"%s",content.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/searchCase";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(CaseSearchScene::onHttpRequestCompleted, this),url);
+    
+    
+    
+   /* char memberUrl[500]={0};
+    string name="";
+    if (textFiledName->getString().length()) {
+        name=textFiledName->getString();
+    }
+    string gender="";
+    if (textFiledSex->getString().length()) {
+        if (textFiledSex->getString()=="男") {
+            gender="M";
+        }else if(textFiledSex->getString()=="女"){
+        gender="F";
+        }
+    }
+    string age="";
+    if (textFiledAge->getString().length()) {
+        age=textFiledAge->getString();
+    }
+    string caseNum="";
+    if (textFiledCase->getString().length()) {
+        caseNum=textFiledCase->getString();
+    }
+    string startTime="";
+    if (textFiledDate1->getString().length()) {
+        startTime=textFiledDate1->getString();
+    }
+    string endTime="";
+    if (textFiledDate2->getString().length()) {
+        endTime=textFiledDate2->getString();
+    }
+    sprintf(memberUrl,"http://czapi.looper.pro/web/searchCase?name=%s&gender=%s&caseNo=%s&age=%s&starttime=%s&endtime=%s",name.c_str(),gender.c_str(),caseNum.c_str(),age.c_str(),startTime.c_str(),endTime.c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(CaseSearchScene::onHttpRequestCompleted, this),nullptr);  */
+}
+
+void CaseSearchScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        if (this->infoData["status"].GetInt()==0) {
+            auto scene=(CaseListScene*)CaseListScene::createScene();
+            scene->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+            Director::getInstance()->pushScene(scene);
+//            rapidjson::Value& object = this->infoData["data"];
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+

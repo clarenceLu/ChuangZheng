@@ -43,7 +43,7 @@ bool CaseListScene::init(){
     });
     this->addChild(backBtn);
     
-    auto searchBtn=Button::create();
+ /*   auto searchBtn=Button::create();
     searchBtn->loadTextures("btn_search.png", "btn_search.png");
     searchBtn->setPosition(Vec2(visibleSize.width-130, visibleSize.height-85));
     searchBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
@@ -54,7 +54,7 @@ bool CaseListScene::init(){
             break;
     }
     });
-    this->addChild(searchBtn);
+    this->addChild(searchBtn);  */
     
     auto addBtn=Button::create();
     addBtn->loadTextures("btn_caselist_add.png", "btn_caselist_add.png");
@@ -72,7 +72,7 @@ bool CaseListScene::init(){
     });
     this->addChild(addBtn);
     
-    ListView* lv = ListView::create();
+    lv = ListView::create();
     lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
     lv->setBounceEnabled(true);
     lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
@@ -83,12 +83,21 @@ bool CaseListScene::init(){
     lv->addEventListener((ui::ListView::ccListViewCallback)CC_CALLBACK_2(CaseListScene::selectedItemEvent, this));//添加监听函数
     lv->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(CaseListScene::selectedItemEventScrollView, this));
     this->addChild(lv);
-    Layout *layout=creatLayout(lv,1);
-    Layout *layout2=creatLayout(lv,2);
-    lv->insertCustomItem(layout,0);
-    lv->insertCustomItem(layout2, 1);
+    
     return true;
 }
+
+void CaseListScene::onEnter(){
+    Scene::onEnter();
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    lv->removeAllChildren();
+    for (int i=0; i<this->infoData["data"].Size(); i++) {
+     Layout *layout=creatLayout(lv,i);
+    lv->insertCustomItem(layout,i);
+    }
+  
+}
+
 
 //新建病例
 Layer* CaseListScene::addCaseLayer(){
@@ -203,8 +212,6 @@ void CaseListScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::Event
             ListView* listView = static_cast<ListView*>(pSender);
             CC_UNUSED_PARAM(listView);
             CCLOG("select child start index = %ld", listView->getCurSelectedIndex());
-            auto historyScene=CaseHistoryScene::createScene();
-            Director::getInstance()->pushScene(historyScene);
             break;
         }
         case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_END:
@@ -212,6 +219,18 @@ void CaseListScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::Event
             ListView* listView = static_cast<ListView*>(pSender);
             CC_UNUSED_PARAM(listView);
             CCLOG("select child end index = %ld", listView->getCurSelectedIndex());
+            int index=listView->getCurSelectedIndex();
+            
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            infoData["data"][index].Accept(writer);
+            CCLOG("%s", buffer.GetString());
+            
+            
+            auto historyScene=(CaseHistoryScene*)CaseHistoryScene::createScene();
+            historyScene->patientId=infoData["data"][index]["paitientId"].GetString();
+            historyScene->caseId=infoData["data"][index]["id"].GetString();
+            Director::getInstance()->pushScene(historyScene);
             break;
         }
         default:
@@ -234,11 +253,16 @@ void CaseListScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::Ev
 
 Layout *CaseListScene::creatLayout(ListView*superV,int i){
      Size visibleSize=Director::getInstance()->getVisibleSize();
+    rapidjson::Value& data = this->infoData["data"][i];
     auto layout = Layout::create();
     layout->setBackGroundImageScale9Enabled(true);
     layout->setBackGroundImage("alpha.png");
     
-    string content="头后仰上身麻无敌无敌无敌无敌无敌";
+    string content="暂时不明病情";
+    if (data["remark"].IsNull()) {
+    }else{
+        content=data["remark"].GetString();
+    }
     auto nameLB2 = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-280,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     float height=nameLB2->getContentSize().height;
     nameLB2->setPosition(Point(250,10));
@@ -257,20 +281,24 @@ Layout *CaseListScene::creatLayout(ListView*superV,int i){
     caseLB->setTextColor(Color4B(91,144,230, 255));
     caseLB->setAnchorPoint(Vec2(0, 0));
     layout->addChild(caseLB);
-     string caseStr="210706";
-auto caseLB2=Label::createWithSystemFont(caseStr,"Arial",35,Size(120,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+     string caseStr="";
+    if (data["caseNo"].IsNull()) {
+    }else{
+        caseStr=data["caseNo"].GetString();
+    }
+auto caseLB2=Label::createWithSystemFont(caseStr,"Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     caseLB2->setPosition(Point(280,10-41+height+50));
     caseLB2->setTextColor(Color4B(0,0,0, 255/3*2));
     caseLB2->setAnchorPoint(Vec2(0, 0));
     layout->addChild(caseLB2);
     
     auto recommendLB = Label::createWithSystemFont("推荐人:","fonts/Marker Felt.ttf",30,Size(140,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    recommendLB->setPosition(Point(420,10-41+height+50));
+    recommendLB->setPosition(Point(480,10-41+height+50));
     recommendLB->setTextColor(Color4B(91,144,230, 255));
     recommendLB->setAnchorPoint(Vec2(0, 0));
     layout->addChild(recommendLB);
-    auto recommendLB2 = Label::createWithSystemFont("周大伟","fonts/Marker Felt.ttf",30,Size(120,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    recommendLB2->setPosition(Point(520,10-41+height+50));
+    auto recommendLB2 = Label::createWithSystemFont("无","fonts/Marker Felt.ttf",30,Size(120,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    recommendLB2->setPosition(Point(580,10-41+height+50));
     recommendLB2->setTextColor(Color4B(0,0,0, 255/3*2));
     recommendLB2->setAnchorPoint(Vec2(0, 0));
     layout->addChild(recommendLB2);
@@ -282,17 +310,22 @@ auto caseLB2=Label::createWithSystemFont(caseStr,"Arial",35,Size(120,50),TextHAl
     layout->addChild(headIV);
     
     auto introduceLB = Label::createWithSystemFont("介绍人:","fonts/Marker Felt.ttf",30,Size(140,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    introduceLB->setPosition(Point(420,10-41+height+100));
+    introduceLB->setPosition(Point(480,10-41+height+100));
     introduceLB->setTextColor(Color4B(91,144,230, 255));
     introduceLB->setAnchorPoint(Vec2(0, 0));
     layout->addChild(introduceLB);
-    auto introduceLB2 = Label::createWithSystemFont("周大伟","fonts/Marker Felt.ttf",30,Size(120,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    introduceLB2->setPosition(Point(520,10-41+height+100));
+    auto introduceLB2 = Label::createWithSystemFont("无","fonts/Marker Felt.ttf",30,Size(120,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    introduceLB2->setPosition(Point(580,10-41+height+100));
     introduceLB2->setTextColor(Color4B(0,0,0, 255/3*2));
     introduceLB2->setAnchorPoint(Vec2(0, 0));
     layout->addChild(introduceLB2);
     
-    auto idLB= Label::createWithSystemFont("张牧之","fonts/Marker Felt.ttf",38,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    string nameStr="佚名";
+    if (data["name"].IsNull()) {
+    }else{
+        nameStr=data["name"].GetString();
+    }
+    auto idLB= Label::createWithSystemFont(nameStr,"fonts/Marker Felt.ttf",38,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     idLB->setPosition(Point(160,10-41+height+50+50));
     idLB->setTextColor(Color4B(0,0,0, 255/3*2));
     idLB->setAnchorPoint(Vec2(0, 0));
@@ -308,7 +341,7 @@ auto caseLB2=Label::createWithSystemFont(caseStr,"Arial",35,Size(120,50),TextHAl
     layout->setTouchEnabled(true);
     
     layout->setContentSize(Size(visibleSize.width, height+130));
-  
+    
     return layout;
     
 }

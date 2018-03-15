@@ -11,6 +11,7 @@
 #include <iostream>
 #include "LoginScene.h"
 #include "NetWrokMangerData.hpp"
+#include "DrawLineScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -22,29 +23,32 @@ bool AccountManageScene::init(){
         return false;
     }
     Size visibleSize=Director::getInstance()->getVisibleSize();
+    
     bkView=Sprite::create("bk_accountManage.png");
     bkView->setPosition(Vec2(0, 0));
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(visibleSize);
     this->addChild(bkView);
+    auto backBtn=Button::create();
+    backBtn->loadTextures("btn_register_return.png", "btn_register_return.png");
+    backBtn->setPosition(Vec2(80, visibleSize.height-85));
+    backBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            updateDataToNetWork();
+            backBtnType=1;
+        }
+        default:
+            break;
+    }
+    });
+    this->addChild(backBtn);
      pushDataToNetWork();
     return true;
 }
 
 void AccountManageScene::createMainView(){
     Size visibleSize=Director::getInstance()->getVisibleSize();
-    auto backBtn=Button::create();
-    backBtn->loadTextures("btn_register_return.png", "btn_register_return.png");
-    backBtn->setPosition(Vec2(80, visibleSize.height-85));
-    backBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
-        case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
-            Director::getInstance()->popScene();
-        default:
-            break;
-    }
-    });
-    this->addChild(backBtn);
     
     auto headBtn=Button::create();
     headBtn->loadTextures("btn_update_head.png", "btn_update_head.png");
@@ -130,7 +134,39 @@ void AccountManageScene::createMainView(){
     bkView->addChild(exitBtn);
     
     textfieldName=createBasicData(bkView, Vec2(86, 768), "真实姓名：", infoData["data"]["name"].GetString());
-    textfieldPass=createBasicData(bkView, Vec2(86, 688), "身份：",getEducationFromRole(infoData["data"]["role"].GetString()));
+    
+    
+    auto roleStr = Label::createWithSystemFont("身份：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    roleStr->setPosition(Vec2(86, 688));
+    roleStr->setTextColor(Color4B(91, 144, 229, 255));
+    roleStr->setAnchorPoint(Vec2(0, 0));
+    bkView->addChild(roleStr);
+    roleNum="";
+    auto roleBtn = Label::createWithSystemFont(getEducationFromRole(infoData["data"]["role"].GetString()),"Arial",35,Size(400,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    roleBtn->setTag(40);
+    roleBtn->setPosition(Vec2(visibleSize.width-86,688));
+    roleBtn->setTextColor(Color4B(40, 40, 40, 255));
+    roleBtn->setAnchorPoint(Vec2(1, 0));
+    bkView->addChild(roleBtn);
+    //label添加监听
+    auto listenter = EventListenerTouchOneByOne::create();
+    listenter->onTouchBegan = [roleBtn](Touch* t, Event * e) {
+        if (roleBtn->getBoundingBox().containsPoint(t->getLocation())) {
+            auto target = static_cast<AccountManageScene*>(e->getCurrentTarget());
+            auto layer=target->createChangeRoleLayer();
+            target->addChild(layer);
+            layer->setTag(2002);
+        }
+        return false;
+    };
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenter, this);
+    
+    auto lineV2=Sprite::create("userInfo_line.png");
+    lineV2->setPosition(Vec2(70, 682));
+    lineV2->setAnchorPoint(Vec2(0, 0));
+    lineV2->setContentSize(Size(visibleSize.width-140, 1.5));
+    bkView->addChild(lineV2);
+    
     
     auto userName = Label::createWithSystemFont("用户名：","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     userName->setPosition(Vec2(86, 608));
@@ -168,6 +204,31 @@ string AccountManageScene::getEducationFromRole(std::string role){
         return "研究生";
     }
     return "医生";
+}
+
+void AccountManageScene::createRoleLabel(){
+    bkView->removeChildByTag(40);
+    auto  visibleSize=Director::getInstance()->getVisibleSize();
+    auto roleBtn = Label::createWithSystemFont(getEducationFromRole(infoData["data"]["role"].GetString()),"Arial",35,Size(400,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    if (roleNum!="") {
+        roleBtn->setString(getEducationFromRole(roleNum.c_str()));
+    }
+    roleBtn->setPosition(Vec2(visibleSize.width-86,688));
+    roleBtn->setTextColor(Color4B(40, 40, 40, 255));
+    roleBtn->setAnchorPoint(Vec2(1, 0));
+    bkView->addChild(roleBtn);
+    //label添加监听
+    auto listenter = EventListenerTouchOneByOne::create();
+    listenter->onTouchBegan = [roleBtn](Touch* t, Event * e) {
+        if (roleBtn->getBoundingBox().containsPoint(t->getLocation())) {
+            auto target = static_cast<AccountManageScene*>(e->getCurrentTarget());
+            auto layer=target->createChangeRoleLayer();
+            target->addChild(layer);
+            layer->setTag(2002);
+        }
+        return false;
+    };
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenter, this);
 }
 
 
@@ -348,6 +409,7 @@ Layer* AccountManageScene::createExitLayer(){
 
 //修改密码
 Layer* AccountManageScene::createChangeKeyLayer(){
+    passWordIsDestory=1;
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
     auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
@@ -375,6 +437,7 @@ Layer* AccountManageScene::createChangeKeyLayer(){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         default:
+            passWordIsDestory=0;
             this->removeChildByTag(1050);
             break;
     }
@@ -462,14 +525,157 @@ Layer* AccountManageScene::createChangeKeyLayer(){
 
 
 
+//修改身份
+Layer* AccountManageScene::createChangeRoleLayer(){
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
+    layer->setContentSize(visibleSize);
+    layer->setPosition(Point(0, 0));
+    layer->setAnchorPoint(Vec2(0, 0));
+    auto callback = [](Touch * ,Event *){
+        return true;
+    };
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = callback;
+    listener->setSwallowTouches(true);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener,layer);
+    auto contentV = Sprite::create("bk_chage_role.png");
+    contentV->setAnchorPoint(Vec2(0,0));
+    contentV->setPosition(Vec2(66,352));
+    contentV->setContentSize(Size(508, 510));
+    layer->addChild(contentV);
+    auto cancelBtn=Button::create();
+    cancelBtn->loadTextures("btn_addCase_cancel.png", "btn_addCase_cancel.png");
+    cancelBtn->setPosition(Vec2(120, 15));
+    cancelBtn->setAnchorPoint(Vec2(0,0));
+    cancelBtn->setScale(0.87);
+    cancelBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            this->removeChildByTag(2002);
+        }
+            break;
+        default:
+            break;
+    }
+    });
+    contentV->addChild(cancelBtn);
+    
+    //role1
+    auto role1Btn=Button::create();
+    role1Btn->loadTextures("alpha.png", "alpha.png");
+    role1Btn->setPosition(Vec2(visibleSize.width/2, 478));
+    role1Btn->setScale9Enabled(true);
+    role1Btn->setContentSize(Size(508, 42));
+    role1Btn->setTitleText("带组教授");
+    role1Btn->setTitleColor(Color3B(40, 40, 40));
+    role1Btn->setTitleFontSize(40);
+    role1Btn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            roleNum="1";
+            createRoleLabel();
+            this->removeChildByTag(2002);
+        }
+        default:
+            break;
+    }
+    });
+    layer->addChild(role1Btn);
+    
+    //role2
+    auto role2Btn=Button::create();
+    role2Btn->loadTextures("alpha.png", "alpha.png");
+    role2Btn->setPosition(Vec2(visibleSize.width/2, 563));
+    role2Btn->setScale9Enabled(true);
+    role2Btn->setContentSize(Size(508, 42));
+    role2Btn->setTitleText("主治医生");
+    role2Btn->setTitleColor(Color3B(40, 40, 40));
+    role2Btn->setTitleFontSize(40);
+    role2Btn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            roleNum="2";
+            createRoleLabel();
+            this->removeChildByTag(2002);
+        }
+        default:
+            break;
+    }
+    });
+    layer->addChild(role2Btn);
+    auto lineV=Sprite::create("userInfo_line.png");
+    lineV->setPosition(Vec2(visibleSize.width/2, 520));
+    lineV->setAnchorPoint(Vec2(0.5, 0));
+    lineV->setContentSize(Size(508, 1.5));
+    layer->addChild(lineV);
+    
+    //role3
+    auto role3Btn=Button::create();
+    role3Btn->loadTextures("alpha.png", "alpha.png");
+    role3Btn->setPosition(Vec2(visibleSize.width/2, 648));
+    role3Btn->setScale9Enabled(true);
+    role3Btn->setContentSize(Size(508, 42));
+    role3Btn->setTitleText("住院医生");
+    role3Btn->setTitleColor(Color3B(40, 40, 40));
+    role3Btn->setTitleFontSize(40);
+    role3Btn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            roleNum="3";
+            createRoleLabel();
+            this->removeChildByTag(2002);
+        }
+        default:
+            break;
+    }
+    });
+    layer->addChild(role3Btn);
+    auto lineV2=Sprite::create("userInfo_line.png");
+    lineV2->setPosition(Vec2(visibleSize.width/2, 605));
+    lineV2->setAnchorPoint(Vec2(0.5, 0));
+    lineV2->setContentSize(Size(508, 1.5));
+    layer->addChild(lineV2);
+    
+    //role4
+    auto role4Btn=Button::create();
+    role4Btn->loadTextures("alpha.png", "alpha.png");
+    role4Btn->setPosition(Vec2(visibleSize.width/2, 733));
+    role4Btn->setScale9Enabled(true);
+    role4Btn->setContentSize(Size(508, 42));
+    role4Btn->setTitleText("研究生");
+    role4Btn->setTitleColor(Color3B(40, 40, 40));
+    role4Btn->setTitleFontSize(40);
+    role4Btn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+        case ui::Widget::TouchEventType::BEGAN: break;
+        case ui::Widget::TouchEventType::ENDED:{
+            roleNum="4";
+            createRoleLabel();
+            this->removeChildByTag(2002);
+        }
+        default:
+            break;
+    }
+    });
+    layer->addChild(role4Btn);
+    auto lineV3=Sprite::create("userInfo_line.png");
+    lineV3->setPosition(Vec2(visibleSize.width/2, 690));
+    lineV3->setAnchorPoint(Vec2(0.5, 0));
+    lineV3->setContentSize(Size(508, 1.5));
+    layer->addChild(lineV3);
+
+    return layer;
+}
 
 void AccountManageScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
     TextField*textField=(TextField*)pSender;
     string  text=textField->getString();
     switch (type){
-        case cocos2d::ui::TextField::EventType::INSERT_TEXT:
+        case cocos2d::ui::TextField::EventType::INSERT_TEXT:{
             CCLOG("INSERT_TEXT");
+        }
             break;
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
             CCLOG("DELETE_BACKWARD");
@@ -494,15 +700,21 @@ void AccountManageScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventTyp
             if (tag==10||tag==11) {
                 //手势锁
                 log("手势锁%s",UserDefault::getInstance()->getStringForKey("DrawPassWord").c_str());
-//                if (tag==10&&(UserDefault::getInstance()->getStringForKey("DrawPassWord"))) {//如果是第一次打开手势锁
-//#pragma-修改收拾密码
-//                    UserDefault::getInstance()->setStringForKey("DrawPassWord", "03678");
-//                    UserDefault::getInstance()->flush();
+                if (tag==10) {
+                    UserDefault::getInstance()->setStringForKey("isLock", "1");
+//                if (!(UserDefault::getInstance()->getStringForKey("DrawPassWord").length()>0)) {
+                    log("第一次设置手势锁");
+                    auto drawLineSC=(DrawLineScene*)DrawLineScene::createScene();
+                    drawLineSC->type=1;
+                    Director::getInstance()->pushScene(drawLineSC);
+                }
 //                }
             }
             break;
-        case cocos2d::ui::CheckBox::EventType::UNSELECTED:
+        case cocos2d::ui::CheckBox::EventType::UNSELECTED:{
+            UserDefault::getInstance()->setStringForKey("isLock", "0");
             log("UNSELECTED!");
+        }
             break;
         default:
             break;
@@ -550,13 +762,15 @@ void AccountManageScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse
     }
 }
 
-#pragma-用于加载网络数据
+#pragma-用于更新网络数据
 void AccountManageScene::updateDataToNetWork(){
     NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
     //当type为2时，删除成员
     char memberUrl[500]={0};
     auto passwd=UserDefault::getInstance()->getStringForKey("passwd");
-    if (surePassword->getStringLength()>0) {
+    if (surePassword!=nullptr&&surePassword->getStringLength()>0&&passWordIsDestory==1) {
+#pragma-怎么判断一个对象已经被销毁,我选择设置passWordIsDestory记录，真的坑
+        log("%d,%d,%d",surePassword->getStringLength(),surePassword!=nullptr,surePassword!=NULL);
         passwd=surePassword->getString();
     }
     auto name=UserDefault::getInstance()->getStringForKey("name");
@@ -564,12 +778,15 @@ void AccountManageScene::updateDataToNetWork(){
         name=textfieldName->getString();
     }
     auto role=UserDefault::getInstance()->getStringForKey("role");
-    if (textfieldPass->getString().length()) {
-        role=textfieldPass->getString();
+    if (roleNum!="") {
+        role=roleNum;
     }
-    sprintf(memberUrl,"http://czapi.looper.pro/web/updateDoctorInfo?doctorId=%s&name=%s&passwd=%s&role=%d&isLock=%d&isRecieve=%d",UserDefault::getInstance()->getStringForKey("id").c_str(),name.c_str(),passwd.c_str(),atoi(role.c_str()),keyCheckBox->getSelectedState(),keyAccompanyBox->getSelectedState());
-    string memberURL=memberUrl;
-    netManeger->sendMessage(memberURL,CC_CALLBACK_2(AccountManageScene::onHttpRequestCompleted2, this),nullptr);
+    sprintf(memberUrl,"doctorId=%s&name=%s&passwd=%s&role=%d&isLock=%d&isRecieve=%d",UserDefault::getInstance()->getStringForKey("id").c_str(),name.c_str(),passwd.c_str(),atoi(role.c_str()),keyCheckBox->getSelectedState(),keyAccompanyBox->getSelectedState());
+    string memberURL="http://czapi.looper.pro/web/updateDoctorInfo";
+     char* url=memberUrl;
+    
+    
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(AccountManageScene::onHttpRequestCompleted2, this),url);
 }
 
 void AccountManageScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
@@ -578,6 +795,9 @@ void AccountManageScene::onHttpRequestCompleted2(HttpClient* sender, HttpRespons
     if (!response)
     {
         return;
+    }
+    if (0 != strlen(response->getHttpRequest()->getTag())) {
+        log("%s compeled",response->getHttpRequest()->getTag());
     }
     std::vector<char> *data = response->getResponseData();
     std::string recieveData;
@@ -595,7 +815,12 @@ void AccountManageScene::onHttpRequestCompleted2(HttpClient* sender, HttpRespons
         if (this->infoData["status"].GetInt()==0) {
             log("修改成功");
             bkView->removeAllChildren();
+            if (backBtnType==1) {
+                backBtnType=0;
+                Director::getInstance()->popScene();
+            }else{
             pushDataToNetWork();
+            }
         }
         
         //        for(int i = 0; i < this->loginData["data"].Size(); i++) {

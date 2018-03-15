@@ -15,6 +15,7 @@
 #include "VASScene.hpp"
 #include "NDIScene.hpp"
 #include "OPLLScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -26,7 +27,7 @@ bool MuscleStrengthScene::init(){
         return false;
     }
     Size visibleSize=Director::getInstance()->getVisibleSize();
-    auto bkView=Sprite::create("bk_mark.png");
+    auto bkView=Sprite::create("bk_strength_abnormal.png");
     bkView->setPosition(Vec2(0, 0));
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(visibleSize);
@@ -91,7 +92,7 @@ bool MuscleStrengthScene::init(){
     lv->insertCustomItem(layer16,15);
     auto layer17 = createMessageLayout(16,"并腿","");
     lv->insertCustomItem(layer17,16);
-    
+    getDataToNetWork();
     return true;
     
 }
@@ -120,6 +121,7 @@ Layout *MuscleStrengthScene::createMessageLayout(int i,string title,string conte
     titleLB->setPosition(Point(37,height));
     titleLB->setTextColor(Color4B(91, 144, 229, 255));
     titleLB->setAnchorPoint(Vec2(0, 0));
+    titleDic.insert(i, titleLB);
     layout->addChild(titleLB);
     
     auto lineV=Sprite::create("userInfo_line.png");
@@ -193,6 +195,7 @@ Layer* MuscleStrengthScene::createSelectLayer(){
          Label* lb=labelDic.at(selectIndex);
             lb->setString("V");
              this->removeChildByTag(200);
+            pushDataToNetWork();
         }
         default:
             break;
@@ -227,6 +230,7 @@ void MuscleStrengthScene::createSelectItem(string title,float Y,Sprite* contentV
 //            log("%d,%s",lb->getTag(),btn->getTitleText().c_str());
             lb->setString(btn->getTitleText());
             this->removeChildByTag(200);
+            pushDataToNetWork();
         }
         default:
             break;
@@ -281,4 +285,192 @@ void MuscleStrengthScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollVi
         default:
             break;
     }
+}
+
+
+#pragma-网络数据
+void MuscleStrengthScene::getDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getCaseById?caseId=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str());
+    netManeger->postHttpRequest(memberUrl,CC_CALLBACK_2(MuscleStrengthScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void MuscleStrengthScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+     rapidjson::Document Jsondata;
+    
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (Jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(Jsondata.HasMember("status")){
+        
+        
+        if (Jsondata["status"].GetInt()==0) {
+            const rapidjson::Value& val_form = Jsondata["data"];
+            if(val_form.IsObject()){
+                if (!val_form["tz_jlyc"].IsNull()) {
+                    infoData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_jlyc"].GetString());
+                    for (int i=0; i<17; i++) {
+                        string title=titleDic.at(i)->getString();
+                        Label* contentLB=labelDic.at(i);
+                        if(infoData.HasMember(title.c_str())){
+                        contentLB->setString(changeIndexToTitle(infoData[title.c_str()].GetString()));
+                    }}
+                    rapidjson::StringBuffer buffer;
+                    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+                    infoData.Accept(writer);
+                    CCLOG("%s", buffer.GetString());
+                    }
+               
+                
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+std::string MuscleStrengthScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        for (int i=0; i<17; i++) {
+            string title=titleDic.at(i)->getString();
+    
+            string content=labelDic.at(i)->getString();
+            document.AddMember(rapidjson::Value(title.c_str(), allocator),rapidjson::Value(changeTitleToIndex(content).c_str(), allocator) , allocator);
+        }
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void MuscleStrengthScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    sprintf(jsonStr,"%s",getJsonData(0).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"tz_jlyc",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(MuscleStrengthScene::onHttpRequestCompleted, this),url);
+    
+}
+
+void MuscleStrengthScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+
+
+
+
+
+string  MuscleStrengthScene::changeTitleToIndex(std::string title){
+  if (strcmp(title.c_str(),"0")==0) {
+      return "0";
+    }
+   if (strcmp(title.c_str(),"I")==0) {
+        return "1";
+    }
+    if (strcmp(title.c_str(),"II")==0) {
+        return "2";
+    }
+    if (strcmp(title.c_str(),"III")==0) {
+        return "3";
+    }
+    if (strcmp(title.c_str(),"IV")==0) {
+        return "4";
+    }
+    if (strcmp(title.c_str(),"V")==0) {
+        return "5";
+    }
+    return "";
+}
+
+string  MuscleStrengthScene::changeIndexToTitle(std::string index){
+    if (strcmp(index.c_str(),"0")==0) {
+        return "0";
+    }
+    if (strcmp(index.c_str(),"1")==0) {
+        return "I";
+    }
+    if (strcmp(index.c_str(),"2")==0) {
+        return "II";
+    }
+    if (strcmp(index.c_str(),"3")==0) {
+        return "III";
+    }
+    if (strcmp(index.c_str(),"4")==0) {
+        return "IV";
+    }
+    if (strcmp(index.c_str(),"5")==0) {
+        return "V";
+    }
+    return "";
 }

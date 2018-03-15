@@ -55,7 +55,13 @@ bool SelectStep4Scene::init(){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
             log("确认选择医生");
-            Director::getInstance()->popScene();
+            if (commandType==2) {
+                if (selectDorctorId!=0) {
+                    commandDoctorToNetWork();
+                }
+            }else{
+            selectDoctorToNetWork();
+            }
         }
 
         default:
@@ -87,11 +93,7 @@ bool SelectStep4Scene::init(){
     }
     });
     serachV->addChild(searchBtn);
-    
-#pragma-TableView
-     
-    
-    auto searchText = TextField::create("最多可选三位医生发送您的病历","Arial",30);
+    searchText = TextField::create("最多可选三位医生发送您的病历","Arial",30);
     searchText->setMaxLength(40);
     searchText->setTouchSize(Size(visibleSize.width-300, 40));
     searchText->setPosition(Vec2(120,20));
@@ -103,11 +105,20 @@ bool SelectStep4Scene::init(){
     searchText->addEventListener(CC_CALLBACK_2(SelectStep4Scene::eventCallBack, this));
     serachV->addChild(searchText);
     
+    
+#pragma-TableView
     Select4Scroll=createTableView(Vec2(0, 0), Size(visibleSize.width, 910));
     bkView->addChild(Select4Scroll);
     
     return true;
 }
+
+void SelectStep4Scene::onEnter(){
+    Scene::onEnter();
+    log("type:%d",commandType);
+    if(commandType==2){searchText->setPlaceHolder("每次只能选择一位医生进行推荐");}
+}
+
 
 ScrollView* SelectStep4Scene::createTableView(Vec2 origin,Size visibleSize){
     auto scrollView=cocos2d::ui::ScrollView::create();
@@ -145,16 +156,15 @@ Layer* SelectStep4Scene::createMessageLayer(int i, Size  innerSize){
     auto headV=Sprite::create("bk_headIV.png");
     headV->setPosition(Vec2(5, 5));
     headV->setAnchorPoint(Vec2(0, 0));
-    headV->setScale(0.87);
+    float height5=headV->getContentSize().height;
+    headV->setScale(125.0/height5);
     bkView->addChild(headV);
-    auto headBtn=ImageView::create("HelloWorld.png");
-    headBtn->setPosition(Vec2(10, 10));
+    auto headBtn=ImageView::create("bk_headIV.png");
+    headBtn->setPosition(Vec2(0, 0));
     headBtn->setAnchorPoint(Vec2(0, 0));
     headBtn->setTouchEnabled(true);
-    headBtn->ignoreContentAdaptWithSize(true);
-    headBtn->setScale9Enabled(true);
-    headBtn->setContentSize(Size(125, 125));
-    headBtn->setColor(Color3B::RED);
+    float height=headBtn->getContentSize().height;
+    headBtn->setScale(125.0/height);
     headBtn->setTag(i);
     headV->addChild(headBtn);
     headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
@@ -200,6 +210,7 @@ Layer* SelectStep4Scene::createMessageLayer(int i, Size  innerSize){
     selectCheckBox->addEventListener(CC_CALLBACK_2(SelectStep4Scene::checkBoxCallback,this));
     //获取checkbox的选中状态
     bkView->addChild(selectCheckBox);
+    boxDic.insert(100+i, selectCheckBox);
     
     return layer;
 }
@@ -210,17 +221,69 @@ void SelectStep4Scene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType 
     MenuItem* item = (MenuItem*)ref;
     int tag= item->getTag();
      auto   checkBox=(CheckBox*)this->getChildByTag(tag);
+    log("tag %d",tag);
 //tag值100以及100+
     //     bool selected  = checkBox->getSelectedState();
+    rapidjson::Value& object = this->loginData["data"][tag-100];
+    if (dataArr.GetArray().Size()) {
+        if (!dataArr[tag-100].IsNull()) {
+            object=dataArr[tag-100];
+        }
+        StringBuffer buffer;
+        rapidjson::Writer<StringBuffer> writer(buffer);
+        dataArr.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
     switch (type)
     {
-        case cocos2d::ui::CheckBox::EventType::SELECTED:
+        case cocos2d::ui::CheckBox::EventType::SELECTED:{
+            log("id:%s",object["id"].GetString());
+            vector<int>::iterator it;
+            for(it=selectNumVector.begin();it!=selectNumVector.end();)
+            {
+                log("%d",*it);
+                if(*it==atoi(object["id"].GetString()))//判断是否有重复
+                    it=selectNumVector.erase(it);    //删除元素，返回值指向已删除元素的下一个位置
+                else
+                    ++it;    //指向下一个位置
+            }
+            selectNumVector.push_back(atoi(object["id"].GetString()));
+            
+#pragma-如果type为二
+            if (commandType==2) {
+                selectDorctorId=atoi(object["id"].GetString());
+                          if (dataArr.GetArray().Size()&&!dataArr[tag-100].IsNull()) {
+                          }else{
+                    for (int i=0; i<loginData["data"].Size(); i++) {
+                        log("data size%d",loginData["data"].Size());
+                        auto otherBox=boxDic.at(i+100);
+                        if (otherBox->getTag()!=tag) {
+                            otherBox->setSelected(false);}
+                                                                                                          }
+                                     }
+            }
+   
+            
             log("SELECTED!");
 //            checkBox->setSelected(false);
-            break;
-        case cocos2d::ui::CheckBox::EventType::UNSELECTED:
+            break;}
+        case cocos2d::ui::CheckBox::EventType::UNSELECTED:{
+            vector<int>::iterator it;
+            for(it=selectNumVector.begin();it!=selectNumVector.end();)
+                     {
+                         log("%d",*it);
+                             if(*it==atoi(object["id"].GetString()))
+                                     it=selectNumVector.erase(it);    //删除元素，返回值指向已删除元素的下一个位置
+                             else
+                                     ++it;    //指向下一个位置
+                         }
+            
+#pragma-如果type为二
+            if (commandType==2) {
+                selectDorctorId=0;
+            }
             log("UNSELECTED!");
-            break;
+            break;}
         default:
             break;
     }
@@ -245,9 +308,13 @@ void SelectStep4Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventT
                    }
                }
                 if (dataArr.GetArray().Size()>0) {
-                    for (int j=0; j<loginData["data"].Size(); j++) {
+                    Select4Scroll->removeAllChildren();
+       /*             for (int j=0; j<loginData["data"].Size(); j++) {
+                        rapidjson::Value& object = this->loginData["data"][j];
+                        if (!object.IsNull()) {
+                            log("%s",object["name"].GetString());}
                         Select4Scroll->removeChildByTag(1000+j);
-                    }
+                    }    */
                     for (int k=0; k<dataArr.GetArray().Size(); k++) {
                         Size visibleSize=Director::getInstance()->getVisibleSize();
                         Select4Scroll->setInnerContainerSize(Size(visibleSize.width, 160*dataArr.GetArray().Size()));//设置内容大小
@@ -257,6 +324,7 @@ void SelectStep4Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventT
                 }
                 
                 log("%d",dataArr.GetArray().Size());
+                
             }
             CCLOG("INSERT_TEXT");
             
@@ -269,17 +337,14 @@ void SelectStep4Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventT
                 Select4Scroll->setInnerContainerSize(Size(visibleSize.width, 160*loginData["data"].Size()));//设置内容大小
                     for (int j=0; j<dataArr.GetArray().Size(); j++) {
                         Select4Scroll->removeChildByTag(1000+j);
+                         }
                         dataArr.Clear();
+                NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+                string url="http://czapi.looper.pro/web/getDoctor";
+                netManeger->sendMessage(url,CC_CALLBACK_2(SelectStep4Scene::onHttpRequestCompleted, this),nullptr);
                     }
-                 log("%d",loginData["data"].Size());
-                for (int i=0; i<loginData["data"].Size(); i++) {
-                    Size visibleSize=Director::getInstance()->getVisibleSize();
-                    Select4Scroll->setInnerContainerSize(Size(visibleSize.width, 160*loginData["data"].Size()));//设置内容大小
-                    auto layer1 = createMessageLayer(i,Select4Scroll->getInnerContainerSize());
-                    Select4Scroll->addChild(layer1);
-                }
-            }
             CCLOG("DELETE_BACKWARD");
+            break;
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
             
             CCLOG("DETACH_WITH_IME");
@@ -297,6 +362,7 @@ void SelectStep4Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventT
 void SelectStep4Scene::pushDataToNetWork(){
     NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
     string url="http://czapi.looper.pro/web/getDoctor";
+    
     netManeger->sendMessage(url,CC_CALLBACK_2(SelectStep4Scene::onHttpRequestCompleted, this),nullptr);
 }
 
@@ -326,6 +392,86 @@ void SelectStep4Scene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* 
 //                    CCLOG("%s", object["name"].GetString());
 //                }
     }
+    StringBuffer buffer;
+    rapidjson::Writer<StringBuffer> writer(buffer);
+    loginData["data"].Accept(writer);
+    CCLOG("%s", buffer.GetString());
     
 }
 
+
+#pragma-选择主治医生
+void SelectStep4Scene::selectDoctorToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    vector<int>::iterator it;
+    int count=0;
+    string content="";
+    for(it=selectNumVector.begin();it!=selectNumVector.end();)
+    {
+        log("%d",*it);
+        if (count==0) {
+            content.append(to_string(*it));
+        }else if(count==1||count==2){
+            content.append(",");   content.append(to_string(*it));
+        }
+            ++it;    //指向下一个位置
+        ++count;
+    }
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"userId=%s&step4=%s",UserDefault::getInstance()->getStringForKey("userId").c_str(),content.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateCase";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(SelectStep4Scene::onHttpRequestCompleted2, this),url);
+}
+
+void SelectStep4Scene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+     rapidjson::Document Jsondata;
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (Jsondata.HasParseError()) {
+        return;
+    }
+    StringBuffer buffer;
+    rapidjson::Writer<StringBuffer> writer(buffer);
+    Jsondata.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+    
+}
+
+#pragma -推荐给别的医生
+void SelectStep4Scene::commandDoctorToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"doctorId=%s&requestId=%s&newDoctorId=%s",UserDefault::getInstance()->getStringForKey("id").c_str(),UserDefault::getInstance()->getStringForKey("patientId").c_str(),to_string(selectDorctorId).c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/recommendPatient";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(SelectStep4Scene::onHttpRequestCompleted3, this),url);
+}
+
+void SelectStep4Scene::onHttpRequestCompleted3(HttpClient* sender, HttpResponse* response)
+{
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    rapidjson::Document Jsondata;
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (Jsondata.HasParseError()) {
+        return;
+    }
+    StringBuffer buffer;
+    rapidjson::Writer<StringBuffer> writer(buffer);
+    Jsondata.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+    
+}

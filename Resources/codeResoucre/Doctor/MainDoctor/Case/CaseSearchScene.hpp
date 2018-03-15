@@ -9,6 +9,13 @@
 #define CaseSearchScene_hpp
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 USING_NS_CC;
 class CaseSearchScene:public cocos2d::Scene{
 public:
@@ -22,7 +29,13 @@ public:
     
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
     
+    
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
 private:
+    rapidjson::Document infoData;
+    
     cocos2d::ui::TextField*textFiledName;
     cocos2d::ui::TextField*textFiledSex;
     cocos2d::ui::TextField*textFiledAge;

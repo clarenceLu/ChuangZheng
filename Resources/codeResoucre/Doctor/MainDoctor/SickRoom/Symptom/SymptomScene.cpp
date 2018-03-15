@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -44,7 +45,9 @@ bool SymptomScene::init(){
     sureBtn->setPosition(Vec2(visibleSize.width-80, visibleSize.height-85));
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:{
+            pushDataToNetWork();
+        }
             
         default:
             break;
@@ -72,22 +75,24 @@ bool SymptomScene::init(){
     lv->insertCustomItem(layer3,2);
     auto layer4 = createMessageLayout(0,"四肢活动不灵活","");
     lv->insertCustomItem(layer4,3);
-    auto layer5 = createItemLayout(1, "行走困难");
-    lv->insertCustomItem(layer5,4);
-    auto layer6 = createItemLayout(2, "间歇性跛行");
-    lv->insertCustomItem(layer6,5);
-    auto layer7 = createItemLayout(3, "踩棉感");
-    lv->insertCustomItem(layer7,6);
-    auto layer8 = createItemLayout(4, "胸腹部束带感");
-    lv->insertCustomItem(layer8,7);
-    auto layer9 = createItemLayout(5, "足下垂");
-    lv->insertCustomItem(layer9,8);
-    auto layer10 = createItemLayout(6, "大小便障碍");
-    lv->insertCustomItem(layer10,9);
-    auto layer11 = createItemLayout(7, "勃起困难");
-    lv->insertCustomItem(layer11,10);
-    auto layer12 = createItemLayout(8, "心慌头昏");
-    lv->insertCustomItem(layer12,11);
+    auto layer13 = createMessageLayout(0,"疼痛","");
+    lv->insertCustomItem(layer13,4);
+    auto layer5 = createItemLayout(0, "行走困难");
+    lv->insertCustomItem(layer5,5);
+    auto layer6 = createItemLayout(1, "间歇性跛行");
+    lv->insertCustomItem(layer6,6);
+    auto layer7 = createItemLayout(2, "踩棉感");
+    lv->insertCustomItem(layer7,7);
+    auto layer8 = createItemLayout(3, "胸腹部束带感");
+    lv->insertCustomItem(layer8,8);
+    auto layer9 = createItemLayout(4, "足下垂");
+    lv->insertCustomItem(layer9,9);
+    auto layer10 = createItemLayout(5, "大小便障碍");
+    lv->insertCustomItem(layer10,10);
+    auto layer11 = createItemLayout(6, "勃起困难");
+    lv->insertCustomItem(layer11,11);
+    auto layer12 = createItemLayout(7, "心慌头昏");
+    lv->insertCustomItem(layer12,12);
     
     return true;
     
@@ -104,7 +109,7 @@ Layout *SymptomScene::createMessageLayout(int i,string title,string content){
     
     float height=10;
     if (content.c_str()!=nullptr) {
-        auto contentLB = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-200,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+        auto contentLB = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-150,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
         height=contentLB->getContentSize().height+10;
         contentLB->setPosition(Point(37,10));
         contentLB->setTextColor(Color4B(0,0,0, 255/3*2));
@@ -173,7 +178,7 @@ Layout *SymptomScene::createItemLayout(int i,string title){
     box->addEventListener(CC_CALLBACK_2(SymptomScene::checkBoxCallback,this));
     //获取checkbox的选中状态
     layout->addChild(box);
-    
+    boxDic.insert(i, box);
     
     return layout;
 }
@@ -234,3 +239,105 @@ void SymptomScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::Eve
             break;
     }
 }
+
+
+std::string SymptomScene::getJsonData()
+{
+    rapidjson::Document document;
+    document.SetArray();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+        for (int i=0; i<8; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void SymptomScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"zz",getJsonData().c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(SymptomScene::onHttpRequestCompleted, this),url);
+    
+}
+
+void SymptomScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+
+
+
+string SymptomScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 0:
+            content="行走困难";
+            break;
+        case 1:
+            content="间歇性跛行";
+            break;
+        case 2:
+            content="踩棉感";
+            break;
+        case 3:
+            content="胸腹部束带感";break;//神经根型颈椎病
+        case 4:
+            content="足下垂";break;
+        case 5:
+            content="大小便障碍";break;
+        case 6:
+            content="勃起困难";break;
+        case 7:
+            content="心慌头昏";break;
+        case 8:
+            content="其他";break;
+            
+        default:
+            break;
+    }
+    return content;
+}
+

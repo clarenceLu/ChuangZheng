@@ -105,7 +105,7 @@ bool RegisterDetailScene::init(){
     });
     this->addChild(sureBtn);
     
-    textfieldName=createBasicData(bkView, Vec2(59, 768), "用户名：", "张牧之");
+    textfieldName=createBasicData(bkView, Vec2(59, 768), "姓名：", "张牧之");
     textfieldPass=createBasicData(bkView, Vec2(59, 688), "密码：", "未填写");
      textfieldPass->setPasswordEnabled(true);
      textfieldSurePass=createBasicData(bkView, Vec2(59, 608), "确认密码：", "未填写");
@@ -348,14 +348,33 @@ Layer* RegisterDetailScene::createAlbumLayer(){
 
 
 #pragma-用于加载网络数据
+std::string RegisterDetailScene::getTimeForSystem(){
+    //获取系统时间
+    struct timeval now;
+    struct tm *time;
+    gettimeofday(&now, NULL);
+    time = localtime(&now.tv_sec);      //microseconds: 微秒
+    int year = time->tm_year +1900;
+    log("year = %d", year);         //显示年份
+    char date1[32] = {0};
+    sprintf(date1, "%d %02d %02d", (int)time->tm_year + 1900, (int)time->tm_mon + 1, (int)time->tm_mday);
+    log("%s", date1);        //显示年月日
+    char date2[50] = {0};
+    sprintf(date2, "%02d %02d %02d", (int)time->tm_hour, (int)time->tm_min, (int)time->tm_sec);
+    log("%s", date2);       //显示时分秒
+    char date[100] = {0};
+    sprintf(date, "%d%d%d%d%d%d", (int)time->tm_year + 1900, (int)time->tm_mon + 1, (int)time->tm_mday,(int)time->tm_hour, (int)time->tm_min, (int)time->tm_sec);
+    return date;
+    
+}
 
 void RegisterDetailScene::pushDataToNetWork(string username,string passwd,string name,string sex,string age,string phone,string phone1,string idCardNo,string address,string headUrl,string caseNo){
     NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
-    char strtest[500] = {0};
-    sprintf(strtest,"http://czapi.looper.pro/web/createUser?userId=%s&passwd=%s&name=%s&sex=%s&phone=%s&phone1=%s&address=%s", username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),phone.c_str(),phone1.c_str(),address.c_str());
-    string url=strtest;
-    
-    netManeger->sendMessage(url,CC_CALLBACK_2(RegisterDetailScene::onHttpRequestCompleted, this),nullptr);
+    char memberUrl[1000]={0};
+sprintf(memberUrl,"userId=%s&passwd=%s&name=%s&sex=%s&phone=%s&phone1=%s&address=%s&caseNo=%s",username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),phone.c_str(),phone1.c_str(),address.c_str(),getTimeForSystem().c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/createUser";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(RegisterDetailScene::onHttpRequestCompleted, this),url);
 }
 
 void RegisterDetailScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)

@@ -10,6 +10,13 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 USING_NS_CC;
 class TreatWayScene:public cocos2d::Scene{
 public:
@@ -22,6 +29,7 @@ public:
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     void menuLoginCallback(cocos2d::Ref* pSender);
     Map<int, cocos2d::ui::CheckBox*> boxDic;
+    Map<int, cocos2d::Label*> boxTitleDic;
     
     
     cocos2d::ui::Layout *createBlueView(std::string name,int tag);
@@ -34,6 +42,15 @@ public:
     float createResection(int type,int tag,cocos2d::Layer *bkView);
     void createImplant(int type,int tag,cocos2d::Layer *bkView,float height);
     void createMiniOperationView(int type,int tag,cocos2d::Layer *bkView);
+    
+//network
+    std::string changeNumToString(int num);
+    std::string getJsonData(int type);
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
+     std::string changeNumToContent(int num);
+    
     
 private:
     cocos2d::ui::ListView* lv;

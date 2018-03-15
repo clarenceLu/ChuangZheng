@@ -21,6 +21,7 @@ class AccountManageScene:public cocos2d::Scene{
 public:
     static  cocos2d::Scene* createScene();
     virtual bool init();
+    void createRoleLabel();
     void createMainView();
     CREATE_FUNC(AccountManageScene);
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
@@ -32,6 +33,8 @@ public:
     cocos2d::Layer* createChangeKeyLayer();
     cocos2d::Layer* createExitLayer();
     
+    Layer* createChangeRoleLayer();
+    
     
     void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
     void pushDataToNetWork();
@@ -40,13 +43,18 @@ public:
     void updateDataToNetWork();
     std::string getEducationFromRole(std::string role);
     
+    
+    
+    
+    
+    
 private:
     rapidjson::Document infoData;
     
     cocos2d::Sprite*bkView;
     
    cocos2d::ui:: TextField* textfieldName;
-   cocos2d::ui::  TextField* textfieldPass;
+    std::string roleNum;
     
    cocos2d::ui::CheckBox* keyAccompanyBox;
      cocos2d::ui::CheckBox* keyCheckBox;
@@ -54,5 +62,10 @@ private:
     cocos2d::ui::TextField *originalPassword;
     cocos2d::ui::TextField *newPassword;
     cocos2d::ui::TextField* surePassword;
+    
+    
+    int backBtnType;//点击了backBtn则为1
+    
+    int passWordIsDestory;  //0为已经销毁
 };
 #endif /* AccountManageScene_hpp */

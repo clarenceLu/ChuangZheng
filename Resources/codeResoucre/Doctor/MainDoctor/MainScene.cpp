@@ -17,6 +17,8 @@
 #include "WaitChatScene.hpp"
 #include "SetTemporaryRoom.hpp"
 #include "SickRoomScene.hpp"
+#include "MessageNotificationScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -39,6 +41,9 @@ bool MainScene::init(){
     auto layer4=createSickInfoLayer();
     multLayer = LayerMultiplex::create(layer1, layer2,layer3,layer4,nullptr);
     addChild(multLayer, 0);
+    
+    pushDataToNetWork();
+    isTempBed=0;
     
     auto bottom=Sprite::create("bk_perfect_bottom.png");
     bottom->setPosition(Vec2(0, 0));
@@ -103,6 +108,7 @@ Layer* MainScene::createSickRoomLayer(){
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
     auto layer = LayerColor::create(Color4B(255, 255, 255, 255));
     layer->setContentSize(visibleSize);
+    layer->setTag(500);
     layer->setPosition(Point(0, 0));
     layer->setAnchorPoint(Vec2(origin.x, origin.y));
     auto callback = [](Touch * ,Event *){
@@ -116,9 +122,14 @@ Layer* MainScene::createSickRoomLayer(){
     auto bkView=Sprite::create("bk_sickRoom.png");
     bkView->setPosition(0,0);
     bkView->setAnchorPoint(Vec2(0, 0));
+    bkView->setTag(501);
     bkView->setContentSize(visibleSize);
     layer->addChild(bkView);
-    
+    createSickRoomWithBackView(bkView);
+    return layer;
+}
+void MainScene::createSickRoomWithBackView(Sprite* bkView){
+     auto visibleSize=Director::getInstance()->getVisibleSize();
     auto addBtn=Button::create();
     addBtn->loadTextures("btn_addCase_add.png", "btn_addCase_add.png");
     addBtn->setPosition(Vec2(visibleSize.width-100, visibleSize.height-85));
@@ -144,7 +155,7 @@ Layer* MainScene::createSickRoomLayer(){
     tempBedBox->setTouchEnabled(true);
     tempBedBox->addEventListener(CC_CALLBACK_2(MainScene::checkBoxCallback,this));
     //获取checkbox的选中状态
-   bkView->addChild(tempBedBox);
+    bkView->addChild(tempBedBox);
     boxVec->pushBack(tempBedBox);
     auto fixedBedBox=CheckBox::create("box_fixedBed_unselect.png","box_fixedBed_select.png");
     //设置CheckBox的位置
@@ -166,7 +177,7 @@ Layer* MainScene::createSickRoomLayer(){
     line1->setScaleX(1.05);
     bkView->addChild(line1);
     
-    auto job = Label::createWithSystemFont("上海医院松江分院外科楼6楼","Arial",35,Size(visibleSize.width-40,50),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    auto job = Label::createWithSystemFont("上海长征医院","Arial",35,Size(visibleSize.width-40,50),TextHAlignment::LEFT,TextVAlignment::CENTER);
     job->setPosition(Vec2(20,850));
     job->setTextColor(Color4B(0, 0, 0, 255/2));
     job->setAnchorPoint(Vec2(0, 0));
@@ -178,31 +189,35 @@ Layer* MainScene::createSickRoomLayer(){
     line2->setScaleX(1.05);
     bkView->addChild(line2);
     
-    ScrollView *scrollV=createScrollV();
-    bkView->addChild(scrollV);
-    scrollV->setInnerContainerSize(Size(visibleSize.width, (int)(11/5)*155+20));//设置内容大小
-    for (int i=0; i<11; i++) {
-        Menu *menu=createRectButton(Vec2(27, scrollV->getInnerContainerSize().height-143), i);
-        scrollV->addChild(menu);
-    }
-    return layer;
 }
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
-ScrollView* MainScene::createScrollV(){
+#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+ScrollView* MainScene::createScrollV(int index){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
     auto scrollView=cocos2d::ui::ScrollView::create();
+    scrollView->setTag(502);
     scrollView->setPosition(Vec2(0,100));
     scrollView->setAnchorPoint(Vec2(0, 0));
     scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
     scrollView->setScrollBarEnabled(true);//是否显示滚动条
     scrollView->setContentSize(Size(visibleSize.width, 730));//设置窗口大小
     scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
+//data
+    scrollView->setInnerContainerSize(Size(visibleSize.width, (int)(index/5)*155+20));//设置内容大小
+    for (int i=0; i<index; i++) {
+        Menu *menu=createRectButton(Vec2(27, scrollView->getInnerContainerSize().height-143), i);
+        scrollView->addChild(menu);
+    }
     return scrollView;
 }
 
 Menu*   MainScene::createRectButton(Vec2 point,int i){
     Size visibleSize=Director::getInstance()->getVisibleSize();
+    rapidjson::Value& data = this->infoData["data"][i];
     auto menuItem  = MenuItemImage::create("bk_bed.png","bk_bed.png",CC_CALLBACK_1(MainScene::menuBedNumCallback, this));
     menuItem->setAnchorPoint(Vec2(0,0));
     menuItem->setPosition(Vec2(0,0));
@@ -219,14 +234,28 @@ Menu*   MainScene::createRectButton(Vec2 point,int i){
             }else{
                 button->setPosition(Vec2(point.x+(imageSize.width+46)*(i%5),point.y-((int)((width-point.x)/((imageSize.width+46)*5))*(imageSize.height+31))));
             }
+    
+    int colorType=1;
+    if (data["status"].IsNull()) {
+    }
+  else  if(strcmp(data["status"].GetString(), "none")==0){
+        colorType=1;
+    }else   if(strcmp(data["status"].GetString(), "new")==0){
+        colorType=2;
+    }else   if(strcmp(data["status"].GetString(), "leave")==0){
+        colorType=3;
+    }else   if(strcmp(data["status"].GetString(), "surgery")==0||strcmp(data["status"].GetString(), "after")==0){
+        colorType=4;
+    }
+    
     char strtest[500] = {0};
-    sprintf(strtest,"bedNum%d.png",i%4+1);
+    sprintf(strtest,"bedNum%d.png",colorType);
     string numStr=strtest;
     auto num=Sprite::create(numStr);
     num->setPosition(Vec2(3, 30));
     num->setAnchorPoint(Vec2(0, 0));
     num->setScale(1.2);
-    auto numLB = Label::createWithSystemFont(CCString::createWithFormat("%d",i+1)->getCString(),"Arial",35,Size(num->getContentSize().width,num->getContentSize().width),TextHAlignment::CENTER,TextVAlignment::CENTER);
+    auto numLB = Label::createWithSystemFont(data["bedNo"].GetString(),"Arial",35,Size(num->getContentSize().width,num->getContentSize().width),TextHAlignment::CENTER,TextVAlignment::CENTER);
     numLB->setPosition(Vec2(0,0));
     numLB->setTextColor(Color4B(255, 255, 255, 255));
     numLB->setAnchorPoint(Vec2(0, 0));
@@ -401,7 +430,10 @@ Layer* MainScene::createSickInfoLayer(){
     messageBtn->setScale(0.9);
     messageBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:{
+            auto messageSC=MessageNotificationScene::createScene();
+            Director::getInstance()->pushScene(messageSC);
+        }
         default:
             break;
     }
@@ -663,6 +695,7 @@ void MainScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
 {
     CheckBox* item = (CheckBox*)ref;
     int tag= item->getTag();
+    log("checkBox tag:%d",tag);
     if (type==cocos2d::ui::CheckBox::EventType::SELECTED) {
         if (tag==5||tag==6) {
 //临时病床和固定病床
@@ -687,6 +720,9 @@ void MainScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
             if (tag==5||tag==6) {
+//当tag为5时，表示点击了临时床位
+                isTempBed=6-tag;
+                pushDataToNetWork();
             }else if(tag>=0&&tag<=4){
                 //切换页面
                 multLayer->switchTo(tag);
@@ -707,8 +743,95 @@ void MainScene::menuBedNumCallback(Ref* pSender)
 {
     MenuItem* item = (MenuItem*)pSender;
     int tag= item->getTag();
+    log("item tag%d,size %d",tag,infoData["data"].Size());
+      rapidjson::Value& data = infoData["data"][tag-100];
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    infoData.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+    if (data["caseId"].IsNull()) {
+#pragma-没有绑定病人，需要加入病人数据，跳转不同的界面
+//                 data["bedNo"].GetString()
+    }else{
     auto sickroomSC=(SickRoomScene*)SickRoomScene::createScene();
-    sickroomSC->bedNum=tag-99;
+    sickroomSC->bedNum=atoi(data["bedNo"].GetString());
+    UserDefault::getInstance()->setStringForKey("caseId", data["caseId"].GetString());
+    UserDefault::getInstance()->setStringForKey("patientId", data["patientId"].GetString());
     Director::getInstance()->pushScene(sickroomSC);
+    }
     
 }
+
+#pragma-用于加载网络数据
+void MainScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getBeds?doctorId=%s",UserDefault::getInstance()->getStringForKey("id").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(MainScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void MainScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+//    rapidjson::Document Jsondata;
+    infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (infoData.HasParseError()) {
+        return;
+    }
+    if(infoData.HasMember("status")){
+        if (infoData["status"].GetInt()==0) {
+            rapidjson::Value& object = infoData["data"];
+            int sizeNum=infoData["data"].Size();
+            log("size:%d",sizeNum);
+            for (int i=0; i<object.Size(); i++) {
+                if (isTempBed==0) {//固定床位
+                    if (strcmp(object[i]["type"].GetString(),"temporary")==0) {
+                        infoData["data"].Erase(infoData["data"].Begin()+i);i=0;}
+                }else{//临时床位
+                    if (strcmp(object[i]["type"].GetString(),"temporary")!=0) {
+                        infoData["data"].Erase(infoData["data"].Begin()+i);i=0;}
+                }
+            }
+ //获取临时床位和固定床位的数据
+ /*           infoData.SetObject();
+            rapidjson::Document::AllocatorType& allocator = infoData.GetAllocator();
+            rapidjson::Value array(rapidjson::kArrayType);
+            for (int i=0; i<object.Size(); i++) {
+                if (strcmp(object[i]["type"].GetString(),"temporary")==0) {//临时床位
+                    if (isTempBed==1) {
+                        array.PushBack(object[i], allocator);}
+                }else {//固定床位
+                     if (isTempBed==0) {
+                array.PushBack(object[i], allocator);
+                     }
+                }
+            }
+            infoData.AddMember("data", array, allocator);   */
+            log("size:%d",infoData["data"].Size());
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            infoData.Accept(writer);
+            CCLOG("%s", buffer.GetString());
+            
+            auto layer=multLayer->getChildByTag(500);
+            auto backV=layer->getChildByTag(501);
+            backV->removeChildByTag(502);//删除scrollView
+            ScrollView *scrollV=createScrollV(infoData["data"].Size());
+            backV->addChild(scrollV);
+        }
+    }
+}
+
+
+
+
+

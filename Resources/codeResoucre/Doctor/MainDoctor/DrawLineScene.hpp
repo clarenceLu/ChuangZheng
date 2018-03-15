@@ -10,6 +10,12 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 USING_NS_CC;
 class DrawLineScene : public cocos2d::Scene{
 private:
@@ -33,12 +39,18 @@ public:
     
     ValueVector numSortVector;
     cocos2d::Vec2 getPointfromVector(int i);
-    
+//用于传值
+    int type;//1代表第一次进入
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork(std::string content);
+    void onHttpRequestCompleted2(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void verifyDataToNetWork(std::string content);
     
     
     void showServerMessage( std::string ch );
     
 protected:
+    rapidjson::Document infoData;
     //自定义draw实现
     void onDraw(const cocos2d::Mat4 &transform, bool transformUpdated);
     cocos2d::CustomCommand _customCommand;

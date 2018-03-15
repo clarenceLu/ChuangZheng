@@ -10,6 +10,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "SenseAbnormalScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -46,7 +47,8 @@ bool SenseScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
-            Director::getInstance()->popScene();
+            pushDataToNetWork();
+            
         default:
             break;
     }
@@ -71,6 +73,7 @@ bool SenseScene::init(){
     acceptBox->setTouchEnabled(true);
     acceptBox->addEventListener(CC_CALLBACK_2(SenseScene::checkBoxCallback,this));
     addChild(acceptBox);
+    boxDic.insert(1, acceptBox);
     
     auto refuseLB= Label::createWithSystemFont("消失","Arial",35,Size(90,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     refuseLB->setPosition(Vec2(214, 857));
@@ -84,6 +87,7 @@ bool SenseScene::init(){
     refuseBox->setTouchEnabled(true);
     refuseBox->addEventListener(CC_CALLBACK_2(SenseScene::checkBoxCallback,this));
     addChild(refuseBox);
+    boxDic.insert(2, refuseBox);
     
     auto allLB= Label::createWithSystemFont("过敏","Arial",35,Size(90,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     allLB->setPosition(Vec2(374, 857));
@@ -97,6 +101,7 @@ bool SenseScene::init(){
     allBox->setTouchEnabled(true);
     allBox->addEventListener(CC_CALLBACK_2(SenseScene::checkBoxCallback,this));
     addChild(allBox);
+    boxDic.insert(3, allBox);
     
     auto lineV8=Sprite::create("userInfo_line.png");
     lineV8->setPosition(Vec2(50,842));
@@ -117,8 +122,7 @@ bool SenseScene::init(){
     confirmBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            auto senseSC=SenseAbnormalScene::createScene();
-            Director::getInstance()->pushScene(senseSC);
+            Director::getInstance()->popScene();
         }
             
         default:
@@ -134,8 +138,7 @@ bool SenseScene::init(){
     cancelBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            auto senseSC=SenseAbnormalScene::createScene();
-            Director::getInstance()->pushScene(senseSC);
+            Director::getInstance()->popScene();
         }
             
         default:
@@ -175,4 +178,95 @@ void SenseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
             break;
     }
 }
+
+
+
+std::string SenseScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    document.SetArray();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    for (int i=1; i<4; i++) {
+        CheckBox*currentBox=boxDic.at(i);
+        if (currentBox->getSelectedState()) {
+            document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+        }
+    }
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void SenseScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    sprintf(jsonStr,"%s",getJsonData(0).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"tz_gjyc_gj",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(SenseScene::onHttpRequestCompleted, this),url);
+    
+}
+
+void SenseScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+string SenseScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 1:
+            content="减退";
+            break;
+        case 2:
+            content="消失";
+            break;
+        case 3:
+            content="过敏";break;//神经根型颈椎病
+            
+            
+        default:
+            break;
+    }
+    return content;
+}
+
 

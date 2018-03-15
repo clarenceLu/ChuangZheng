@@ -11,6 +11,7 @@
 #include <iostream>
 #include "MainScene.hpp"
 #include <math.h>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -47,7 +48,8 @@ bool TreatWayScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
-          Director::getInstance()->popToSceneStackLevel(4);
+            pushDataToNetWork();
+         
         default:
             break;
     }
@@ -371,8 +373,8 @@ float TreatWayScene::createResection(int type,int tag,Layer *bkView){
             userName->setTextColor(Color4B(0,0,0, 255/3*2));
             userName->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(userName);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "左", 2017, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "右", 2016, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "左", 2030, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "右", 2029, 120, whiteV);
             auto title = Label::createWithSystemFont("锥板","Arial",35,Size(130,50),TextHAlignment::LEFT,TextVAlignment::CENTER);
             title->setPosition(Vec2(20,120));
             title->setTextColor(Color4B(0,0,0, 255/3*2));
@@ -432,20 +434,20 @@ float TreatWayScene::createResection(int type,int tag,Layer *bkView){
             userName->setTextColor(Color4B(0,0,0, 255/3*2));
             userName->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(userName);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "左", 2017, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "右", 2016, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "左", 2041, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "右", 2040, 120, whiteV);
             auto title = Label::createWithSystemFont("锥板","Arial",35,Size(130,50),TextHAlignment::LEFT,TextVAlignment::CENTER);
             title->setPosition(Vec2(20,120));
             title->setTextColor(Color4B(0,0,0, 255/3*2));
             title->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(title);
             //T7  T8  T9  T10  T11  T12
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "T12", 2028, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 70), "T11", 2027, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-340, 70), "T10", 2026, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 130), "T9", 2025, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 130), "T8", 2024, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-340, 130), "T7", 2023, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "T12", 2039, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 70), "T11", 2038, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-340, 70), "T10", 2037, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 130), "T9", 2036, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 130), "T8", 2035, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-340, 130), "T7", 2034, 70, whiteV);
         }
     }else if(tag==4){
         if (type==0) {
@@ -461,24 +463,24 @@ float TreatWayScene::createResection(int type,int tag,Layer *bkView){
             userName->setTextColor(Color4B(0,0,0, 255/3*2));
             userName->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(userName);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "L5/S1", 1058, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-210, 10), "L4/5", 1057, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-360, 10), "T10/T11", 1056, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "L3/4", 1055, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-210, 70), "L2/3", 1054, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-360, 70), "L1/2", 1053, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "L5/S1", 1075, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-210, 10), "L4/5", 1074, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-360, 10), "T10/T11", 1073, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "L3/4", 1072, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-210, 70), "L2/3", 1071, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-360, 70), "L1/2", 1070, 120, whiteV);
             auto title = Label::createWithSystemFont("锥体","Arial",35,Size(130,50),TextHAlignment::LEFT,TextVAlignment::CENTER);
             title->setPosition(Vec2(20,180));
             title->setTextColor(Color4B(0,0,0, 255/3*2));
             title->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(title);
             //L1  L2  L3  L4  L5 S1
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 130), "S1", 1052, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 130), "L5", 1051, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-340, 130), "L4", 1050, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 190), "L3", 1049, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 190), "L2", 1048, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-340, 190), "L1", 1047, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 130), "S1", 1069, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 130), "L5", 1068, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-340, 130), "L4", 1067, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 190), "L3", 1066, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 190), "L2", 1065, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-340, 190), "L1", 1064, 70, whiteV);
             
         }else if(type==1){
             auto whiteV=Sprite::create("bk_impress_rect_white.png");
@@ -492,32 +494,32 @@ float TreatWayScene::createResection(int type,int tag,Layer *bkView){
             userName->setTextColor(Color4B(0,0,0, 255/3*2));
             userName->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(userName);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "左", 2017, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "右", 2016, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "左", 2059, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "右", 2058, 120, whiteV);
             auto title = Label::createWithSystemFont("锥板","Arial",35,Size(130,50),TextHAlignment::LEFT,TextVAlignment::CENTER);
             title->setPosition(Vec2(20,120));
             title->setTextColor(Color4B(0,0,0, 255/3*2));
             title->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(title);
             //T12  L1  L2  L3  L4  L5 S1
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "S1", 2028, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 70), "L5", 2027, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-340, 70), "L4", 2026, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-480, 70), "L3", 2025, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 130), "L2", 2024, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 130), "L1", 2023, 70, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-340, 130), "T12", 2023, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "S1", 2057, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 70), "L5", 2056, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-340, 70), "L4", 2055, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-480, 70), "L3", 2054, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 130), "L2", 2053, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 130), "L1", 2052, 70, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-340, 130), "T12", 2051, 70, whiteV);
             auto title2 = Label::createWithSystemFont("锥间盘","Arial",35,Size(120,50),TextHAlignment::LEFT,TextVAlignment::CENTER);
             title2->setPosition(Vec2(20,240));
             title2->setTextColor(Color4B(0,0,0, 255/3*2));
             title2->setAnchorPoint(Vec2(0, 0));
             whiteV->addChild(title2);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 190), "L5/S1", 1058, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-210, 190), "L4/5", 1057, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-360, 190), "T10/T11", 1056, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 250), "L3/4", 1055, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-210, 250), "L2/3", 1054, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-360, 250), "L1/2", 1053, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 190), "L5/S1", 2050, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-210, 190), "L4/5", 2049, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-360, 190), "T10/T11", 2048, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 250), "L3/4", 2047, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-210, 250), "L2/3", 2046, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-360, 250), "L1/2", 2045, 120, whiteV);
             
         }
     }
@@ -636,9 +638,9 @@ void TreatWayScene::createImplant(int type,int tag,Layer *bkView,float height){
             whiteV->setTag(tag);
             bkView->addChild(whiteV);
             //           椎弓根螺钉  横连接  椎板钩
-            createOtherSelectBox(Vec2(20, 130), "成型钢板", 2029, whiteV);
-            createOtherSelectBox(Vec2(20, 70), "横连接", 2030, whiteV);
-            createOtherSelectBox(Vec2(20, 10), "椎板钩", 2031, whiteV);
+            createOtherSelectBox(Vec2(20, 130), "成型钢板", 2031, whiteV);
+            createOtherSelectBox(Vec2(20, 70), "横连接", 2032, whiteV);
+            createOtherSelectBox(Vec2(20, 10), "椎板钩", 2033, whiteV);
         }
     }else if(tag==3){
         if (type==0) {
@@ -649,11 +651,11 @@ void TreatWayScene::createImplant(int type,int tag,Layer *bkView,float height){
             whiteV->setTag(tag);
             bkView->addChild(whiteV);
             //            Cage   MESH 髂骨块   前路钢板  前路可吸收板
-            createOtherSelectBox(Vec2(20, 250), "Cage", 1042, whiteV);
-            createOtherSelectBox(Vec2(20, 190), "MESH", 1043, whiteV);
-            createOtherSelectBox(Vec2(20, 130), "髂骨块", 1044, whiteV);
-            createOtherSelectBox(Vec2(20, 70), "前路钢板", 1045, whiteV);
-            createOtherSelectBox(Vec2(20, 10), "前路可吸收板", 1046, whiteV);
+            createOtherSelectBox(Vec2(20, 250), "Cage", 1059, whiteV);
+            createOtherSelectBox(Vec2(20, 190), "MESH", 1060, whiteV);
+            createOtherSelectBox(Vec2(20, 130), "髂骨块", 1061, whiteV);
+            createOtherSelectBox(Vec2(20, 70), "前路钢板", 1062, whiteV);
+            createOtherSelectBox(Vec2(20, 10), "前路可吸收板", 1063, whiteV);
         }else if(type==1){
             auto whiteV=Sprite::create("bk_impress_rect_white.png");
             whiteV->setPosition(Vec2(10, height-10));
@@ -662,9 +664,9 @@ void TreatWayScene::createImplant(int type,int tag,Layer *bkView,float height){
             whiteV->setTag(tag);
             bkView->addChild(whiteV);
             //           椎弓根螺钉  横连接  椎板钩
-            createOtherSelectBox(Vec2(20, 130), "成型钢板", 2029, whiteV);
-            createOtherSelectBox(Vec2(20, 70), "横连接", 2030, whiteV);
-            createOtherSelectBox(Vec2(20, 10), "椎板钩", 2031, whiteV);
+            createOtherSelectBox(Vec2(20, 130), "成型钢板", 2042, whiteV);
+            createOtherSelectBox(Vec2(20, 70), "横连接", 2043, whiteV);
+            createOtherSelectBox(Vec2(20, 10), "椎板钩", 2044, whiteV);
         }
     }else if(tag==4){
         if (type==0) {
@@ -675,12 +677,12 @@ void TreatWayScene::createImplant(int type,int tag,Layer *bkView,float height){
             whiteV->setTag(tag);
             bkView->addChild(whiteV);
             //            Cage   MESH 人工椎间盘  髂骨块 前路钢板  前路可吸收板
-            createOtherSelectBox(Vec2(20, 310), "Cage", 1042, whiteV);
-            createOtherSelectBox(Vec2(20, 250), "MESH", 1043, whiteV);
-            createOtherSelectBox(Vec2(20, 190), "人工椎间盘", 1043, whiteV);
-            createOtherSelectBox(Vec2(20, 130), "髂骨块", 1044, whiteV);
-            createOtherSelectBox(Vec2(20, 70), "前路钢板", 1045, whiteV);
-            createOtherSelectBox(Vec2(20, 10), "前路可吸收板", 1046, whiteV);
+            createOtherSelectBox(Vec2(20, 310), "Cage", 1076, whiteV);
+            createOtherSelectBox(Vec2(20, 250), "MESH", 1077, whiteV);
+            createOtherSelectBox(Vec2(20, 190), "人工椎间盘", 1078, whiteV);
+            createOtherSelectBox(Vec2(20, 130), "髂骨块", 1079, whiteV);
+            createOtherSelectBox(Vec2(20, 70), "前路钢板", 1080, whiteV);
+            createOtherSelectBox(Vec2(20, 10), "前路可吸收板", 1081, whiteV);
         }else if(type==1){
             auto whiteV=Sprite::create("bk_impress_rect_white.png");
             whiteV->setPosition(Vec2(10, height-10));
@@ -689,10 +691,10 @@ void TreatWayScene::createImplant(int type,int tag,Layer *bkView,float height){
             whiteV->setTag(tag);
             bkView->addChild(whiteV);
             //           椎弓根螺钉  横连接  椎板钩  Cage
-            createOtherSelectBox(Vec2(20, 190), "椎弓根螺钉", 2029, whiteV);
-            createOtherSelectBox(Vec2(20, 130), "横连接", 2029, whiteV);
-            createOtherSelectBox(Vec2(20, 70), "椎板钩", 2030, whiteV);
-            createOtherSelectBox(Vec2(20, 10), "Cage", 2031, whiteV);
+            createOtherSelectBox(Vec2(20, 190), "椎弓根螺钉", 2063, whiteV);
+            createOtherSelectBox(Vec2(20, 130), "横连接", 2062, whiteV);
+            createOtherSelectBox(Vec2(20, 70), "椎板钩", 2061, whiteV);
+            createOtherSelectBox(Vec2(20, 10), "Cage", 2060, whiteV);
         }
     }
     
@@ -713,6 +715,14 @@ void TreatWayScene::createImplant(int type,int tag,Layer *bkView,float height){
 
 //微创
 void TreatWayScene::createMiniOperationView(int type,int tag,Layer *bkView){
+    int boxTag=0;
+    if (tag==0) {boxTag=3000;}
+    else if (tag==1){boxTag=3009;}
+    else if (tag==2){boxTag=3018;}
+    else if (tag==3){boxTag=3028;}
+    else if (tag==4){boxTag=3038;}
+    
+    
     auto visibleSize=Director::getInstance()->getVisibleSize();
     auto contentSize=bkView->getContentSize();
 //经皮
@@ -728,9 +738,9 @@ void TreatWayScene::createMiniOperationView(int type,int tag,Layer *bkView){
     title->setAnchorPoint(Vec2(0, 0));
     whiteV->addChild(title);
     //椎弓根螺钉  PKP  PVP
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "PVP", 1005, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "PKP", 1004, 120, whiteV);
-            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "椎弓根螺钉", 1001, 220, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "PVP", boxTag+3, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-200, 10), "PKP", boxTag+2, 120, whiteV);
+            createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "椎弓根螺钉", boxTag+1, 220, whiteV);
     auto greenV=Sprite::create("recover_rect_green.png");
     greenV->setPosition(Vec2(10, contentSize.height-10));
     greenV->setAnchorPoint(Vec2(0, 1));
@@ -755,10 +765,10 @@ void TreatWayScene::createMiniOperationView(int type,int tag,Layer *bkView){
     title2->setAnchorPoint(Vec2(0, 0));
     whiteV2->addChild(title2);
     //MISTLIF       LLIF         髓核摘除    椎管减压
-    createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "髓核摘除", 1005, 180, whiteV2);
-    createSelectBox(Vec2(whiteV->getContentSize().width-330, 10), "椎管减压", 1004, 180, whiteV2);
-    createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "LLIF", 1001, 120, whiteV2);
-    createSelectBox(Vec2(whiteV->getContentSize().width-200, 70), "MISTLIF", 1001, 220, whiteV2);
+    createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "髓核摘除", boxTag+7, 180, whiteV2);
+    createSelectBox(Vec2(whiteV->getContentSize().width-330, 10), "椎管减压", boxTag+6, 180, whiteV2);
+    createSelectBox(Vec2(whiteV->getContentSize().width-60, 70), "LLIF", boxTag+5, 120, whiteV2);
+    createSelectBox(Vec2(whiteV->getContentSize().width-200, 70), "MISTLIF", boxTag+4, 220, whiteV2);
     auto greenV2=Sprite::create("recover_rect_green.png");
     greenV2->setPosition(Vec2(10, contentSize.height-60*3-20));
     greenV2->setAnchorPoint(Vec2(0, 1));
@@ -775,10 +785,10 @@ void TreatWayScene::createMiniOperationView(int type,int tag,Layer *bkView){
     whiteV3->setAnchorPoint(Vec2(0, 1));
     whiteV3->setContentSize(Size(contentSize.width-20, 60*2));
     bkView->addChild(whiteV3);
-    createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "胸腔镜", 1005, 180, whiteV3);
-    createSelectBox(Vec2(whiteV->getContentSize().width-240, 10), "椎间盘镜", 1004, 180, whiteV3);
+    createSelectBox(Vec2(whiteV->getContentSize().width-60, 10), "胸腔镜", boxTag+9, 180, whiteV3);
+    createSelectBox(Vec2(whiteV->getContentSize().width-240, 10), "椎间盘镜", boxTag+8, 180, whiteV3);
     if (tag==2||tag==3) {
-        createSelectBox(Vec2(whiteV->getContentSize().width-440, 10), "椎间盘镜", 1004, 180, whiteV3);
+        createSelectBox(Vec2(whiteV->getContentSize().width-440, 10), "椎间盘镜", boxTag+10, 180, whiteV3);
     }
     auto greenV3=Sprite::create("recover_rect_green.png");
     greenV3->setPosition(Vec2(10, contentSize.height-60*6-30));
@@ -803,6 +813,7 @@ void TreatWayScene::createSelectBox(Vec2 origin,string name,int tag,float width,
     acceptLB->setTextColor(Color4B(0,0,0, 255/3*2));
     acceptLB->setAnchorPoint(Vec2(1, 0));
     bkView->addChild(acceptLB);
+    boxTitleDic.insert(tag,acceptLB);
     auto acceptBox = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     acceptBox->setPosition(Vec2(origin.x+5,origin.y));
     acceptBox->setAnchorPoint(Vec2(0, 0));
@@ -824,6 +835,7 @@ void TreatWayScene::createOtherSelectBox(Vec2 origin,string name,int tag,Sprite*
     acceptLB->setTextColor(Color4B(0,0,0, 255/3*2));
     acceptLB->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(acceptLB);
+    boxTitleDic.insert(tag,acceptLB);
     auto acceptBox = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
     acceptBox->setPosition(Vec2(bkView->getContentSize().width-50,origin.y));
     acceptBox->setAnchorPoint(Vec2(0, 0));
@@ -891,6 +903,7 @@ void TreatWayScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
     Size visibleSize=Director::getInstance()->getVisibleSize();
     CheckBox* item = (CheckBox*)ref;
     int tag= item->getTag();
+    log("box tag:%d",tag);
     switch (type)
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
@@ -950,5 +963,593 @@ void TreatWayScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::Ev
         default:
             break;
     }
+}
+
+
+std::string TreatWayScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    document.SetArray();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    switch (type) {
+        case 0:{//zlc0c2_ql_qc
+            for (int i=1001; i<1006; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 1:{//zlc0c2_ql_zr
+            for (int i=1006; i<=1011; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 2:{//zlc0c2_hl_qc
+            for (int i=2001; i<=2003; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 3:{//zlc0c2_hl_zr
+            for (int i=2004; i<=2010; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 4:{//zlc0c2_wc_nj
+            for (int i=3008; i<=3009; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 5:{//zlc0c2_wc_jp
+            for (int i=3001; i<=3003; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 6:{//zlc0c2_wc_td
+            for (int i=3004; i<=3007; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 7:{//zlc3c7_ql_qc_zt
+            for (int i=1012; i<=1016; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 8:{//zlc3c7_ql_qc_zjp
+            for (int i=1017; i<=1022; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 9:{//zlc3c7_ql_zr
+            for (int i=1023; i<=1029; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 10:{//zlc3c7_hl_qc_zt
+            for (int i=2011; i<=2015; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 11:{//zlc3c7_hl_qc_bzb
+            for (int i=2016; i<=2017; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 12:{//zlc3c7_hl_zr
+            for (int i=2018; i<=2021; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 13:{//zlc3c7_wc_nj
+            for (int i=3017; i<=3018; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 14:{//zlc3c7_wc_jp
+            for (int i=3010; i<=3012; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 15:{//zlc3c7_wc_td
+            for (int i=3013; i<=3016; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 16:{//zlt1t6_ql_qc_zt
+            for (int i=1030; i<=1035; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 17:{//zlt1t6_ql_qc_zjp
+            for (int i=1036; i<=1041; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 18:{//zlt1t6_ql_zr
+            for (int i=1042; i<=1046; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 19:{//zlt1t6_hl_qc_zt
+            for (int i=2022; i<=2028; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 20:{//zlt1t6_hl_qc_bzb
+            for (int i=2029; i<=2030; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 21:{//zlt1t6_hl_zr
+            for (int i=2031; i<=2033; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 22:{//zlt1t6_wc_nj
+            for (int i=3026; i<=3028; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 23:{//zlt1t6_wc_jp
+            for (int i=3019; i<=3021; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 24:{//zlt1t6_wc_td
+            for (int i=3022; i<=3025; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 25:{//zlt7t12_ql_qc_zt
+            for (int i=1047; i<=1052; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 26:{//zlt7t12_ql_qc_zjp
+            for (int i=1053; i<=1058; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 27:{//zlt7t12_ql_zr
+            for (int i=1059; i<=1063; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 28:{//zlt7t12_hl_qc_zt
+            for (int i=2034; i<=2039; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 29:{//zlt7t12_hl_qc_bzb
+            for (int i=2040; i<=2041; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 30:{//zlt7t12_hl_zr
+            for (int i=2042; i<=2044; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 31:{//zlt7t12_wc_nj
+            for (int i=3036; i<=3038; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 32:{//zlt7t12_wc_jp
+            for (int i=3029; i<=3031; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 33:{//zlt7t12_wc_td
+            for (int i=3032; i<=3035; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 34:{//zll1s1_ql_qc_zt
+            for (int i=1064; i<=1069; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 35:{//zll1s1_ql_qc_zjp
+            for (int i=1070; i<=1075; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 36:{//zll1s1_ql_zr
+            for (int i=1076; i<=1081; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 42:{//zll1s1_hl_qc_zjp
+            for (int i=2045; i<=2050; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 38:{//zll1s1_hl_qc_zb
+            for (int i=2051; i<=2057; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 39:{//zll1s1_hl_qc_bzb
+            for (int i=2058; i<=2059; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 43:{//zll1s1_hl_zr
+            for (int i=2060; i<=2063; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 44:{//zll1s1_wc_nj
+            for (int i=3046; i<=3047; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 45:{//zll1s1_wc_jp
+            for (int i=3039; i<=3041; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        case 46:{//zll1s1_wc_td
+            for (int i=3042; i<=3045; i++) {
+                CheckBox*currentBox=boxDic.at(i);
+                Label* content=boxTitleDic.at(i);
+                if (currentBox->getSelectedState()) {
+                    document.PushBack(rapidjson::Value(content->getString().c_str(), allocator),allocator);
+                }
+            }
+        }break;
+        default:
+            break;
+    }
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    if (document.Size()) {
+        return buffer.GetString();
+    }
+    return "";
+}
+
+#pragma-用于加载网络数据
+void TreatWayScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char answersStr[2000]={0};
+    char keysStr[2000]={0};
+    string  key=keysStr;
+    string answer=answersStr;
+    int count=0;
+    for (int i=0; i<48; i++) {
+        string answers=getJsonData(i).c_str();
+        if (strcmp(answers.c_str(),"")!=0) {
+            if (count==0) {
+            sprintf(answersStr, "%s",answers.c_str());
+            sprintf(keysStr, "%s",changeNumToString(i).c_str());
+             key=keysStr;
+             answer=answersStr;
+            count++;
+            }else {
+                key.append(";");
+                key.append(changeNumToString(i));
+                answer.append(";");
+                answer.append(answers);
+            }
+        }
+    }
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),key.c_str(),answer.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(TreatWayScene::onHttpRequestCompleted, this),url);
+    
+}
+
+void TreatWayScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+             Director::getInstance()->popToSceneStackLevel(4);
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+string TreatWayScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 0:
+            content="zlc0c2_ql_qc";break;
+        case 1:
+            content="zlc0c2_ql_zr";break;
+        case 2:
+            content="zlc0c2_hl_qc";break;
+        case 3:
+            content="zlc0c2_hl_zr";break;
+        case 4:
+            content="zlc0c2_wc_nj";break;
+        case 5:
+            content="zlc0c2_wc_jp";break;
+        case 6:
+            content="zlc0c2_wc_td";break;
+        case 7:
+            content="zlc3c7_ql_qc_zt";break;
+        case 8:
+            content="zlc3c7_ql_qc_zjp";break;
+        case 9:
+            content="zlc3c7_ql_zr";break;
+        case 10:
+            content="zlc3c7_hl_qc_zt";break;
+        case 11:
+            content="zlc3c7_hl_qc_bzb";break;
+        case 12:
+            content="zlc3c7_hl_zr";break;
+        case 13:
+            content="zlc3c7_wc_nj";break;
+        case 14:
+            content="zlc3c7_wc_jp";break;
+        case 15:
+            content="zlc3c7_wc_td";break;
+        case 16:
+            content="zlt1t6_ql_qc_zt";break;
+        case 17:
+            content="zlt1t6_ql_qc_zjp";break;
+        case 18:
+            content="zlt1t6_ql_zr";break;
+        case 19:
+            content="zlt1t6_hl_qc_zt";break;
+        case 20:
+            content="zlt1t6_hl_qc_bzb";break;
+        case 21:
+            content="zlt1t6_hl_zr";break;
+        case 22:
+            content="zlt1t6_wc_nj";break;
+        case 23:
+            content="zlt1t6_wc_jp";break;
+        case 24:
+            content="zlt1t6_wc_td";break;
+        case 25:
+            content="zlt7t12_ql_qc_zt";break;
+        case 26:
+            content="zlt7t12_ql_qc_zjp";break;
+        case 27:
+            content="zlt7t12_ql_zr";break;
+        case 28:
+            content="zlt7t12_hl_qc_zt";break;
+        case 29:
+            content="zlt7t12_hl_qc_bzb";break;
+        case 30:
+            content="zlt7t12_hl_zr";break;
+        case 31:
+            content="zlt7t12_wc_nj";break;
+        case 32:
+            content="zlt7t12_wc_jp";break;
+        case 33:
+            content="zlt7t12_wc_td";break;
+        case 34:
+            content="zll1s1_ql_qc_zt";break;
+        case 35:
+            content="zll1s1_ql_qc_zjp";break;
+        case 36:
+            content="zll1s1_ql_zr";break;
+        case 37:
+            content="zll1s1_hl_qc_zt";break;
+        case 38:
+            content="zll1s1_hl_qc_zb";break;
+        case 39:
+            content="zll1s1_hl_qc_bzb";break;
+        case 40:
+            content="zll1s1_hl_qc_gtj";break;
+        case 41:
+            content="zll1s1_hl_qc_bq";break;
+        case 42:
+            content="zll1s1_hl_qc_zjp";break;
+        case 43:
+            content="zll1s1_hl_zr";break;
+        case 44:
+            content="zll1s1_wc_nj";break;
+        case 45:
+            content="zll1s1_wc_jp";break;
+        case 46:
+            content="zll1s1_wc_td";break;
+        default:   break;
+    }
+    return content;
 }
 

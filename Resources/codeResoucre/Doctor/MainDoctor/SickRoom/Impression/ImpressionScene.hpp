@@ -10,6 +10,13 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 USING_NS_CC;
 class ImpressionScene:public cocos2d::Scene{
 public:
@@ -24,12 +31,21 @@ public:
     cocos2d::Sprite* createWhiteView(int type,int tag,int index);
     void createSelectBox(cocos2d::Vec2 origin,std::string name,int tag,float width,Sprite*bkView);
     
-    
-    
     void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
     Map<int, cocos2d::ui::CheckBox*> boxDic;
     
+
+    std::string changeNumToString(int num);
+    
+ //网络请求
+    std::string getJsonData(int type);
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
 private:
+    cocos2d::LayerMultiplex *multLayer;
+    
+    
 };
 
 #endif /* ImpressionScene_hpp */

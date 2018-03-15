@@ -11,6 +11,7 @@
 #include <iostream>
 #include "ChatUserDetailScene.hpp"
 #include "SearchScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -82,7 +83,9 @@ bool AppearanceAbnormalScene::init(){
     sureBtn->setPosition(Vec2(visibleSize.width-80, visibleSize.height-85));
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Widget::TouchEventType::ENDED:{
+            pushDataToNetWork();
+        }
             
         default:
             break;
@@ -120,7 +123,6 @@ ScrollView* AppearanceAbnormalScene::createTableView(Vec2 origin,Size visibleSiz
     float pointY5 =createPopUpView(Vec2(40, pointY4-20), moveView, "双侧不对称",5,1);
      float pointY6 =createPopUpView(Vec2(40, pointY5+60*5), moveView, "肌肉萎缩",10,2);
    float pointY7 = createPopUpView(Vec2(40, pointY6+60*7), moveView, "脊柱曲度改变",17,3);
-    float pointY8 = createPopUpView(Vec2(40, pointY7+60*3), moveView, "双侧不对称",20,1);
     
 #warning -在这里设置没有用，因为当innerSize<contentSize，以contentSize为准
     if (visibleSize.height>visibleSize.height-20-pointY7) {
@@ -264,6 +266,7 @@ void AppearanceAbnormalScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::Eve
     Size visibleSize=Director::getInstance()->getVisibleSize();
     CheckBox* item = (CheckBox*)ref;
     int tag= item->getTag();
+    log("tag:%d",tag);
     switch (type)
     {
         case cocos2d::ui::CheckBox::EventType::SELECTED:
@@ -302,6 +305,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
     box->addEventListener(CC_CALLBACK_2(AppearanceAbnormalScene::checkBoxCallback,this));
     //获取checkbox的选中状态
     bkView->addChild(box);
+    boxDic.insert(tag, box);
     }else if (type==2){
         auto box = CheckBox::create("btn_appearance_unsure.png","btn_appearance_sure.png");
         //设置CheckBox的位置
@@ -314,6 +318,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         box->addEventListener(CC_CALLBACK_2(AppearanceAbnormalScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box);
+        boxDic.insert(tag, box);
         auto boxName= Label::createWithSystemFont("R","Arial",35,Size(60,60),TextHAlignment::CENTER,TextVAlignment::CENTER);
         boxName->setPosition(Vec2(bkView->getContentSize().width-120, point.y));
         boxName->setTextColor(Color4B(0, 0, 0, 255/2));
@@ -331,6 +336,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         box2->addEventListener(CC_CALLBACK_2(AppearanceAbnormalScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box2);
+        boxDic.insert(tag+1000, box2);
         auto boxName2= Label::createWithSystemFont("L","Arial",35,Size(60,60),TextHAlignment::CENTER,TextVAlignment::CENTER);
         boxName2->setPosition(Vec2(bkView->getContentSize().width-240, point.y));
         boxName2->setTextColor(Color4B(0, 0, 0, 255/2));
@@ -348,6 +354,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         box->addEventListener(CC_CALLBACK_2(AppearanceAbnormalScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box);
+        boxDic.insert(tag, box);
         auto boxName= Label::createWithSystemFont("腰椎","Arial",30,Size(80,60),TextHAlignment::CENTER,TextVAlignment::CENTER);
         boxName->setPosition(Vec2(bkView->getContentSize().width-140, point.y));
         boxName->setTextColor(Color4B(0, 0, 0, 255/3*2));
@@ -365,6 +372,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         box2->addEventListener(CC_CALLBACK_2(AppearanceAbnormalScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box2);
+        boxDic.insert(tag+1000, box2);
         auto boxName2= Label::createWithSystemFont("胸椎","Arial",30,Size(80,60),TextHAlignment::CENTER,TextVAlignment::CENTER);
         boxName2->setPosition(Vec2(bkView->getContentSize().width-280, point.y));
         boxName2->setTextColor(Color4B(0, 0, 0, 255/3*2));
@@ -382,6 +390,7 @@ float AppearanceAbnormalScene::creatBlueLabelView(Vec2 point,Sprite* bkView,stri
         box3->addEventListener(CC_CALLBACK_2(AppearanceAbnormalScene::checkBoxCallback,this));
         //获取checkbox的选中状态
         bkView->addChild(box3);
+        boxDic.insert(tag+2000, box3);
         auto boxName3= Label::createWithSystemFont("颈椎","Arial",30,Size(80,60),TextHAlignment::CENTER,TextVAlignment::CENTER);
         boxName3->setPosition(Vec2(bkView->getContentSize().width-420, point.y));
         boxName3->setTextColor(Color4B(0, 0, 0, 255/3*2));
@@ -418,6 +427,7 @@ float AppearanceAbnormalScene::creatLabelView(Vec2 point,Sprite* bkView,string n
     box->addEventListener(CC_CALLBACK_2(AppearanceAbnormalScene::checkBoxCallback,this));
     //获取checkbox的选中状态
     bkView->addChild(box);
+    boxDic.insert(tag, box);
     
     auto lineV=Sprite::create("userInfo_line.png");
     lineV->setPosition(Vec2(51, point.y-10));
@@ -427,5 +437,194 @@ float AppearanceAbnormalScene::creatLabelView(Vec2 point,Sprite* bkView,string n
     return point.y-20;
 }
 
+
+
+std::string AppearanceAbnormalScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        document.SetArray();
+        for (int i=1; i<5; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }else if(type==1){//两侧不对称
+        document.SetArray();
+        for (int i=5; i<10; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }else if(type==2){//肌肉萎缩
+        document.SetArray();
+        for (int i=10; i<17; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+        for (int i=1010; i<1017; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }else if(type==3){
+        document.SetArray();
+        for (int i=17; i<20; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }else if(type==4){
+        document.SetArray();
+        for (int i=1017; i<1020; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }else if(type==5){
+        document.SetArray();
+        for (int i=2017; i<2020; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void AppearanceAbnormalScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    sprintf(jsonStr,"%s;%s;%s;%s;%s;%s",getJsonData(0).c_str(),getJsonData(1).c_str(),getJsonData(2).c_str(),getJsonData(3).c_str(),getJsonData(4).c_str(),getJsonData(5).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"tz_wgyc;tz_wgyc_bdc;tz_wgyc_ws;tz_wgyc_gb_bz;tz_wgyc_gb_fq;tz_wgyc_gb_cw",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(AppearanceAbnormalScene::onHttpRequestCompleted, this),url);
+}
+
+void AppearanceAbnormalScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+
+
+
+string AppearanceAbnormalScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 1:
+            content="短颈";
+            break;
+        case 2:
+            content="牛奶咖啡斑";
+            break;
+        case 3:
+            content="剃刀背";break;//神经根型颈椎病
+        case 4:
+            content="足下垂";break;
+//双侧不对称
+        case 5:
+            content="面部不对称";break;
+        case 6:
+            content="双肩不等高";break;
+        case 7:
+            content="肩胛骨不等";break;
+        case 8:
+            content="骼棘不等高";break;
+        case 9:
+            content="下肢不等长";break;
+//肌肉萎缩
+        case 10:
+            content="鱼际肌-R";break;
+        case 11:
+            content="掌间肌-R";break;
+        case 12:
+            content="肱二头肌-R";break;
+        case 13:
+            content="肱三头肌-R";break;
+        case 14:
+            content="三角肌-R";break;
+        case 15:
+            content="股四头肌-R";break;
+        case 16:
+            content="腓肠肌-R";break;
+        case 1010:
+            content="鱼际肌-L";break;
+        case 1011:
+            content="掌间肌-L";break;
+        case 1012:
+            content="肱二头肌-L";break;
+        case 1013:
+            content="肱三头肌-L";break;
+        case 1014:
+            content="三角肌-L";break;
+        case 1015:
+            content="股四头肌-L";break;
+        case 1016:
+            content="腓肠肌-L";break;
+//脊柱曲度改变
+        case 17:  case 18 :case 19 :
+            content="腰椎";break;
+        case 1017:  case 1018 :case 1019 :
+            content="胸椎";break;
+        case 2017:  case 2018 :case 2019 :
+            content="颈椎";break;
+            
+            
+        default:
+            break;
+    }
+    return content;
+}
 
 

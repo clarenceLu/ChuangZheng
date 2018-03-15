@@ -10,6 +10,8 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "OperationScene.hpp"
+#include "NetWrokMangerData.hpp"
+#include "TreatWayScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -68,25 +70,8 @@ bool TreatScene::init(){
     layout->addChild(judgeBtn);
     lv->insertCustomItem(layout,0);
     
-    auto layout2=Layout::create();
-    layout2->setBackGroundImageScale9Enabled(true);
-    layout2->setBackGroundImage("alpha.png");
-    layout2->setTouchEnabled(true);
-    layout2->setContentSize(Size(visibleSize.width, 230));
+    pushDataToNetWork();
     
-    auto textfieldName=createBasicData(layout2, Vec2(54, 170), "支架", "填写");
-    textfieldName->setTag(10);
-    auto textfieldMedicine=createBasicData(layout2, Vec2(54, 90), "药物", "填写");
-    textfieldMedicine->setTag(11);
-    auto textfieldObserve=createBasicData(layout2, Vec2(54, 10), "观察", "填写");
-    textfieldObserve->setTag(12);
-    lv->insertCustomItem(layout2,1);
-    
-#pragma-在这里需要加判断-如果数据
-    Layout *layout1=createBlueView("C3-C7", 0);
-    lv->insertCustomItem(layout1, 1);
-    Layout *layout3=createBlueView("C0-C2", 1);
-    lv->insertCustomItem(layout3, 1);
     return true;
     
 }
@@ -132,6 +117,7 @@ cocos2d::ui::Layout *TreatScene::createBlueView(string name,int tag){
     layout->setTouchEnabled(true);
     //必须执行一下允许点击
     layout->setTouchEnabled(true);
+    layout->setTag(tag);
     layoutDic.insert(tag, layout);
     
     auto whiteView=createWhiteView(0, tag);
@@ -172,14 +158,440 @@ Sprite *TreatScene::createWhiteView(int type,int tag){
     whiteView->setAnchorPoint(Vec2(0, 0));
     whiteView->setVisible(false);
     whiteViewDic.insert(tag, whiteView);
-    float   height=createMessage(Vec2(0, 0), "植入", "Cage,前路钢板", whiteView);
-    float   height2=createMessage(Vec2(0, height), "切除", "锥体:C1-C3", whiteView);
+    
+    const rapidjson::Value& data = infoData["data"];
     float   height3=0;
-    if (tag==1) {
-    height3=createMessage(Vec2(0, height2), "前路", "", whiteView);
-    }else{
-        height3=createMessage(Vec2(0, height2), "前路", "我是传奇", whiteView);
+    float   height=0;
+    float   height2=0;
+    float   height4=0;
+    float   height5=0;
+    float   height6=0;
+    float   height7=0;
+    float   height8=0;
+    float   height9=0;
+     float   height10=0;
+    
+    if (tag==0) {   //C0-2
+        if(data.IsObject()){
+//微创
+            string content5="";
+            if (!data["zlc0c2_wc_nj"].IsNull()) {
+                rapidjson::Document contentData;
+                contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc0c2_wc_nj"].GetString());
+                content5=searchContentForInfoData(content5, "",contentData);
+            }
+            if (strcmp(content5.c_str(), "")!=0) {
+                height7=createMessage(Vec2(0, 0), "内镜：", content5, whiteView);
+            }
+            string content6="";
+            if (!data["zlc0c2_wc_jp"].IsNull()) {
+                rapidjson::Document contentData;
+                contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc0c2_wc_jp"].GetString());
+                content6=searchContentForInfoData(content6, "",contentData);
+            }
+            if (strcmp(content6.c_str(), "")!=0) {
+                height8=createMessage(Vec2(0, height7), "经皮选择：", content6, whiteView);
+            }else{height8=height7;}
+            string content7="";
+            if (!data["zlc0c2_wc_td"].IsNull()) {
+                rapidjson::Document contentData;
+                contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc0c2_wc_td"].GetString());
+                content7=searchContentForInfoData(content7, "",contentData);
+            }
+            if (strcmp(content7.c_str(), "")!=0) {
+                height10=createMessage(Vec2(0, height8), "通道选择：", content7, whiteView);
+            }else{height10=height8;}
+            if (height10!=0) {
+                height9=createMessage(Vec2(0, height10), "微创", "", whiteView);
+            }else{height9=height10;}
+//后路
+            string content3="";
+            if (!data["zlc0c2_hl_zr"].IsNull()) {
+                rapidjson::Document contentData;
+                contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc0c2_hl_zr"].GetString());
+                content3=searchContentForInfoData(content3, "",contentData);
+            }
+            if (strcmp(content3.c_str(), "")!=0) {
+                height4=createMessage(Vec2(0, height9), "植入", content3, whiteView);
+            }
+            string content4="";
+            if (!data["zlc0c2_hl_qc"].IsNull()) {
+                rapidjson::Document contentData;
+                contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc0c2_hl_qc"].GetString());
+                content4=searchContentForInfoData(content4, "",contentData);
+            }
+            if (strcmp(content4.c_str(), "")!=0) {
+                height5=createMessage(Vec2(0, height4), "切除", content4, whiteView);
+            }else{height5=height4;}
+            if (height5!=height9) {
+                height6=createMessage(Vec2(0, height5), "后路", "", whiteView);
+            }else{height6=height5;}
+//前路
+            string content2="";
+            if (!data["zlc0c2_ql_zr"].IsNull()) {
+                rapidjson::Document contentData;
+                contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc0c2_ql_zr"].GetString());
+                content2=searchContentForInfoData(content2, "",contentData);
+            }
+            if (strcmp(content2.c_str(), "")!=0) {
+        height=createMessage(Vec2(0, height6), "植入", content2, whiteView);
+            }else{height=height6;}
+            string content1="";
+            if (!data["zlc0c2_ql_qc"].IsNull()) {
+                rapidjson::Document contentData;
+                contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc0c2_ql_qc"].GetString());
+                content1=searchContentForInfoData(content1, "锥体：",contentData);
+            }
+             if (strcmp(content1.c_str(), "")!=0) {
+         height2=createMessage(Vec2(0, height), "切除", content1, whiteView);
+             }else{height2=height;}
+            if (height2!=height6) {
+        height3=createMessage(Vec2(0, height2), "前路", "", whiteView);
+             }else{height3=height2;}
+            
+        }
+}else if(tag==1){//C3-7
+    if(data.IsObject()){
+//微创
+        string content5="";
+        if (!data["zlc3c7_wc_nj"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_wc_nj"].GetString());
+            content5=searchContentForInfoData(content5, "",contentData);
+        }
+        if (strcmp(content5.c_str(), "")!=0) {
+            height7=createMessage(Vec2(0, 0), "内镜：", content5, whiteView);
+        }
+        string content6="";
+        if (!data["zlc3c7_wc_jp"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_wc_jp"].GetString());
+            content6=searchContentForInfoData(content6, "",contentData);
+        }
+        if (strcmp(content6.c_str(), "")!=0) {
+            height8=createMessage(Vec2(0, height7), "经皮选择：", content6, whiteView);
+        }else{height8=height7;}
+        string content7="";
+        if (!data["zlc3c7_wc_td"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_wc_td"].GetString());
+            content7=searchContentForInfoData(content7, "",contentData);
+        }
+        if (strcmp(content7.c_str(), "")!=0) {
+            height10=createMessage(Vec2(0, height8), "通道选择：", content7, whiteView);
+        }else{height10=height8;}
+        if (height10!=0) {
+            height9=createMessage(Vec2(0, height10), "微创", "", whiteView);
+        }else{height9=height10;}
+//后路
+        string content3="";
+        if (!data["zlc3c7_hl_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_hl_zr"].GetString());
+            content3=searchContentForInfoData(content3, "",contentData);
+        }
+        if (strcmp(content3.c_str(), "")!=0) {
+            height4=createMessage(Vec2(0, height9), "植入", content3, whiteView);
+        }
+        string content4="";
+        rapidjson::Document contentData2;
+        if (!data["zlc3c7_hl_qc_zt"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_hl_qc_zt"].GetString());
+            content4=searchContentForInfoData(content4, "椎板：",contentData2);
+        }
+        if (!data["zlc3c7_hl_qc_bzb"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_hl_qc_bzb"].GetString());
+            content4=searchContentForInfoData(content4, "半椎板：",contentData2);
+        }
+        if (strcmp(content4.c_str(), "")!=0) {
+            height5=createMessage(Vec2(0, height4), "切除", content4, whiteView);
+        }else{height5=height4;}
+        if (height5!=height9) {
+            height6=createMessage(Vec2(0, height5), "后路", "", whiteView);
+        }else{height6=height5;}
+//前路
+        string content2="";
+        if (!data["zlc3c7_ql_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_ql_zr"].GetString());
+            content2=searchContentForInfoData(content2, "",contentData);
+        }
+        if (strcmp(content2.c_str(), "")!=0) {
+            height=createMessage(Vec2(0, height6), "植入", content2, whiteView);
+        }else{height=height6;}
+        string content1="";
+        rapidjson::Document contentData;
+        if (!data["zlc3c7_ql_qc_zt"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_ql_qc_zt"].GetString());
+            content1=searchContentForInfoData(content1, "锥体：",contentData);}
+        if (!data["zlc3c7_ql_qc_zjp"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlc3c7_ql_qc_zjp"].GetString());
+            content1=searchContentForInfoData(content1, "锥间盘：",contentData);}
+        if (strcmp(content1.c_str(), "")!=0) {
+            height2=createMessage(Vec2(0, height), "切除", content1, whiteView);
+        }else{height2=height;}
+        if (height2!=height6) {
+            height3=createMessage(Vec2(0, height2), "前路", "", whiteView);
+        }else{height3=height2;}
     }
+}else if(tag==2){//t1-6
+    if(data.IsObject()){
+//微创
+        string content5="";
+        if (!data["zlt1t6_wc_nj"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_wc_nj"].GetString());
+            content5=searchContentForInfoData(content5, "",contentData);
+        }
+        if (strcmp(content5.c_str(), "")!=0) {
+            height7=createMessage(Vec2(0, 0), "内镜：", content5, whiteView);
+        }
+        string content6="";
+        if (!data["zlt1t6_wc_jp"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_wc_jp"].GetString());
+            content6=searchContentForInfoData(content6, "",contentData);
+        }
+        if (strcmp(content6.c_str(), "")!=0) {
+            height8=createMessage(Vec2(0, height7), "经皮选择：", content6, whiteView);
+        }else{height8=height7;}
+        string content7="";
+        if (!data["zlt1t6_wc_td"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_wc_td"].GetString());
+            content7=searchContentForInfoData(content7, "",contentData);
+        }
+        if (strcmp(content7.c_str(), "")!=0) {
+            height10=createMessage(Vec2(0, height8), "通道选择：", content7, whiteView);
+        }else{height10=height8;}
+        if (height10!=0) {
+            height9=createMessage(Vec2(0, height10), "微创", "", whiteView);
+        }else{height9=height10;}
+//后路
+        string content3="";
+        if (!data["zlt1t6_ql_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_ql_zr"].GetString());
+            content3=searchContentForInfoData(content3, "",contentData);
+        }
+        if (strcmp(content3.c_str(), "")!=0) {
+            height4=createMessage(Vec2(0, height9), "植入", content3, whiteView);
+        }
+        string content4="";
+        rapidjson::Document contentData2;
+        if (!data["zlt1t6_hl_qc_zt"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_hl_qc_zt"].GetString());
+            content4=searchContentForInfoData(content4, "椎板：",contentData2);
+        }
+        if (!data["zlt1t6_hl_qc_bzb"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_hl_qc_bzb"].GetString());
+            content4=searchContentForInfoData(content4, "半椎板：",contentData2);
+        }
+        if (strcmp(content4.c_str(), "")!=0) {
+            height5=createMessage(Vec2(0, height4), "切除", content4, whiteView);
+        }else{height5=height4;}
+        if (height5!=height9) {
+            height6=createMessage(Vec2(0, height5), "后路", "", whiteView);
+        }else{height6=height5;}
+//前路
+        string content2="";
+        if (!data["zlt1t6_ql_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_ql_zr"].GetString());
+            content2=searchContentForInfoData(content2, "",contentData);
+        }
+        if (strcmp(content2.c_str(), "")!=0) {
+            height=createMessage(Vec2(0, height6), "植入", content2, whiteView);
+        }else{height=height6;}
+        string content1="";
+        rapidjson::Document contentData;
+        if (!data["zlt1t6_ql_qc_zt"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_ql_qc_zt"].GetString());
+            content1=searchContentForInfoData(content1, "锥体：",contentData);}
+        if (!data["zlt1t6_ql_qc_zjp"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt1t6_ql_qc_zjp"].GetString());
+            content1=searchContentForInfoData(content1, "锥间盘：",contentData);}
+        if (strcmp(content1.c_str(), "")!=0) {
+            height2=createMessage(Vec2(0, height), "切除", content1, whiteView);
+        }else{height2=height;}
+        if (height2!=height6) {
+            height3=createMessage(Vec2(0, height2), "前路", "", whiteView);
+        }else{height3=height2;}
+    }
+}else if(tag==3){//t7-12
+    if(data.IsObject()){
+        //微创
+        string content5="";
+        if (!data["zlt7t12_wc_nj"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_wc_nj"].GetString());
+            content5=searchContentForInfoData(content5, "",contentData);
+        }
+        if (strcmp(content5.c_str(), "")!=0) {
+            height7=createMessage(Vec2(0, 0), "内镜：", content5, whiteView);
+        }
+        string content6="";
+        if (!data["zlt7t12_wc_jp"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_wc_jp"].GetString());
+            content6=searchContentForInfoData(content6, "",contentData);
+        }
+        if (strcmp(content6.c_str(), "")!=0) {
+            height8=createMessage(Vec2(0, height7), "经皮选择：", content6, whiteView);
+        }else{height8=height7;}
+        string content7="";
+        if (!data["zlt7t12_wc_td"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_wc_td"].GetString());
+            content7=searchContentForInfoData(content7, "",contentData);
+        }
+        if (strcmp(content7.c_str(), "")!=0) {
+            height10=createMessage(Vec2(0, height8), "通道选择：", content7, whiteView);
+        }else{height10=height8;}
+        if (height10!=0) {
+            height9=createMessage(Vec2(0, height10), "微创", "", whiteView);
+        }else{height9=height10;}
+//后路
+        string content3="";
+        if (!data["zlt7t12_hl_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_hl_zr"].GetString());
+            content3=searchContentForInfoData(content3, "",contentData);
+        }
+        if (strcmp(content3.c_str(), "")!=0) {
+            height4=createMessage(Vec2(0, height9), "植入", content3, whiteView);
+        }
+        string content4="";
+        rapidjson::Document contentData2;
+        if (!data["zlt7t12_hl_qc_zt"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_hl_qc_zt"].GetString());
+            content4=searchContentForInfoData(content4, "椎板：",contentData2);
+        }
+        if (!data["zlt7t12_hl_qc_bzb"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_hl_qc_bzb"].GetString());
+            content4=searchContentForInfoData(content4, "半椎板：",contentData2);
+        }
+        if (strcmp(content4.c_str(), "")!=0) {
+            height5=createMessage(Vec2(0, height4), "切除", content4, whiteView);
+        }else{height5=height4;}
+        if (height5!=height9) {
+            height6=createMessage(Vec2(0, height5), "后路", "", whiteView);
+        }else{height6=height5;}
+//前路
+        string content2="";
+        if (!data["zlt7t12_ql_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_ql_zr"].GetString());
+            content2=searchContentForInfoData(content2, "",contentData);
+        }
+        if (strcmp(content2.c_str(), "")!=0) {
+            height=createMessage(Vec2(0, height6), "植入", content2, whiteView);
+        }else{height=height6;}
+        string content1="";
+        rapidjson::Document contentData;
+        if (!data["zlt7t12_ql_qc_zt"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_ql_qc_zt"].GetString());
+            content1=searchContentForInfoData(content1, "锥体：",contentData);}
+        if (!data["zlt7t12_ql_qc_zjp"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zlt7t12_ql_qc_zjp"].GetString());
+            content1=searchContentForInfoData(content1, "锥间盘：",contentData);}
+        if (strcmp(content1.c_str(), "")!=0) {
+            height2=createMessage(Vec2(0, height), "切除", content1, whiteView);
+        }else{height2=height;}
+        if (height2!=height6) {
+            height3=createMessage(Vec2(0, height2), "前路", "", whiteView);
+        }else{height3=height2;}
+    }
+}else if(tag==4){//L1-s1
+    if(data.IsObject()){
+//微创
+        string content5="";
+        if (!data["zll1s1_wc_nj"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_wc_nj"].GetString());
+            content5=searchContentForInfoData(content5, "",contentData);
+        }
+        if (strcmp(content5.c_str(), "")!=0) {
+            height7=createMessage(Vec2(0, 0), "内镜：", content5, whiteView);
+        }
+        string content6="";
+        if (!data["zll1s1_wc_jp"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_wc_jp"].GetString());
+            content6=searchContentForInfoData(content6, "",contentData);
+        }
+        if (strcmp(content6.c_str(), "")!=0) {
+            height8=createMessage(Vec2(0, height7), "经皮选择：", content6, whiteView);
+        }else{height8=height7;}
+        string content7="";
+        if (!data["zll1s1_wc_td"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_wc_td"].GetString());
+            content7=searchContentForInfoData(content7, "",contentData);
+        }
+        if (strcmp(content7.c_str(), "")!=0) {
+            height10=createMessage(Vec2(0, height8), "通道选择：", content7, whiteView);
+        }else{height10=height8;}
+        if (height10!=0) {
+            height9=createMessage(Vec2(0, height10), "微创", "", whiteView);
+        }else{height9=height10;}
+//后路
+        string content3="";
+        if (!data["zll1s1_hl_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_hl_zr"].GetString());
+            content3=searchContentForInfoData(content3, "",contentData);
+        }
+        if (strcmp(content3.c_str(), "")!=0) {
+            height4=createMessage(Vec2(0, height9), "植入", content3, whiteView);
+        }
+        string content4="";
+        rapidjson::Document contentData2;
+        if (!data["zll1s1_hl_qc_zb"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_hl_qc_zb"].GetString());
+            content4=searchContentForInfoData(content4, "椎板：",contentData2);
+        }
+        if (!data["zll1s1_hl_qc_zjp"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_hl_qc_zjp"].GetString());
+            content4=searchContentForInfoData(content4, "椎间盘：",contentData2);
+        }
+        if (!data["zll1s1_hl_qc_bzb"].IsNull()) {
+            contentData2.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_hl_qc_bzb"].GetString());
+            content4=searchContentForInfoData(content4, "半椎板：",contentData2);
+        }
+        if (strcmp(content4.c_str(), "")!=0) {
+            height5=createMessage(Vec2(0, height4), "切除", content4, whiteView);
+        }else{height5=height4;}
+        if (height5!=height9) {
+            height6=createMessage(Vec2(0, height5), "后路", "", whiteView);
+        }else{height6=height5;}
+        //前路
+        string content2="";
+        if (!data["zll1s1_ql_zr"].IsNull()) {
+            rapidjson::Document contentData;
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_ql_zr"].GetString());
+            content2=searchContentForInfoData(content2, "",contentData);
+        }
+        if (strcmp(content2.c_str(), "")!=0) {
+            height=createMessage(Vec2(0, height6), "植入", content2, whiteView);
+        }else{height=height6;}
+        string content1="";
+        rapidjson::Document contentData;
+        if (!data["zll1s1_ql_qc_zt"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_ql_qc_zt"].GetString());
+            content1=searchContentForInfoData(content1, "锥体：",contentData);}
+        if (!data["zll1s1_ql_qc_zjp"].IsNull()) {
+            contentData.Parse<rapidjson::kParseDefaultFlags>(data["zll1s1_ql_qc_zjp"].GetString());
+            content1=searchContentForInfoData(content1, "锥间盘：",contentData);}
+        if (strcmp(content1.c_str(), "")!=0) {
+            height2=createMessage(Vec2(0, height), "切除", content1, whiteView);
+        }else{height2=height;}
+        if (height2!=height6) {
+            height3=createMessage(Vec2(0, height2), "前路", "", whiteView);
+        }else{height3=height2;}
+    }
+}
+
     whiteView->setContentSize(Size(visibleSize.width, height3));
     whiteView->setTag(ceil(height3));
     
@@ -232,9 +644,10 @@ void TreatScene::createSelectBox(Vec2 origin,string name,int tag,float width,Spr
 }
 
 
-cocos2d::Layer* TreatScene::createPromptLayer(std::string content){
+cocos2d::Layer* TreatScene::createPromptLayer(std::string content,int index){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    currentTextFieldTag=index;
     auto layer = LayerColor::create(Color4B(0, 0, 0, 255/3));
     layer->setContentSize(visibleSize);
     layer->setPosition(Point(0, 0));
@@ -261,6 +674,20 @@ cocos2d::Layer* TreatScene::createPromptLayer(std::string content){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
+            string titleStr="";
+            if (currentTextFieldTag==10) {
+                titleStr="zl_zj";//支架
+            }else if(currentTextFieldTag==11){
+                titleStr="zl_yw";//药物
+            }else{
+                titleStr="zl_gc";//观察
+            }
+            string contentStr="";
+            auto textField=(TextField*)textFieldDic.at(currentTextFieldTag);
+            if (textField->getStringLength()) {
+                contentStr=textField->getString();
+            }
+            pushTextFieldToNetWork(titleStr,contentStr);
             this->removeChildByTag(2001);
             break;
         }
@@ -318,6 +745,9 @@ void TreatScene::eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::Eve
     TextField* textField = dynamic_cast<cocos2d::ui::TextField*>(pSender);
     int tag= textField->getTag();
     switch (type){
+        case cocos2d::ui::TextField::EventType::ATTACH_WITH_IME:
+            CCLOG("ATTACH_WITH_IME");
+            break;
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
             CCLOG("INSERT_TEXT");
             
@@ -325,23 +755,24 @@ void TreatScene::eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::Eve
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
             
             CCLOG("DELETE_BACKWARD");
+            break;
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
             if (tag==10) {
                 log("%d",tag);
-              Layer * layer=createPromptLayer("确认需要修改支架吗");
+              Layer * layer=createPromptLayer("确认需要修改支架吗",10);
                 layer->setTag(2001);
                 this->addChild(layer);
             }if (tag==11) {
                 log("%d",tag);
-                Layer * layer=createPromptLayer("确认需要修改药物吗");
+                Layer * layer=createPromptLayer("确认需要修改药物吗",11);
                 layer->setTag(2001);
                 this->addChild(layer);
             }if (tag==12) {
                 log("%d",tag);
-                Layer * layer=createPromptLayer("确认需要修改观察吗");
+                Layer * layer=createPromptLayer("确认需要修改观察吗",12);
                 layer->setTag(2001);
                 this->addChild(layer);
-            }
+            }    
             CCLOG("DETACH_WITH_IME");
             
             break;
@@ -369,7 +800,8 @@ void TreatScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::EventTyp
             CCLOG("select child end index = %ld", listView->getCurSelectedIndex());
             long index=listView->getCurSelectedIndex();
             if(index==0){
-                auto SC=OperationScene::createScene();
+//                auto SC=OperationScene::createScene();
+                auto SC=TreatWayScene::createScene();
                 Director::getInstance()->pushScene(SC);
             }
             break;
@@ -429,3 +861,161 @@ void TreatScene::menuLoginCallback(Ref* pSender)
     }
     onEnter();
 }
+
+
+#pragma-网络数据
+void TreatScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getCaseById?caseId=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str());
+    netManeger->postHttpRequest(memberUrl,CC_CALLBACK_2(TreatScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void TreatScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+        if (this->infoData["status"].GetInt()==0) {
+             const rapidjson::Value& data = infoData["data"];
+//layout
+            auto layout2=Layout::create();
+            layout2->setBackGroundImageScale9Enabled(true);
+            layout2->setBackGroundImage("alpha.png");
+            layout2->setTouchEnabled(true);
+            layout2->setContentSize(Size(visibleSize.width, 230));
+            auto textfieldName=createBasicData(layout2, Vec2(54, 170), "支架", "填写");
+            if (!data["zl_zj"].IsNull()) {
+                textfieldName->setString(data["zl_zj"].GetString());
+            }
+            textfieldName->setTag(10);
+            textFieldDic.insert(10, textfieldName);
+            auto textfieldMedicine=createBasicData(layout2, Vec2(54, 90), "药物", "填写");
+            if (!data["zl_yw"].IsNull()) {
+                textfieldMedicine->setString(data["zl_yw"].GetString());
+            }
+            textfieldMedicine->setTag(11);
+            textFieldDic.insert(11, textfieldMedicine);
+            auto textfieldObserve=createBasicData(layout2, Vec2(54, 10), "观察", "填写");
+            if (!data["zl_gc"].IsNull()) {
+                textfieldObserve->setString(data["zl_gc"].GetString());
+            }
+            textfieldObserve->setTag(12);
+            textFieldDic.insert(12, textfieldObserve);
+            lv->insertCustomItem(layout2,1);
+            
+            
+            Layout *layout6=createBlueView("L1-S1", 4);
+            lv->insertCustomItem(layout6, 1);
+            Layout *layout5=createBlueView("T7-T12", 3);
+            lv->insertCustomItem(layout5, 1);
+            Layout *layout4=createBlueView("T1-T6", 2);
+            lv->insertCustomItem(layout4, 1);
+            Layout *layout1=createBlueView("C3-C7", 1);
+            lv->insertCustomItem(layout1, 1);
+            Layout *layout3=createBlueView("C0-C2", 0);
+            lv->insertCustomItem(layout3, 1);
+        }
+    }
+}
+
+
+void TreatScene::pushTextFieldToNetWork(std::string title,std::string content){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),title.c_str(),content.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(TreatScene::onHttpRequestCompleted2, this),url);
+}
+
+void TreatScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+    }
+}
+
+
+
+std::string TreatScene::searchContentForInfoData(std::string content,std::string title,rapidjson::Document& data){
+        if (data.IsObject()) {
+            content.append(title);
+            for (auto j=data.MemberBegin(); j!=data.MemberEnd(); ++j) {
+                auto key = (j->name).GetString();
+                if (data[key].Size()) {
+                    content.append(key);
+                    content.append(":");
+                }
+                log("key:%s", key);
+                for(auto i = 0; i < data[key].Size(); ++i){
+                    content.append(data[key][i].GetString());
+                    if (i==data[key].Size()-1&&j==data.MemberEnd()-1) {}else{
+                        content.append(" ");}
+                    
+                    log("%s", data[key][i].GetString());
+                }
+            }
+            content.append(";");
+        }else if(data.IsArray()){
+            if (data.Size()>0) {
+                content.append(title);
+            }
+            for(auto i = 0; i < data.Size(); ++i){
+                content.append(data[i].GetString());
+                content.append(" ");
+                log("%s", data[i].GetString());
+            }
+            if (data.Size()>0) {
+                content.append(";");
+            }
+        }
+        log("content：%s",content.c_str());
+        return content;
+    }
+

@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include "network/HttpClient.h"
 #include <iostream>
-
+#include "iconv.h"
 using namespace cocos2d::network;
 using namespace std;
 using namespace cocos2d;
@@ -29,9 +29,13 @@ public:
     
     void sendMessage(string UrlStr,const ccHttpRequestCallback& callback,char *requestDataStr);
     
+    void postHttpRequest(string UrlStr,const ccHttpRequestCallback& callback,char* requestDataStr);
+    
     void upLoadData(string UrlStr,const ccHttpRequestCallback& callback,char *requestData,size_t len);
     
     void onHttpRequestCompleted(HttpClient* sender,HttpResponse* response);
+    
+    string changeUTF8ToUnicode(string str);
 private:
 
     NetWorkManger();

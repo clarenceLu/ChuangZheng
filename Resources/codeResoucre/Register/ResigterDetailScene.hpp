@@ -35,7 +35,7 @@ public:
     
     
     cocos2d::ui::TextField*  createBasicData(cocos2d::Sprite* bkView,cocos2d::Vec2 point,std::string name1,std::string name2);
-    
+    std::string getTimeForSystem();
     
 #pragma-用于加载数据
     void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);

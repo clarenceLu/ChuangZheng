@@ -147,6 +147,9 @@ Layer* RegisterScene::createCaseLayer(){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
+            string caseId=textFieldCase->getString();
+            log("content:%s",caseId.c_str());
+            
             auto detailSC=RegisterDetailScene::createScene();
             Director::getInstance()->pushScene(detailSC);
         }
@@ -156,7 +159,7 @@ Layer* RegisterScene::createCaseLayer(){
     });
     contentV->addChild(sureBtn);
     
-    auto textFieldCase = TextField::create("在此填写","Arial",40);
+    textFieldCase = TextField::create("在此填写","Arial",40);
     textFieldCase->setMaxLength(40);
     textFieldCase->setTouchSize(Size(400, 42));
     textFieldCase->setAnchorPoint(Vec2(0.5,0));

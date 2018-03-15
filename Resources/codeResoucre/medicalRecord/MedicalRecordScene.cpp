@@ -41,41 +41,159 @@ bool MedicalRecordScene::init(){
     });
     bkView->addChild(backBtn);
     
-     float height1=createLabel(Vec2(0, 900), "责任医生：", "刘玄德,张翼德,关云长",bkView);
-    float height2= createLabel(Vec2(0, 810+41-height1), "印象：", "头后仰上身麻无敌无敌无敌无敌无敌", bkView);
-    float height3= createLabel(Vec2(0, 720+41*2-height2-height1), "症状：", "右手麻木，右手疼痛", bkView);
-    float height4= createLabel(Vec2(0, 630+41*3-height3-height2-height1), "体征：", "体质弱", bkView);
-    float height5= createLabel(Vec2(0, 540+41*4-height4-height3-height2-height1), "影像：", "无", bkView);
-    float height6= createLabel(Vec2(0, 450+41*5-height5-height4-height3-height2-height1), "评分：", "颈椎", bkView);
-    float height7= createLabel(Vec2(0, 360+41*6-height6-height5-height4-height3-height2-height1), "治疗方式：", "手术，支架", bkView);
-    float height8= createLabel(Vec2(0, 270+41*7-height7-height6-height5-height4-height3-height2-height1), "备注：", "多喝水", bkView);
+    
+    lv = ListView::create();
+    lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
+    lv->setBounceEnabled(true);
+    lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
+    lv->setBackGroundImageScale9Enabled(true);
+    lv->setContentSize(Size(visibleSize.width-40, 830));
+    lv->setAnchorPoint(Point(0,0));
+    lv->setPosition(Point(20,150));
+    lv->addEventListener((ui::ListView::ccListViewCallback)CC_CALLBACK_2(MedicalRecordScene::selectedItemEvent, this));//添加监听函数
+    lv->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(MedicalRecordScene::selectedItemEventScrollView, this));
+    this->addChild(lv);
+    
+    
+    auto layer1 = createLabel(0,"责任医生：","");
+    lv->insertCustomItem(layer1,0);
+    auto layer2 = createLabel(1,"印象：","");
+    lv->insertCustomItem(layer2,1);
+    auto layer3 = createLabel(2,"症状","");
+    lv->insertCustomItem(layer3,2);
+    auto layer4 = createLabel(3,"体征","");
+    lv->insertCustomItem(layer4,3);
+    auto layer5 = createLabel(4,"影像","");
+    lv->insertCustomItem(layer5,4);
+    auto layer6 = createLabel(5,"评分","");
+    lv->insertCustomItem(layer6,5);
+    auto layer7 = createLabel(6,"治疗方式","");
+    lv->insertCustomItem(layer7,6);
+    auto layer8 = createLabel(7,"备注","多喝水");
+    lv->insertCustomItem(layer8,7);
     
     return true;
 }
 
-float MedicalRecordScene::createLabel(Vec2 point,string name1,string name2,Sprite* superV){
+void MedicalRecordScene::onEnter(){
+    Scene::onEnter();
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    infoData.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+    if (!infoData.IsNull()) {
+        {
+            const rapidjson::Value& val_form = infoData["data"];
+            if(val_form.IsObject()){
+                string content="";
+                if (!val_form["yx_tb"].IsNull()) {
+                    log("   yx_tb: %s", val_form["yx_tb"].GetString());
+                    impressData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_tb"].GetString());
+                    content=searchContentForInfoData(content, "退变（",impressData);        //遍历数据
+                }
+                if (!val_form["yx_jx"].IsNull()) {
+                    formationData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_jx"].GetString());
+                    content=searchContentForInfoData(content, "畸形（",formationData);
+                }
+                if (!val_form["yx_gr"].IsNull()) {
+                    infectData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_gr"].GetString());
+                    content=searchContentForInfoData(content, "感染（",infectData);
+                }
+                if (!val_form["yx_ws"].IsNull()) {
+                    injuryData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_ws"].GetString());
+                    content=searchContentForInfoData(content, "外伤（",injuryData);
+                }
+                lv->removeChildByTag(1);
+                auto layer2 = createLabel(1,"印象：","");
+                lv->insertCustomItem(layer2,1);
+                
+                string symptomContent="";
+                if (!val_form["zz"].IsNull()) {
+                    symptomData.Parse<rapidjson::kParseDefaultFlags>(val_form["zz"].GetString());
+                    symptomContent=searchContentForInfoData(symptomContent, "主体（",symptomData);
+                }
+                lv->removeChildByTag(2);
+                auto layer3 = createLabel(2,"症状","");
+                lv->insertCustomItem(layer3,2);
+            }
+        }
+    }
+}
+
+Layout* MedicalRecordScene::createLabel(int i,string title,string content){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
-    auto nameLB = Label::createWithSystemFont(name1,"fonts/Marker Felt.ttf",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    nameLB->setPosition(Point(56,point.y));
-    nameLB->setTextColor(Color4B(91,144,230, 255));
-    nameLB->setAnchorPoint(Vec2(0, 0));
-    superV->addChild(nameLB);
+    //Data
+    auto layout = Layout::create();
+    layout->setBackGroundImageScale9Enabled(true);
+    layout->setBackGroundImage("alpha.png");
+    layout->setTouchEnabled(true);
     
-    auto nameLB2 = Label::createWithSystemFont(name2,"Arial",35,Size(visibleSize.width-265,0),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
-    float height=nameLB2->getContentSize().height;
-    nameLB2->setPosition(Point(218,point.y+41-height));
-    nameLB2->setTextColor(Color4B(0,0,0, 255/3*2));
-    nameLB2->setAnchorPoint(Vec2(0, 0));
-    superV->addChild(nameLB2);
+    float height=10;
+    if (content.c_str()!=nullptr) {
+        auto contentLB = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-150,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+        height=contentLB->getContentSize().height+10;
+        contentLB->setPosition(Point(37,10));
+        contentLB->setTextColor(Color4B(0,0,0, 255/3*2));
+        contentLB->setAnchorPoint(Vec2(0, 0));
+        layout->addChild(contentLB);
+    }
+    if (i==4) {
+        //影像
+   /*     ScrollView *imageScrol=createImageScroll(Vec2(35, 10), Size(visibleSize.width-150, 80));
+        height=imageScrol->getContentSize().height+10;
+        layout->addChild(imageScrol);    */
+    }
+    
+    auto titleLB = Label::createWithSystemFont(title,"Arial",38,Size(visibleSize.width-200,50),TextHAlignment::LEFT,TextVAlignment::TOP);
+    titleLB->setPosition(Point(37,height+10));
+    titleLB->setTextColor(Color4B(91, 144, 229, 255));
+    titleLB->setAnchorPoint(Vec2(0, 0));
+    layout->addChild(titleLB);
     
     auto lineV=Sprite::create("userInfo_line.png");
-    lineV->setPosition(Vec2(51, point.y+31-height));
+    lineV->setPosition(Vec2(30, 0));
     lineV->setAnchorPoint(Vec2(0, 0));
-    lineV->setScaleX(0.87);
-    superV->addChild(lineV);
+    lineV->setContentSize(Size(visibleSize.width-100, 1.5));
+    layout->addChild(lineV);
+    //必须执行一下允许点击
+    layout->setTouchEnabled(true);
+    layout->setContentSize(Size(visibleSize.width, height+80));
     
-    return height;
+    return layout;
+}
+
+void MedicalRecordScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::EventType type)
+{
+    switch (type)
+    {
+        case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_START:
+        {
+            ListView* listView = static_cast<ListView*>(pSender);
+            CC_UNUSED_PARAM(listView);
+            CCLOG("select child start index = %ld", listView->getCurSelectedIndex());
+            break;
+        }
+        case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_END:
+        {
+            break;
+        }
+        default:
+            break;
+    }
+}
+void MedicalRecordScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::EventType type)
+{
+    switch (type) {
+        case ui::ScrollView::EventType::SCROLL_TO_BOTTOM://滑动到底部
+            CCLOG("SCROLL_TO_BOTTOM");
+            break;
+        case ui::ScrollView::EventType::SCROLL_TO_TOP://滑动到头部
+            CCLOG("SCROLL_TO_TOP");
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -91,5 +209,34 @@ void MedicalRecordScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::Even
             CCLOG("DETACH_WITH_IME");
             break;
     }
+}
+
+std::string MedicalRecordScene::searchContentForInfoData(std::string content,std::string title,rapidjson::Document& data){
+    content.append(title);
+    
+    if (data.IsObject()) {
+        for (auto j=data.MemberBegin(); j!=data.MemberEnd(); ++j) {
+            auto key = (j->name).GetString();
+            if (data[key].Size()) {
+                content.append(key);
+                content.append(":");
+            }
+            log("key:%s", key);
+            for(auto i = 0; i < data[key].Size(); ++i){
+                content.append(data[key][i].GetString());
+                if (i==data[key].Size()-1&&j==data.MemberEnd()-1) {}else{content.append(" ");}
+                log("%s", data[key][i].GetString());
+            }
+        }
+    }else if(data.IsArray()){
+        for(auto i = 0; i < data.Size(); ++i){
+            content.append(data[i].GetString());
+            content.append(" ");
+            log("%s", data[i].GetString());
+        }
+    }
+    content.append("）");
+    log("%s",content.c_str());
+    return content;
 }
 

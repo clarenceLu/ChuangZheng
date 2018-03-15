@@ -15,6 +15,8 @@
 #include "SymptomScene.hpp"
 #include "ImpressionScene.hpp"
 #include "TreatScene.hpp"
+#include "NetWrokMangerData.hpp"
+#include "VisitTimeScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -71,6 +73,8 @@ bool SickRoomScene::init(){
     visitBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
+            auto visitScene=VisitTimeScene::createScene();
+            Director::getInstance()->pushScene(visitScene);
             log("随访设置");
         }
             
@@ -88,6 +92,7 @@ bool SickRoomScene::init(){
     recoverBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
+            pushLeaveHospitalToNetWork();
             log("出院");
         }
             
@@ -97,6 +102,17 @@ bool SickRoomScene::init(){
     });
     bkView->addChild(recoverBtn);
     
+    lv = ListView::create();
+    lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
+    lv->setBounceEnabled(true);
+    lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
+    lv->setBackGroundImageScale9Enabled(true);
+    lv->setContentSize(Size(visibleSize.width-40, visibleSize.height-300));
+    lv->setAnchorPoint(Point(0,0));
+    lv->setPosition(Point(20,150));
+    lv->addEventListener((ui::ListView::ccListViewCallback)CC_CALLBACK_2(SickRoomScene::selectedItemEvent, this));//添加监听函数
+    lv->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(SickRoomScene::selectedItemEventScrollView, this));
+    this->addChild(lv);
     return true;
     
 }
@@ -114,27 +130,15 @@ void SickRoomScene::onEnter()
     timeLB->setTextColor(Color4B(255, 255, 255, 255));
     timeLB->setAnchorPoint(Vec2(0.5, 0));
     this->addChild(timeLB);
-    
-    if (lv==nullptr) {
-    lv = ListView::create();
-    lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
-    lv->setBounceEnabled(true);
-    lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
-    lv->setBackGroundImageScale9Enabled(true);
-    lv->setContentSize(Size(visibleSize.width-40, visibleSize.height-300));
-    lv->setAnchorPoint(Point(0,0));
-    lv->setPosition(Point(20,150));
-    lv->addEventListener((ui::ListView::ccListViewCallback)CC_CALLBACK_2(SickRoomScene::selectedItemEvent, this));//添加监听函数
-    lv->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(SickRoomScene::selectedItemEventScrollView, this));
-    this->addChild(lv);
-    
+   
+    lv->removeAllItems();
     auto layer1 = createMessageLayout(0,"张牧之","男    54    20171816");
     lv->insertCustomItem(layer1,0);
     auto layer2 = createMessageLayout(1,"负责医生","元亨      张建华    熊青春");
     lv->insertCustomItem(layer2,1);
-    auto layer3 = createMessageLayout(2,"印象","上肢发达  双臂麻木   双大腿抽筋    左前方脊椎疼痛  脑袋晕");
+    auto layer3 = createMessageLayout(2,"印象","");
     lv->insertCustomItem(layer3,2);
-    auto layer4 = createMessageLayout(3,"症状","上肢发达  双臂麻木   双大腿抽筋");
+    auto layer4 = createMessageLayout(3,"症状","");
     lv->insertCustomItem(layer4,3);
     auto layer5 = createMessageLayout(4,"体征","");
     lv->insertCustomItem(layer5,4);
@@ -144,10 +148,10 @@ void SickRoomScene::onEnter()
     lv->insertCustomItem(layer7,6);
     auto layer8 = createMessageLayout(7,"治疗方式","");
     lv->insertCustomItem(layer8,7);
-    auto layer9 = createMessageLayout(8,"备注","");
+    auto layer9 = createMessageLayout(8,"备注","多喝热水");
     lv->insertCustomItem(layer9,8);
-    }
-    
+    pushDataToNetWork();
+    getUserDataToNetWork();
 }
 
 Layout *SickRoomScene::createMessageLayout(int i,string title,string content){
@@ -158,10 +162,11 @@ Layout *SickRoomScene::createMessageLayout(int i,string title,string content){
     layout->setBackGroundImageScale9Enabled(true);
     layout->setBackGroundImage("alpha.png");
     layout->setTouchEnabled(true);
+    layout->setTag(i);
     
     float height=10;
     if (content.c_str()!=nullptr) {
-    auto contentLB = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-200,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    auto contentLB = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-150,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     height=contentLB->getContentSize().height+10;
     contentLB->setPosition(Point(37,10));
     contentLB->setTextColor(Color4B(0,0,0, 255/3*2));
@@ -269,6 +274,7 @@ Layer* SickRoomScene::addCalendarLayer(){
     outpatientBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
+            pushLeaveHospitalToNetWork();
             log("出院");
         }
         default:
@@ -342,7 +348,12 @@ void SickRoomScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::Event
                 auto SC=ImpressionScene::createScene();
                 Director::getInstance()->pushScene(SC);
             }else if(index==7){
-                auto SC=TreatScene::createScene();
+                auto SC=(TreatScene*)TreatScene::createScene();
+            /*SC->infoData.SetObject();
+                rapidjson::Document::AllocatorType& allocator = SC->infoData.GetAllocator();
+                rapidjson::Value object(rapidjson::kObjectType);
+                object=this->infoData["data"];
+                SC->infoData.AddMember("data", object, allocator);  */
                 Director::getInstance()->pushScene(SC);
             }
             
@@ -366,4 +377,211 @@ void SickRoomScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::Ev
             break;
     }
 }
+
+
+#pragma-个人资料界面
+void SickRoomScene::getUserDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getUserById?patientId=%s",UserDefault::getInstance()->getStringForKey("patientId").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(SickRoomScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void SickRoomScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    // rapidjson::Document Jsondata;
+    userData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (this->userData.HasParseError()) {
+        return;
+    }
+    if(this->userData.HasMember("status")){
+        if (this->userData["status"].GetInt()==0) {
+            rapidjson::Value& object = userData["data"];
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            userData.Accept(writer);
+            CCLOG("病人个人资料：  %s", buffer.GetString());
+            string name="";
+            if (!object["name"].IsNull()) {
+                name=object["name"].GetString();
+            }
+            string contentStr="男";
+            if (!object["sex"].IsNull()) {
+                if (strcmp(object["sex"].GetString(), "F")) {contentStr="女";}
+            }
+            if (!object["age"].IsNull()) {
+                contentStr.append("  ");
+                contentStr.append(object["age"].GetString());
+            }
+            if (!object["caseNo"].IsNull()) {
+                contentStr.append("  ");
+                contentStr.append(object["caseNo"].GetString());
+            }
+            lv->removeChildByTag(0);
+            auto layer1 = createMessageLayout(0,name,contentStr);
+            lv->insertCustomItem(layer1,0);
+        }
+    }
+}
+
+
+#pragma-网络数据
+void SickRoomScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getCaseById?caseId=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str());
+    netManeger->postHttpRequest(memberUrl,CC_CALLBACK_2(SickRoomScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void SickRoomScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
     
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+        
+        
+        if (this->infoData["status"].GetInt()==0) {
+            if(infoData["data"].HasMember("yx_tb")){
+                const rapidjson::Value& val_form = infoData["data"];
+                if(val_form.IsObject()){
+                    string content="";
+                     if (!val_form["yx_tb"].IsNull()) {
+                         log("   yx_tb: %s", val_form["yx_tb"].GetString());
+                    impressData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_tb"].GetString());
+                    content=searchContentForInfoData(content, "退变（",impressData);        //遍历数据
+                     }
+                    if (!val_form["yx_jx"].IsNull()) {
+                    formationData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_jx"].GetString());
+                    content=searchContentForInfoData(content, "畸形（",formationData);
+                    }
+                    if (!val_form["yx_gr"].IsNull()) {
+                    infectData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_gr"].GetString());
+                    content=searchContentForInfoData(content, "感染（",infectData);
+                    }
+                    if (!val_form["yx_ws"].IsNull()) {
+                    injuryData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_ws"].GetString());
+                    content=searchContentForInfoData(content, "外伤（",injuryData);
+                    }
+            lv->removeChildByTag(2);
+            auto layer3 = createMessageLayout(2,"印象",content);
+            lv->insertCustomItem(layer3,2);
+                    
+                    string symptomContent="";
+                    if (!val_form["zz"].IsNull()) {
+                        symptomData.Parse<rapidjson::kParseDefaultFlags>(val_form["zz"].GetString());
+                        symptomContent=searchContentForInfoData(symptomContent, "主体（",symptomData);
+                    }
+            lv->removeChildByTag(3);
+            auto layer4 = createMessageLayout(3,"症状",symptomContent);
+            lv->insertCustomItem(layer4,3);
+                    
+                    
+                   
+                }
+            }
+        }
+      
+    }
+}
+
+std::string SickRoomScene::searchContentForInfoData(std::string content,std::string title,rapidjson::Document& data){
+    content.append(title);
+    
+if (data.IsObject()) {
+    for (auto j=data.MemberBegin(); j!=data.MemberEnd(); ++j) {
+        auto key = (j->name).GetString();
+        if (data[key].Size()) {
+            content.append(key);
+            content.append(":");
+        }
+        log("key:%s", key);
+        for(auto i = 0; i < data[key].Size(); ++i){
+            content.append(data[key][i].GetString());
+            if (i==data[key].Size()-1&&j==data.MemberEnd()-1) {}else{content.append(" ");}
+            log("%s", data[key][i].GetString());
+        }
+    }
+}else if(data.IsArray()){
+    for(auto i = 0; i < data.Size(); ++i){
+        content.append(data[i].GetString());
+        content.append(" ");
+        log("%s", data[i].GetString());
+    }
+}
+    content.append("）");
+    log("%s",content.c_str());
+    return content;
+}
+
+
+#pragma -出院
+void SickRoomScene::pushLeaveHospitalToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/updatePatientStatus?patientId=%s&status=%s",UserDefault::getInstance()->getStringForKey("patientId").c_str(),"leave");
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(SickRoomScene::onHttpRequestCompleted3, this),nullptr);
+}
+
+void SickRoomScene::onHttpRequestCompleted3(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+     rapidjson::Document Jsondata;
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (Jsondata.HasParseError()) {
+        return;
+    }
+    if(Jsondata.HasMember("status")){
+        if (Jsondata["status"].GetInt()==0) {
+        }
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        Jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+
+
+

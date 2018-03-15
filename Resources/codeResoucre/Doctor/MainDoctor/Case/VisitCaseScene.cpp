@@ -13,6 +13,7 @@
 #include "DocUserInfoScene.hpp"
 #include "ImpressionScene.hpp"
 #include "TreatScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -54,7 +55,13 @@ bool VisitCaseScene::init(){
     lv->addEventListener((ui::ListView::ccListViewCallback)CC_CALLBACK_2(VisitCaseScene::selectedItemEvent, this));//添加监听函数
     lv->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(VisitCaseScene::selectedItemEventScrollView, this));
     this->addChild(lv);
-    
+    return true;
+}
+
+void VisitCaseScene::onEnter(){
+    Scene::onEnter();
+    Size visibleSize=Director::getInstance()->getVisibleSize();
+    lv->removeAllItems();
     auto layer1 = createMessageLayout(0,"张牧之   男  60       856","");
     lv->insertCustomItem(layer1,0);
     auto layer2 = createMessageLayout(1,"印象","");
@@ -65,7 +72,7 @@ bool VisitCaseScene::init(){
     lv->insertCustomItem(layer4,3);
     auto layer5 = createMessageLayout(4,"治疗方式","");
     lv->insertCustomItem(layer5,4);
-  
+    
     auto layout = Layout::create();
     layout->setBackGroundImageScale9Enabled(true);
     layout->setBackGroundImage("alpha.png");
@@ -101,7 +108,7 @@ bool VisitCaseScene::init(){
     textFieldContent->setTag(110);
     textFieldContent->addEventListener(CC_CALLBACK_2(VisitCaseScene::eventCallBack, this));
     layout2->addChild(textFieldContent);
-     layout2->setContentSize(Size(visibleSize.width-40, 300));
+    layout2->setContentSize(Size(visibleSize.width-40, 300));
     lv->insertCustomItem(layout2,6);
     
     auto layout3 = Layout::create();
@@ -115,9 +122,9 @@ bool VisitCaseScene::init(){
     layout3->addChild(textFieldBottom);
     layout3->setContentSize(Size(visibleSize.width, textFieldBottom->getContentSize().height));
     lv->insertCustomItem(layout3,7);
+    getCaseInfoToNetWork();
+    getUserDataToNetWork();
     
-    
-    return true;
 }
 void VisitCaseScene::createTextFieldView(Layout* contentV){
     Size visibleSize=Director::getInstance()->getVisibleSize();
@@ -137,6 +144,7 @@ Layout *VisitCaseScene::createMessageLayout(int i,string title,string content){
     layout->setBackGroundImageScale9Enabled(true);
     layout->setBackGroundImage("alpha.png");
     layout->setTouchEnabled(true);
+    layout->setTag(i);
     
     float height=10;
     if (content.c_str()!=nullptr) {
@@ -329,3 +337,164 @@ Size VisitCaseScene::calculateFontSize(const char *str )
     //CCLog("fHeight = %f  nHeight = %d " ,fHeight ,nHeight);
     return labelSize;
 }
+
+
+#pragma-个人资料界面
+void VisitCaseScene::getUserDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getUserById?patientId=%s",UserDefault::getInstance()->getStringForKey("patientId").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(VisitCaseScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void VisitCaseScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    // rapidjson::Document Jsondata;
+    userData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    if (this->userData.HasParseError()) {
+        return;
+    }
+    if(this->userData.HasMember("status")){
+        if (this->userData["status"].GetInt()==0) {
+            rapidjson::Value& object = userData["data"];
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            userData.Accept(writer);
+            CCLOG("病人个人资料：  %s", buffer.GetString());
+            string name="";
+            if (!object["name"].IsNull()) {
+                name=object["name"].GetString();
+            }
+            string contentStr="男";
+            if (!object["sex"].IsNull()) {
+                if (strcmp(object["sex"].GetString(), "F")) {contentStr="女";}
+            }
+            if (!object["age"].IsNull()) {
+                contentStr.append("  ");
+                contentStr.append(object["age"].GetString());
+            }
+            if (!object["caseNo"].IsNull()) {
+                contentStr.append("  ");
+                contentStr.append(object["caseNo"].GetString());
+            }
+            lv->removeChildByTag(0);
+            auto layer1 = createMessageLayout(0,name,contentStr);
+            lv->insertCustomItem(layer1,0);
+        }
+    }
+}
+
+
+#pragma-网络数据
+void VisitCaseScene::getCaseInfoToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getCaseById?caseId=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str());
+    netManeger->postHttpRequest(memberUrl,CC_CALLBACK_2(VisitCaseScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void VisitCaseScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+        
+        
+        if (this->infoData["status"].GetInt()==0) {
+            if(infoData["data"].HasMember("yx_tb")){
+                const rapidjson::Value& val_form = infoData["data"];
+                if(val_form.IsObject()){
+                    string content="";
+                    if (!val_form["yx_tb"].IsNull()) {
+                        log("   yx_tb: %s", val_form["yx_tb"].GetString());
+                        impressData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_tb"].GetString());
+                        content=searchContentForInfoData(content, "退变（",impressData);        //遍历数据
+                    }
+                    if (!val_form["yx_jx"].IsNull()) {
+                        formationData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_jx"].GetString());
+                        content=searchContentForInfoData(content, "畸形（",formationData);
+                    }
+                    if (!val_form["yx_gr"].IsNull()) {
+                        infectData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_gr"].GetString());
+                        content=searchContentForInfoData(content, "感染（",infectData);
+                    }
+                    if (!val_form["yx_ws"].IsNull()) {
+                        injuryData.Parse<rapidjson::kParseDefaultFlags>(val_form["yx_ws"].GetString());
+                        content=searchContentForInfoData(content, "外伤（",injuryData);
+                    }
+                    lv->removeChildByTag(1);
+                    auto layer3 = createMessageLayout(1,"印象",content);
+                    lv->insertCustomItem(layer3,1);
+                }
+            }
+        }
+        
+    }
+}
+
+std::string VisitCaseScene::searchContentForInfoData(std::string content,std::string title,rapidjson::Document& data){
+    content.append(title);
+    
+    if (data.IsObject()) {
+        for (auto j=data.MemberBegin(); j!=data.MemberEnd(); ++j) {
+            auto key = (j->name).GetString();
+            if (data[key].Size()) {
+                content.append(key);
+                content.append(":");
+            }
+            log("key:%s", key);
+            for(auto i = 0; i < data[key].Size(); ++i){
+                content.append(data[key][i].GetString());
+                if (i==data[key].Size()-1&&j==data.MemberEnd()-1) {}else{content.append(" ");}
+                log("%s", data[key][i].GetString());
+            }
+        }
+    }else if(data.IsArray()){
+        for(auto i = 0; i < data.Size(); ++i){
+            content.append(data[i].GetString());
+            content.append(" ");
+            log("%s", data[i].GetString());
+        }
+    }
+    content.append("）");
+    log("%s",content.c_str());
+    return content;
+}
+
+
+
+

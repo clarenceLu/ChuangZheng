@@ -10,6 +10,11 @@
 #include "cocos2d.h"
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
 USING_NS_CC;
 class SpineTendernessScene:public cocos2d::Scene{
 public:
@@ -27,5 +32,11 @@ public:
     void onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event  *event);
     void onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::Event  *event);
     void onTouchesCancelled(const std::vector<Touch*>& touches, cocos2d::Event  *event);
+    
+    std::string getJsonData(int type);
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
+    
 };
 #endif /* SpineTendernessScene_hpp */

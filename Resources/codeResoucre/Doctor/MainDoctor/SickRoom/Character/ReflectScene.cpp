@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -45,7 +46,7 @@ bool ReflectScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
-            Director::getInstance()->popScene();
+            pushDataToNetWork();
         default:
             break;
     }
@@ -78,6 +79,7 @@ void ReflectScene::createSelectView(int tag,Sprite*bkView,float originY,string t
     acceptBox->setTouchEnabled(true);
     acceptBox->addEventListener(CC_CALLBACK_2(ReflectScene::checkBoxCallback,this));
     addChild(acceptBox);
+    boxDic.insert(tag, acceptBox);
     
     auto refuseLB= Label::createWithSystemFont("R","Arial",35,Size(80,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
     refuseLB->setPosition(Vec2(184, originY));
@@ -91,6 +93,7 @@ void ReflectScene::createSelectView(int tag,Sprite*bkView,float originY,string t
     refuseBox->setTouchEnabled(true);
     refuseBox->addEventListener(CC_CALLBACK_2(ReflectScene::checkBoxCallback,this));
     addChild(refuseBox);
+    boxDic.insert(tag+1, refuseBox);
     
     auto lineV8=Sprite::create("userInfo_line.png");
     lineV8->setPosition(Vec2(50,originY-15));
@@ -144,3 +147,112 @@ void ReflectScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type
             break;
     }
 }
+
+std::string ReflectScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        document.SetArray();
+        for (int i=1; i<3; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }else if(type==1){//两侧不对称
+        document.SetArray();
+        for (int i=3; i<5; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }else if(type==2){//肌肉萎缩
+        document.SetArray();
+        for (int i=5; i<7; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void ReflectScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    sprintf(jsonStr,"%s;%s;%s",getJsonData(0).c_str(),getJsonData(1).c_str(),getJsonData(2).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"tz_ycfs_Hoffman;tz_ycfs_Babinski;tz_ycfs_hzl",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(ReflectScene::onHttpRequestCompleted, this),url);
+}
+
+void ReflectScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+
+
+
+string ReflectScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 1:case 3:case 5:
+            content="L";
+            break;
+        case 2:case 4:case 6:
+            content="R";
+            break;
+            
+        default:
+            break;
+    }
+    return content;
+}
+
+
+

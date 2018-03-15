@@ -183,6 +183,18 @@
 		B23529E21FF63ED300737DFD /* bk_caseHistory.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529DF1FF63ED300737DFD /* bk_caseHistory.png */; };
 		B23529E41FF63F4200737DFD /* btn_addCase_add.png in Resources */ = {isa = PBXBuildFile; fileRef = B23529E31FF63F4200737DFD /* btn_addCase_add.png */; };
 		B23529E71FF63F7F00737DFD /* CaseHistoryScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23529E51FF63F7F00737DFD /* CaseHistoryScene.cpp */; };
+		B23907FF205A697100BE7EC6 /* UpdateBedScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23907FD205A697100BE7EC6 /* UpdateBedScene.cpp */; };
+		B239EAAB20203F1200F24C3D /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B239EAA920203F1200F24C3D /* libiconv.tbd */; };
+		B239EAAD2020628B00F24C3D /* bk_chage_role.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAAC2020628B00F24C3D /* bk_chage_role.png */; };
+		B239EAB12021970F00F24C3D /* MessageNotificationScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B239EAAF2021970F00F24C3D /* MessageNotificationScene.cpp */; };
+		B239EABB20219B9300F24C3D /* bk_notification_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAB320219B9300F24C3D /* bk_notification_blue.png */; };
+		B239EABC20219B9300F24C3D /* bk_notificaion_message.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAB420219B9300F24C3D /* bk_notificaion_message.png */; };
+		B239EABD20219B9300F24C3D /* btn_notification_not_remind.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAB520219B9300F24C3D /* btn_notification_not_remind.png */; };
+		B239EABE20219B9300F24C3D /* btn_notificationTop_select.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAB620219B9300F24C3D /* btn_notificationTop_select.png */; };
+		B239EABF20219B9300F24C3D /* btn_notification_remind.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAB720219B9300F24C3D /* btn_notification_remind.png */; };
+		B239EAC020219B9300F24C3D /* btn_notificationInfo_unselect.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAB820219B9300F24C3D /* btn_notificationInfo_unselect.png */; };
+		B239EAC120219B9300F24C3D /* btn_notification_delete.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EAB920219B9300F24C3D /* btn_notification_delete.png */; };
+		B239EAC220219B9300F24C3D /* btn_notificationInfo_select.png in Resources */ = {isa = PBXBuildFile; fileRef = B239EABA20219B9300F24C3D /* btn_notificationInfo_select.png */; };
 		B25FB64E1FD6757F0032D18F /* bk_notification_info.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB6481FD6757F0032D18F /* bk_notification_info.png */; };
 		B25FB64F1FD6757F0032D18F /* notification_none.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB6491FD6757F0032D18F /* notification_none.png */; };
 		B25FB6501FD6757F0032D18F /* bk_notification.png in Resources */ = {isa = PBXBuildFile; fileRef = B25FB64A1FD6757F0032D18F /* bk_notification.png */; };
@@ -620,6 +632,20 @@
 		B23529E31FF63F4200737DFD /* btn_addCase_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_addCase_add.png; sourceTree = "<group>"; };
 		B23529E51FF63F7F00737DFD /* CaseHistoryScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CaseHistoryScene.cpp; sourceTree = "<group>"; };
 		B23529E61FF63F7F00737DFD /* CaseHistoryScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CaseHistoryScene.hpp; sourceTree = "<group>"; };
+		B23907FD205A697100BE7EC6 /* UpdateBedScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UpdateBedScene.cpp; sourceTree = "<group>"; };
+		B23907FE205A697100BE7EC6 /* UpdateBedScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UpdateBedScene.hpp; sourceTree = "<group>"; };
+		B239EAA920203F1200F24C3D /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.1.sdk/usr/lib/libiconv.tbd; sourceTree = DEVELOPER_DIR; };
+		B239EAAC2020628B00F24C3D /* bk_chage_role.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_chage_role.png; sourceTree = "<group>"; };
+		B239EAAF2021970F00F24C3D /* MessageNotificationScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MessageNotificationScene.cpp; sourceTree = "<group>"; };
+		B239EAB02021970F00F24C3D /* MessageNotificationScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MessageNotificationScene.hpp; sourceTree = "<group>"; };
+		B239EAB320219B9300F24C3D /* bk_notification_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_notification_blue.png; sourceTree = "<group>"; };
+		B239EAB420219B9300F24C3D /* bk_notificaion_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_notificaion_message.png; sourceTree = "<group>"; };
+		B239EAB520219B9300F24C3D /* btn_notification_not_remind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notification_not_remind.png; sourceTree = "<group>"; };
+		B239EAB620219B9300F24C3D /* btn_notificationTop_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notificationTop_select.png; sourceTree = "<group>"; };
+		B239EAB720219B9300F24C3D /* btn_notification_remind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notification_remind.png; sourceTree = "<group>"; };
+		B239EAB820219B9300F24C3D /* btn_notificationInfo_unselect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notificationInfo_unselect.png; sourceTree = "<group>"; };
+		B239EAB920219B9300F24C3D /* btn_notification_delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notification_delete.png; sourceTree = "<group>"; };
+		B239EABA20219B9300F24C3D /* btn_notificationInfo_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_notificationInfo_select.png; sourceTree = "<group>"; };
 		B25FB6481FD6757F0032D18F /* bk_notification_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_notification_info.png; sourceTree = "<group>"; };
 		B25FB6491FD6757F0032D18F /* notification_none.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notification_none.png; sourceTree = "<group>"; };
 		B25FB64A1FD6757F0032D18F /* bk_notification.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bk_notification.png; sourceTree = "<group>"; };
@@ -886,6 +912,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B239EAAB20203F1200F24C3D /* libiconv.tbd in Frameworks */,
 				C44E920C200666C10029476C /* WebKit.framework in Frameworks */,
 				C44E91E3200658BB0029476C /* CoreMedia.framework in Frameworks */,
 				C44E91E1200657A00029476C /* ImageIO.framework in Frameworks */,
@@ -985,6 +1012,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B239EAA920203F1200F24C3D /* libiconv.tbd */,
 				C44E920B200666C10029476C /* WebKit.framework */,
 				C44E91E2200658BB0029476C /* CoreMedia.framework */,
 				C44E91E0200657A00029476C /* ImageIO.framework */,
@@ -1217,8 +1245,8 @@
 				B230667F1FFBA2FF00E85600 /* WaitChatScene.cpp */,
 				B23066831FFC7CF100E85600 /* WaitChatDetailScene.hpp */,
 				B23066821FFC7CF100E85600 /* WaitChatDetailScene.cpp */,
-				C4F895A52011EFAE00C82285 /* ChatViewScene.cpp */,
 				C4F895A62011EFAE00C82285 /* ChatViewScene.hpp */,
+				C4F895A52011EFAE00C82285 /* ChatViewScene.cpp */,
 			);
 			path = Outpatient;
 			sourceTree = "<group>";
@@ -1479,6 +1507,21 @@
 			path = CaseHistory;
 			sourceTree = "<group>";
 		};
+		B239EAB220219B9300F24C3D /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				B239EAB320219B9300F24C3D /* bk_notification_blue.png */,
+				B239EAB420219B9300F24C3D /* bk_notificaion_message.png */,
+				B239EAB520219B9300F24C3D /* btn_notification_not_remind.png */,
+				B239EAB620219B9300F24C3D /* btn_notificationTop_select.png */,
+				B239EAB720219B9300F24C3D /* btn_notification_remind.png */,
+				B239EAB820219B9300F24C3D /* btn_notificationInfo_unselect.png */,
+				B239EAB920219B9300F24C3D /* btn_notification_delete.png */,
+				B239EABA20219B9300F24C3D /* btn_notificationInfo_select.png */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		B25FB6471FD6757F0032D18F /* notification */ = {
 			isa = PBXGroup;
 			children = (
@@ -1703,6 +1746,7 @@
 		B2749BCB1FF37810007516BF /* SickInfo */ = {
 			isa = PBXGroup;
 			children = (
+				B239EAB220219B9300F24C3D /* Notification */,
 				B23529CB1FF60D6B00737DFD /* Case */,
 				B2749D811FF4E886007516BF /* MedicalGroup */,
 				B2749D7A1FF4D4EC007516BF /* AccountManage */,
@@ -1793,6 +1837,10 @@
 				B23529C71FF60B7000737DFD /* Case */,
 				B2749D721FF38105007516BF /* MainScene.hpp */,
 				B2749D711FF38105007516BF /* MainScene.cpp */,
+				B23907FE205A697100BE7EC6 /* UpdateBedScene.hpp */,
+				B23907FD205A697100BE7EC6 /* UpdateBedScene.cpp */,
+				B239EAB02021970F00F24C3D /* MessageNotificationScene.hpp */,
+				B239EAAF2021970F00F24C3D /* MessageNotificationScene.cpp */,
 				B2749D771FF4D2C8007516BF /* AccountManageScene.hpp */,
 				B2749D761FF4D2C8007516BF /* AccountManageScene.cpp */,
 				B2749D981FF4E928007516BF /* GroupLeaderScene.hpp */,
@@ -1808,6 +1856,7 @@
 		B2749D7A1FF4D4EC007516BF /* AccountManage */ = {
 			isa = PBXGroup;
 			children = (
+				B239EAAC2020628B00F24C3D /* bk_chage_role.png */,
 				B2749D7B1FF4D4EC007516BF /* btn_head_account.png */,
 				B2749D7C1FF4D4EC007516BF /* btn_exit_account.png */,
 				B2749D7D1FF4D4EC007516BF /* bk_accountManage.png */,
@@ -2124,8 +2173,8 @@
 			children = (
 				C44E91E8200666500029476C /* SGQRCode */,
 				C427CF7A1FF3646B00127931 /* Qcode */,
-				C450254F1FCE9E7300596F38 /* NetWrokMangerData.cpp */,
 				C45025501FCE9E7300596F38 /* NetWrokMangerData.hpp */,
+				C450254F1FCE9E7300596F38 /* NetWrokMangerData.cpp */,
 				C46E36681FF510A600186F52 /* QRViewController.h */,
 				C46E36691FF510A600186F52 /* QRViewController.m */,
 			);
@@ -2302,11 +2351,14 @@
 			files = (
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				B262F7A31FD7C27900EF887A /* bk_userInfo.png in Resources */,
+				B239EAC120219B9300F24C3D /* btn_notification_delete.png in Resources */,
+				B239EAAD2020628B00F24C3D /* bk_chage_role.png in Resources */,
 				B2749D631FF37811007516BF /* bedNum3.png in Resources */,
 				B2749D621FF37811007516BF /* bedNum2.png in Resources */,
 				B2749D7E1FF4D4EC007516BF /* btn_head_account.png in Resources */,
 				B27FFF902005C95C0034DAA4 /* bk_impress_rect_white.png in Resources */,
 				B2749D611FF37811007516BF /* bk_bed.png in Resources */,
+				B239EAC220219B9300F24C3D /* btn_notificationInfo_select.png in Resources */,
 				B2749CA51FF37811007516BF /* bk_sickInfo_QRCode.png in Resources */,
 				B262F7F71FDA82B700EF887A /* btn_QRCode_close.png in Resources */,
 				B2749D6A1FF37811007516BF /* box_tempBed_unselect.png in Resources */,
@@ -2368,6 +2420,7 @@
 				B23066D61FFF492500E85600 /* bk_mark.png in Resources */,
 				B2749D8F1FF4E886007516BF /* bk_group_leader.png in Resources */,
 				B2749CA61FF37811007516BF /* btn_sickInfo_case.png in Resources */,
+				B239EABE20219B9300F24C3D /* btn_notificationTop_select.png in Resources */,
 				B262F7FE1FDE2C4700EF887A /* bk_dynamic.png in Resources */,
 				B23066921FFCA57900E85600 /* btn_wait_accept.png in Resources */,
 				C43E9E2E1FC8364E00CFB6EC /* bg_input_account.png in Resources */,
@@ -2376,6 +2429,7 @@
 				B232ADEF1FD0FC7300ABBA1D /* btn_case_select.png in Resources */,
 				B23066671FFB5A4E00E85600 /* bk_add_hospital.png in Resources */,
 				B2749CAE1FF37811007516BF /* btn_outpatient_content.png in Resources */,
+				B239EABB20219B9300F24C3D /* bk_notification_blue.png in Resources */,
 				B27FFF8F2005C95C0034DAA4 /* btn_impression_sure.png in Resources */,
 				B223F12B1FCE6B5500DA0315 /* register_SQCode.png in Resources */,
 				B2749D5F1FF37811007516BF /* bk_welcome.png in Resources */,
@@ -2446,6 +2500,7 @@
 				B2749D8E1FF4E886007516BF /* btn_group_leader_delete.png in Resources */,
 				B232ADE91FD0FC7300ABBA1D /* step2.png in Resources */,
 				B232ADEB1FD0FC7300ABBA1D /* step1.png in Resources */,
+				B239EABC20219B9300F24C3D /* bk_notificaion_message.png in Resources */,
 				B223F12A1FCE6B5500DA0315 /* btn_register_return.png in Resources */,
 				B262F7811FD7B95100EF887A /* select_sure.png in Resources */,
 				B25FB6511FD6757F0032D18F /* btn_notification_info.png in Resources */,
@@ -2472,6 +2527,7 @@
 				B27FFF6B200484F50034DAA4 /* bk_sense.png in Resources */,
 				B23066D81FFF492500E85600 /* bk_neck_JOA.png in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
+				B239EAC020219B9300F24C3D /* btn_notificationInfo_unselect.png in Resources */,
 				B20EA5041FEBD3E900C38518 /* btn_appearance_unsure.png in Resources */,
 				B223F13C1FCEAB0E00DA0315 /* btn_message_sure.png in Resources */,
 				C4DF56971FC678FF0010307E /* btn_login.png in Resources */,
@@ -2506,6 +2562,7 @@
 				B27FFFAB20071F0D0034DAA4 /* bk_visit_case.png in Resources */,
 				B23066E11FFF494400E85600 /* bk_set_temporary_room.png in Resources */,
 				B27FFF9C200609220034DAA4 /* bk_operation.png in Resources */,
+				B239EABD20219B9300F24C3D /* btn_notification_not_remind.png in Resources */,
 				B2749D8A1FF4E886007516BF /* btn_group_member_join.png in Resources */,
 				B27FFF962005D9550034DAA4 /* box_select_sure.png in Resources */,
 				B20EA5011FEBAE8200C38518 /* btn_spine_white.png in Resources */,
@@ -2555,6 +2612,7 @@
 				B20EA4F91FEBADD700C38518 /* appearance_blue_rect.png in Resources */,
 				B27FFF4E20047A1A0034DAA4 /* bk_character.png in Resources */,
 				B232AE061FD13A0100ABBA1D /* usercase_whiterect.png in Resources */,
+				B239EABF20219B9300F24C3D /* btn_notification_remind.png in Resources */,
 				B2749D8D1FF4E886007516BF /* bk_group_leader_prompt.png in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
 				B28993CD1FE12E120047C9E6 /* bk_sureExit.png in Resources */,
@@ -2615,6 +2673,7 @@
 				B2749D731FF38105007516BF /* MainScene.cpp in Sources */,
 				B23066811FFBA30000E85600 /* WaitChatScene.cpp in Sources */,
 				B262F8211FDFF2C800EF887A /* SearchScene.cpp in Sources */,
+				B23907FF205A697100BE7EC6 /* UpdateBedScene.cpp in Sources */,
 				C44E91F9200666510029476C /* UIImage+ImageSize.m in Sources */,
 				B27FFF852004C4650034DAA4 /* SymptomScene.cpp in Sources */,
 				B27FFF722004901B0034DAA4 /* MuscleStrengthScene.cpp in Sources */,
@@ -2630,6 +2689,7 @@
 				B262F79C1FD7BE8000EF887A /* RegisterMessageScene.cpp in Sources */,
 				B262F78E1FD7B9C200EF887A /* LoginScene.cpp in Sources */,
 				B23529D51FF621FF00737DFD /* CaseListScene.cpp in Sources */,
+				B239EAB12021970F00F24C3D /* MessageNotificationScene.cpp in Sources */,
 				B23529C61FF5EBF000737DFD /* GroupMemberScene.cpp in Sources */,
 				B27FFF48200478670034DAA4 /* CharacterScene.cpp in Sources */,
 				B262F80A1FDE604800EF887A /* UserCaseScene.cpp in Sources */,

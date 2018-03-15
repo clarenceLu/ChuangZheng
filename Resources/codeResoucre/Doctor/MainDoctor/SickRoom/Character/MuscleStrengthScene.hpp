@@ -10,6 +10,11 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
 USING_NS_CC;
 class MuscleStrengthScene:public cocos2d::Scene{
 public:
@@ -25,9 +30,24 @@ public:
     cocos2d::Layer* createSelectLayer();
     void createSelectItem(std::string title,float Y,cocos2d::Sprite* contentV);
     
+    std::string changeTitleToIndex(std::string title);
+    std::string changeIndexToTitle(std::string index);
+    
+    std::string getJsonData(int type);
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
+    
+    void onHttpRequestCompleted2(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void getDataToNetWork();
+    
 private:
     Map<int, cocos2d::Label*> labelDic;
+    Map<int, cocos2d::Label*> titleDic;
     int selectIndex;
+    
+    rapidjson::Document infoData;
+    
 };
 
 #endif /* MuscleStrengthScene_hpp */

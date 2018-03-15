@@ -17,6 +17,7 @@
 #include "MuscleStrengthScene.hpp"
 #include "ReflectAbnormalScene.hpp"
 #include "ReflectScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -47,7 +48,7 @@ bool CharacterScene::init(){
     });
     this->addChild(backBtn);
     
-    ListView* lv = ListView::create();
+    lv = ListView::create();
     lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
     lv->setBounceEnabled(true);
     lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
@@ -58,27 +59,34 @@ bool CharacterScene::init(){
     lv->addEventListener((ui::ListView::ccListViewCallback)CC_CALLBACK_2(CharacterScene::selectedItemEvent, this));//添加监听函数
     lv->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(CharacterScene::selectedItemEventScrollView, this));
     this->addChild(lv);
-    
-    auto layer1 = createMessageLayout(0,"外观异常","双手,双脚,双前臂,双脚,双大腿");
-    lv->insertCustomItem(layer1,0);
-    auto layer2 = createMessageLayout(0,"行动异常","");
-    lv->insertCustomItem(layer2,1);
-    auto layer3 = createMessageLayout(0,"棘突压痛","上肢发达  双臂麻木   双大腿抽筋    左前方脊椎疼痛  脑袋晕");
-    lv->insertCustomItem(layer3,2);
-    auto layer4 = createMessageLayout(0,"感觉异常","上肢发达  双臂麻木   双大腿抽筋");
-    lv->insertCustomItem(layer4,3);
-    auto layer5 = createMessageLayout(0,"肌张力异常","");
-    lv->insertCustomItem(layer5,4);
-    auto layer6 = createMessageLayout(0,"肌力异常","");
-    lv->insertCustomItem(layer6,5);
-    auto layer7 = createMessageLayout(0,"生理反射异常","");
-    lv->insertCustomItem(layer7,6);
-    auto layer8 = createMessageLayout(0,"病理反射","");
-    lv->insertCustomItem(layer8,7);
-    
     return true;
     
 }
+
+void CharacterScene::onEnter()
+{
+    Scene::onEnter();
+    lv->removeAllItems();
+    auto layer1 = createMessageLayout(0,"外观异常","");
+    lv->insertCustomItem(layer1,0);
+    auto layer2 = createMessageLayout(1,"行动异常","");
+    lv->insertCustomItem(layer2,1);
+    auto layer3 = createMessageLayout(2,"棘突压痛","");
+    lv->insertCustomItem(layer3,2);
+    auto layer4 = createMessageLayout(3,"感觉异常","");
+    lv->insertCustomItem(layer4,3);
+    auto layer5 = createMessageLayout(4,"肌张力异常","");
+    lv->insertCustomItem(layer5,4);
+    auto layer6 = createMessageLayout(5,"肌力异常","");
+    lv->insertCustomItem(layer6,5);
+    auto layer7 = createMessageLayout(6,"生理反射异常","");
+    lv->insertCustomItem(layer7,6);
+    auto layer8 = createMessageLayout(7,"病理反射","");
+    lv->insertCustomItem(layer8,7);
+    pushDataToNetWork();
+}
+
+
 
 Layout *CharacterScene::createMessageLayout(int i,string title,string content){
     auto visibleSize=Director::getInstance()->getVisibleSize();
@@ -87,11 +95,12 @@ Layout *CharacterScene::createMessageLayout(int i,string title,string content){
     auto layout = Layout::create();
     layout->setBackGroundImageScale9Enabled(true);
     layout->setBackGroundImage("alpha.png");
+    layout->setTag(i);
     layout->setTouchEnabled(true);
     
     float height=10;
     if (content.c_str()!=nullptr) {
-        auto contentLB = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-200,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+        auto contentLB = Label::createWithSystemFont(content,"Arial",35,Size(visibleSize.width-150,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
         height=contentLB->getContentSize().height+10;
         contentLB->setPosition(Point(37,10));
         contentLB->setTextColor(Color4B(0,0,0, 255/3*2));
@@ -185,5 +194,240 @@ void CharacterScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::E
         default:
             break;
     }
+}
+
+
+
+#pragma-网络数据
+void CharacterScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getCaseById?caseId=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str());
+    netManeger->postHttpRequest(memberUrl,CC_CALLBACK_2(CharacterScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void CharacterScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+        
+        
+        if (this->infoData["status"].GetInt()==0) {
+                const rapidjson::Value& val_form = infoData["data"];
+                if(val_form.IsObject()){
+                    string spineContent="";//感觉异常
+                    if (!val_form["tz_jtyt"].IsNull()) {
+                        senseData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_jtyt"].GetString());
+                        spineContent=searchContentForInfoData(spineContent, "棘突：",senseData);
+                    }
+                    lv->removeChildByTag(2);
+                    auto layer3 = createMessageLayout(2,"棘突压痛",spineContent);
+                    lv->insertCustomItem(layer3,2);
+                    
+                    string senseContent="";//感觉异常
+                    if (!val_form["tz_gjyc_gj"].IsNull()) {
+                        senseData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_gjyc_gj"].GetString());
+                        senseContent=searchContentForInfoData(senseContent, "",senseData);
+                    }
+                    lv->removeChildByTag(3);
+                    auto layer4 = createMessageLayout(3,"感觉异常",senseContent);
+                    lv->insertCustomItem(layer4,3);
+                    
+                    string symptomContent="";//行动异常
+                    if (!val_form["tz_xdyc"].IsNull()) {
+                        actionData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_xdyc"].GetString());
+                        symptomContent=searchContentForInfoData(symptomContent, "感觉：",actionData);
+                    }
+                    lv->removeChildByTag(1);
+                    auto layer2 = createMessageLayout(1,"行动异常",symptomContent);
+                    lv->insertCustomItem(layer2,1);
+                    
+                    string dystoniaContent="";//肌张力异常
+                    if(!val_form["tz_jzlyc_sz"].IsNull()){
+                       dystoniaUpData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_jzlyc_sz"].GetString());
+                        dystoniaContent=searchContentForInfoData(dystoniaContent, "上肢：", dystoniaUpData);
+                    }dystoniaContent.append(" ");
+                    if(!val_form["tz_jzlyc_xz"].IsNull()){
+                        dystoniaDownData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_jzlyc_xz"].GetString());
+                        dystoniaContent=searchContentForInfoData(dystoniaContent, "下肢：", dystoniaDownData);
+                    }
+                    lv->removeChildByTag(4);
+                    auto layer5 = createMessageLayout(4,"肌张力异常",dystoniaContent);
+                    lv->insertCustomItem(layer5,4);
+                    
+                    string appearanceContent="";   //"tz_wgyc;tz_wgyc_bdc;tz_wgyc_ws;tz_wgyc_gb_bz;tz_wgyc_gb_fq;tz_wgyc_gb_cw"
+                    if(!val_form["tz_wgyc"].IsNull()){//外观异常
+                        appearanceData1.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_wgyc"].GetString());
+                        appearanceContent=searchContentForInfoData(appearanceContent, "外观：", appearanceData1);
+                        appearanceContent.append(" ");
+                    }
+                    if(!val_form["tz_wgyc_bdc"].IsNull()){
+                        appearanceData2.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_wgyc_bdc"].GetString());
+                        appearanceContent=searchContentForInfoData(appearanceContent, "两侧不对称：", appearanceData2);
+                        appearanceContent.append(" ");
+                    }
+                    if(!val_form["tz_wgyc_ws"].IsNull()){
+                        appearanceData3.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_wgyc_ws"].GetString());
+                        appearanceContent=searchContentForInfoData(appearanceContent, "肌肉萎缩：", appearanceData3);
+                        appearanceContent.append(" ");
+                    }
+                    if(!val_form["tz_wgyc_gb_bz"].IsNull()){
+                        appearanceData4.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_wgyc_gb_bz"].GetString());
+                        appearanceContent=searchContentForInfoData(appearanceContent, "曲度变直：", appearanceData4);
+                        appearanceContent.append(" ");
+                    }
+                    if(!val_form["tz_wgyc_gb_fq"].IsNull()){
+                        appearanceData5.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_wgyc_gb_fq"].GetString());
+                        appearanceContent=searchContentForInfoData(appearanceContent, "曲度反曲：", appearanceData5);
+                        appearanceContent.append(" ");
+                    }
+                    if(!val_form["tz_wgyc_gb_cw"].IsNull()){
+                        appearanceData6.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_wgyc_gb_cw"].GetString());
+                        appearanceContent=searchContentForInfoData(appearanceContent, "曲度侧弯：", appearanceData6);
+                        appearanceContent.append(" ");
+                    }
+                    lv->removeChildByTag(0);
+                    auto layer1 = createMessageLayout(0,"外观异常",appearanceContent);
+                    lv->insertCustomItem(layer1,0);
+                    
+                    string reflectAbnormalContent="";   //tz_slyc_he;tz_slyc_hs;tz_slyc_jgm;tz_slyc_fb;tz_slyc_tg;tz_slyc_gm;tz_slyc_qt;tz_slyc_gj
+                    if(!val_form["tz_slyc_he"].IsNull()){//生理反射异常
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_he"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "肱二肌：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    if(!val_form["tz_slyc_hs"].IsNull()){
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_hs"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "肱三肌：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    if(!val_form["tz_slyc_jgm"].IsNull()){
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_jgm"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "桡骨膜：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    if(!val_form["tz_slyc_fb"].IsNull()){
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_fb"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "腹壁：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    if(!val_form["tz_slyc_tg"].IsNull()){
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_tg"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "提睾：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    if(!val_form["tz_slyc_gm"].IsNull()){
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_gm"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "肛门：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    if(!val_form["tz_slyc_qt"].IsNull()){
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_qt"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "膝跳：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    if(!val_form["tz_slyc_gj"].IsNull()){
+                        reflectAbnormalData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_slyc_gj"].GetString());
+                        reflectAbnormalContent=searchContentForInfoData(reflectAbnormalContent, "跟腱：", reflectAbnormalData);
+                        reflectAbnormalContent.append(" ");
+                    }
+                    lv->removeChildByTag(6);
+                    auto layer7 = createMessageLayout(6,"生理反射异常",reflectAbnormalContent);
+                    lv->insertCustomItem(layer7,6);
+                    
+                    string reflectContent="";//病历反射异常 tz_ycfs_Hoffman;tz_ycfs_hzl;tz_ycfs_Babinski
+                    if(!val_form["tz_ycfs_Hoffman"].IsNull()){
+                        reflectData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_ycfs_Hoffman"].GetString());
+                        reflectContent=searchContentForInfoData(reflectContent, "Hoffman症阳性：", reflectData);
+                        reflectContent.append(" ");
+                    }
+                    if(!val_form["tz_ycfs_hzl"].IsNull()){
+                        reflectData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_ycfs_hzl"].GetString());
+                        reflectContent=searchContentForInfoData(reflectContent, "踝阵挛阳性：", reflectData);
+                        reflectContent.append(" ");
+                    }
+                    if(!val_form["tz_ycfs_Babinski"].IsNull()){
+                        reflectData.Parse<rapidjson::kParseDefaultFlags>(val_form["tz_ycfs_Babinski"].GetString());
+                        reflectContent=searchContentForInfoData(reflectContent, "Babinski症阳性：", reflectData);
+                    }
+                    lv->removeChildByTag(7);
+                    auto layer8 = createMessageLayout(7,"病理反射",reflectContent);
+                    lv->insertCustomItem(layer8,7);
+                    
+                }
+        }
+        
+    }
+}
+
+std::string CharacterScene::searchContentForInfoData(std::string content,std::string title,rapidjson::Document& data){
+    if (data.IsObject()) {
+        content.append(title);
+        for (auto j=data.MemberBegin(); j!=data.MemberEnd(); ++j) {
+            auto key = (j->name).GetString();
+            if (data[key].Size()) {
+                content.append(key);
+                content.append(":");
+//仅修改棘突异常
+                if (strcmp(title.c_str(), "棘突：")==0) {
+                    content.append("（");
+                }
+            }
+            log("key:%s", key);
+            for(auto i = 0; i < data[key].Size(); ++i){
+                content.append(data[key][i].GetString());
+                if (i==data[key].Size()-1&&j==data.MemberEnd()-1) {}else{
+                    content.append(" ");}
+//仅修改棘突异常
+                if (i==data[key].Size()-1) {
+                    if (strcmp(title.c_str(), "棘突：")==0) {
+                        content.append("）");
+                    }
+                }
+                
+                log("%s", data[key][i].GetString());
+            }
+        }
+        content.append(";");
+    }else if(data.IsArray()){
+        if (data.Size()>0) {
+            content.append(title);
+        }
+        for(auto i = 0; i < data.Size(); ++i){
+            content.append(data[i].GetString());
+            content.append(" ");
+            log("%s", data[i].GetString());
+        }
+        if (data.Size()>0) {
+            content.append(";");
+        }
+    }
+    log("content：%s",content.c_str());
+    return content;
 }
 

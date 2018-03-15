@@ -256,6 +256,7 @@ bool RegisterMessageScene::init(){
     });
     this->addChild(sureBtn);
     
+    getTimeForSystem();
     return true;
 }
 
@@ -378,14 +379,32 @@ Layer* RegisterMessageScene::createAlbumLayer(){
 }
 
 #pragma-用于加载网络数据
-
+std::string RegisterMessageScene::getTimeForSystem(){
+    //获取系统时间
+         struct timeval now;
+         struct tm *time;
+         gettimeofday(&now, NULL);
+         time = localtime(&now.tv_sec);      //microseconds: 微秒
+         int year = time->tm_year +1900;
+         log("year = %d", year);         //显示年份
+         char date1[32] = {0};
+         sprintf(date1, "%d %02d %02d", (int)time->tm_year + 1900, (int)time->tm_mon + 1, (int)time->tm_mday);
+         log("%s", date1);        //显示年月日
+         char date2[50] = {0};
+         sprintf(date2, "%02d %02d %02d", (int)time->tm_hour, (int)time->tm_min, (int)time->tm_sec);
+         log("%s", date2);       //显示时分秒
+         char date[100] = {0};
+         sprintf(date, "%d%d%d%d%d%d", (int)time->tm_year + 1900, (int)time->tm_mon + 1, (int)time->tm_mday,(int)time->tm_hour, (int)time->tm_min, (int)time->tm_sec);
+    return date;
+    
+}
 void RegisterMessageScene::pushDataToNetWork(string username,string passwd,string name,string sex,string age,string phone,string phone1,string idCardNo,string address,string headUrl,string caseNo){
      NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
-        char strtest[500] = {0};
-        sprintf(strtest,"http://c.looper.pro/web/createUser?userId=%s&passwd=%s&name=%s&sex=%s&number=%s&phone=%s&idCardNo=%s", username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),age.c_str(),phone.c_str(),idCardNo.c_str());
-        string url=strtest;
-        
-    netManeger->sendMessage(url,CC_CALLBACK_2(RegisterMessageScene::onHttpRequestCompleted, this),nullptr);
+    char memberUrl[1000]={0};
+sprintf(memberUrl,"userId=%s&passwd=%s&name=%s&sex=%s&number=%s&phone=%s&idCardNo=%s&caseNo=%s",username.c_str(),passwd.c_str(),name.c_str(),sex.c_str(),age.c_str(),phone.c_str(),idCardNo.c_str(),getTimeForSystem().c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/createUser";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(RegisterMessageScene::onHttpRequestCompleted, this),url);
 }
 
 void RegisterMessageScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)

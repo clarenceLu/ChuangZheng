@@ -20,6 +20,9 @@ public:
     
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
     cocos2d::Layer* createCaseLayer();
+    
+private:
+    cocos2d::ui::TextField* textFieldCase;
 };
 
 

@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -50,6 +51,7 @@ bool SpineTendernessScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
+            pushDataToNetWork();
             
         default:
             break;
@@ -147,6 +149,7 @@ void SpineTendernessScene::menuSelectCallback(Ref* pSender)
     MenuItemToggle* item=(MenuItemToggle*)pSender;
     int  index=item->getSelectedIndex();
     int tag= item->getTag();
+    log("index:%d",tag);
     Label *num=(Label*)this->getChildByTag(tag+100);
     if (index==1) {
             num->setTextColor(Color4B::WHITE);
@@ -220,6 +223,97 @@ bool judgeTouchMoveWith(Vec2 origin,cocos2d::Ref * ref){
     return false;
 }
 
+
+std::string SpineTendernessScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        rapidjson::Value array(rapidjson::kArrayType);
+        rapidjson::Value array2(rapidjson::kArrayType);
+        rapidjson::Value array3(rapidjson::kArrayType);
+       for (int i=0; i<spintVector->size(); i++) {
+            MenuItemToggle* item=(MenuItemToggle*)spintVector->at(i);
+            int  index=item->getSelectedIndex();
+            int tag= item->getTag();
+            if (tag>=100&&tag<107) {
+                if (index==1) {
+                    array.PushBack(rapidjson::Value(to_string(tag-99).c_str(), allocator),allocator);
+                }
+            }
+           if (tag>=107&&tag<119) {
+               if (index==1) {
+                   array2.PushBack(rapidjson::Value(to_string(tag-106).c_str(), allocator),allocator);
+               }
+           }
+           if (tag>=119&&tag<124) {
+               if (index==1) {
+                   array3.PushBack(rapidjson::Value(to_string(tag-118).c_str(), allocator),allocator);
+               }
+           }
+        }
+        document.AddMember("C", array, allocator);
+        document.AddMember("T", array2, allocator);
+        document.AddMember("L", array3, allocator);
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void SpineTendernessScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    sprintf(jsonStr,"%s",getJsonData(0).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"tz_jtyt",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(SpineTendernessScene::onHttpRequestCompleted, this),url);
+}
+
+void SpineTendernessScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
 
 
 

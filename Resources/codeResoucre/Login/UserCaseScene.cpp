@@ -13,6 +13,8 @@
 #include "ChatScene.hpp"
 #include "LoginScene.h"
 #include "MedicalRecordScene.hpp"
+#include "NetWrokMangerData.hpp"
+#include "ChatUserDetailScene.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -28,11 +30,11 @@ bool UserCaseScene::init(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin =Director::getInstance()->getVisibleOrigin();
     
-    auto layer1=createCaseLayer();
-    auto layer2=createInformLayer();
-    auto layer3=createDynamicLayer();
-    auto layer4=createUserInfoLayer();
-    multLayer = LayerMultiplex::create(layer1, layer2,layer3,layer4,nullptr);
+    caseLayer=createCaseLayer();
+    informLayer=createInformLayer();
+    dynamicLayer=createDynamicLayer();
+    userInfoLayer=createUserInfoLayer();
+    multLayer = LayerMultiplex::create(caseLayer, informLayer,dynamicLayer,userInfoLayer,nullptr);
     addChild(multLayer, 0);
     
     auto bottom=Sprite::create("bk_perfect_bottom.png");
@@ -90,6 +92,18 @@ bool UserCaseScene::init(){
     //获取checkbox的选中状态
     addChild(userCheckBox);
     return true;
+}
+
+void UserCaseScene::onEnter(){
+    Scene::onEnter();
+    rapidjson::Value& object = this->infoData["data"];
+/*    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    infoData.Accept(writer);
+    CCLOG("infodata: %s", buffer.GetString());    */
+    pushDataToNetWork();
+    getUserDataToNetWork();
+    getCaseDataToNetWork();
 }
 
 //通知
@@ -260,90 +274,215 @@ Layer* UserCaseScene::createCaseLayer(){
     blueBK->setScale(0.87);
     layer->addChild(blueBK);
     
-    auto label = Label::createWithSystemFont("张三丰","fonts/Marker Felt.ttf",45,Size(160,60),TextHAlignment::LEFT,TextVAlignment::TOP);
+    auto label = Label::createWithSystemFont("张三丰","Arial",45,Size(160,60),TextHAlignment::LEFT,TextVAlignment::TOP);
     label->setPosition(Point(20,28));
     label->setAnchorPoint(Vec2(0, 0));
+    labelDic.insert(0, label);
     blueBK->addChild(label);
     
-    auto sexLB = Label::createWithSystemFont("男","fonts/Marker Felt.ttf",45,Size(60,60),TextHAlignment::LEFT,TextVAlignment::TOP);
+    auto sexLB = Label::createWithSystemFont("男","Arial",45,Size(60,60),TextHAlignment::LEFT,TextVAlignment::TOP);
     sexLB->setPosition(Point(200,28));
     sexLB->setAnchorPoint(Vec2(0, 0));
+    labelDic.insert(1, sexLB);
     blueBK->addChild(sexLB);
     
     auto ageLB = Label::createWithSystemFont("32岁","Arial",45,Size(120,60),TextHAlignment::LEFT,TextVAlignment::TOP);
     ageLB->setPosition(Point(280,28));
     ageLB->setAnchorPoint(Vec2(0, 0));
+    labelDic.insert(2, ageLB);
     blueBK->addChild(ageLB);
     
-    auto numLB = Label::createWithSystemFont("330681199404058945","Arial",40,Size(300,50),TextHAlignment::LEFT,TextVAlignment::TOP);
+    auto numLB = Label::createWithSystemFont("3306811994","Arial",40,Size(290,50),TextHAlignment::RIGHT,TextVAlignment::TOP);
     numLB->setPosition(Point(400,30));
     numLB->setAnchorPoint(Vec2(0, 0));
+    labelDic.insert(3, numLB);
     blueBK->addChild(numLB);
     
+ //加入病人列表
+    ListView*   lv = ListView::create();
+    lv->setTag(100);
+    lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
+    lv->setBounceEnabled(true);
+    lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
+    lv->setBackGroundImageScale9Enabled(true);
+    lv->setContentSize(Size(visibleSize.width, visibleSize.height-370));
+    lv->setAnchorPoint(Point(0,0));
+    lv->setPosition(Vec2(0, 100));
+    layer->addChild(lv);
+    
+    auto layout = Layout::create();
+    layout->setBackGroundImageScale9Enabled(true);
+    layout->setBackGroundImage("alpha.png");
+    layout->setTag(0);
+    layout->setTouchEnabled(true);
+    layout->setTouchEnabled(true);
+    layout->setContentSize(Size(visibleSize.width, 100));
+    lv->insertCustomItem(layout,0);
     auto detailBtn=Button::create();
     detailBtn->loadTextures("usercase_detail.png", "usercase_detail.png");
-    detailBtn->setPosition(Vec2(20, visibleSize.height-370));
+    detailBtn->setPosition(Vec2(20, 5));
     detailBtn->setAnchorPoint(Vec2(0, 0));
     detailBtn->setScale(0.87);
     detailBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
-        {
-            auto medicalSC= MedicalRecordScene::create();
-            Director::getInstance()->pushScene(medicalSC);
-        }
-        default:
-            break;
+        {auto medicalSC= (MedicalRecordScene*)MedicalRecordScene::create();
+            if (caseData["data"].Size()) {
+            medicalSC->infoData.SetObject();
+            rapidjson::Document::AllocatorType& allocator = medicalSC->infoData.GetAllocator();
+            rapidjson::Value object1(rapidjson::kObjectType);
+            object1=this->caseData["data"][0];
+            medicalSC->infoData.AddMember("data", object1, allocator);
+            }
+            Director::getInstance()->pushScene(medicalSC);}
+        default:break;
     }
     });
-    layer->addChild(detailBtn);
-    
+    layout->addChild(detailBtn);
     auto detailLB = Label::createWithSystemFont("住院","fonts/Marker Felt.ttf",40,Size(120,60),TextHAlignment::LEFT,TextVAlignment::TOP);
     detailLB->setPosition(Point(20,10));
     detailLB->setTextColor(Color4B::BLACK);
     detailLB->setAnchorPoint(Vec2(0, 0));
     detailBtn->addChild(detailLB);
-    
     auto timeLB = Label::createWithSystemFont("2017-04-05","Arial",40,Size(visibleSize.width-280,60),TextHAlignment::CENTER,TextVAlignment::TOP);
     timeLB->setPosition(Point(140,10));
     timeLB->setTextColor(Color4B::BLACK);
     timeLB->setAnchorPoint(Vec2(0, 0));
+    labelDic.insert(4, timeLB);
     detailBtn->addChild(timeLB);
     
     
-    
+    auto layout2 = Layout::create();
+    layout2->setBackGroundImageScale9Enabled(true);
+    layout2->setBackGroundImage("alpha.png");
+    layout2->setTouchEnabled(true);
+    layout2->setTouchEnabled(true);
+    layout2->setContentSize(Size(visibleSize.width, 100));
+    lv->insertCustomItem(layout2,1);
     auto selfBtn=Button::create();
     selfBtn->loadTextures("usercase_detail.png", "usercase_detail.png");
-    selfBtn->setPosition(Vec2(20, visibleSize.height-470));
+    selfBtn->setPosition(Vec2(20, 5));
     selfBtn->setAnchorPoint(Vec2(0, 0));
     selfBtn->setScale(0.87);
     selfBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
-            auto perfectScene= PerfectCaseScene::create();
-            Director::getInstance()->pushScene(perfectScene);
+         /*      auto perfectScene= PerfectCaseScene::create();
+            Director::getInstance()->pushScene(perfectScene);     */
+            auto chatSC=(ChatUserDetailScene*)ChatUserDetailScene::createScene();
+            chatSC->infoData.SetObject();
+            rapidjson::Document::AllocatorType& allocator = chatSC->infoData.GetAllocator();
+            rapidjson::Value object1(rapidjson::kObjectType);
+            object1=this->userData["data"];
+            chatSC->infoData.AddMember("data", object1, allocator);
+            Director::getInstance()->pushScene(chatSC);
         }
-        default:
-            break;
+        default:break;
     }
     });
-    layer->addChild(selfBtn);
-    
+    layout2->addChild(selfBtn);
     auto selfLB = Label::createWithSystemFont("自述","fonts/Marker Felt.ttf",40,Size(120,60),TextHAlignment::LEFT,TextVAlignment::TOP);
     selfLB->setPosition(Point(20,10));
     selfLB->setTextColor(Color4B::BLACK);
     selfLB->setAnchorPoint(Vec2(0, 0));
     selfBtn->addChild(selfLB);
-    
     auto selfTime = Label::createWithSystemFont("2017-04-05","Arial",40,Size(visibleSize.width-280,60),TextHAlignment::CENTER,TextVAlignment::TOP);
     selfTime->setPosition(Point(140,10));
     selfTime->setTextColor(Color4B::BLACK);
     selfTime->setAnchorPoint(Vec2(0, 0));
+    labelDic.insert(5, selfTime);
     selfBtn->addChild(selfTime);
     
     return layer;
 }
+
+void UserCaseScene::getCaseDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getCaseList?userId=%s",UserDefault::getInstance()->getStringForKey("userId").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(UserCaseScene::onHttpRequestCompleted4, this),nullptr);
+}
+
+void UserCaseScene::onHttpRequestCompleted4(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    caseData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->caseData.HasParseError()) {
+        
+        return;
+    }
+    if(this->caseData.HasMember("status")){
+        if (this->caseData["status"].GetInt()==0) {
+            auto scrollView=(ListView*)caseLayer->getChildByTag(100);
+            for (int i=0; i<caseData["data"].Size(); i++) {
+                rapidjson::Value& object = caseData["data"][i];
+                if (i>0) {
+                    auto layout = Layout::create();
+                    layout->setBackGroundImageScale9Enabled(true);
+                    layout->setBackGroundImage("alpha.png");
+                    layout->setTag(i);
+                    layout->setTouchEnabled(true);
+                    layout->setTouchEnabled(true);
+                    layout->setContentSize(Size(visibleSize.width, 100));
+                    scrollView->insertCustomItem(layout,1);
+                    auto detailBtn=Button::create();
+                    detailBtn->loadTextures("usercase_detail.png", "usercase_detail.png");
+                    detailBtn->setTag(i);
+                    detailBtn->setPosition(Vec2(20, 5));
+                    detailBtn->setAnchorPoint(Vec2(0, 0));
+                    detailBtn->setScale(0.87);
+                    detailBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
+                        case ui::Widget::TouchEventType::BEGAN: break;
+                        case ui::Widget::TouchEventType::ENDED:
+                        {auto button=(Button*)sender;
+                            auto medicalSC= MedicalRecordScene::create();
+                            medicalSC->infoData.SetObject();
+                            rapidjson::Document::AllocatorType& allocator = medicalSC->infoData.GetAllocator();
+                            rapidjson::Value object1(rapidjson::kObjectType);
+                            object1=this->caseData["data"][button->getTag()];
+                            medicalSC->infoData.AddMember("data", object1, allocator);
+                            Director::getInstance()->pushScene(medicalSC);}
+                        default:break;
+                    }
+                    });
+                    layout->addChild(detailBtn);
+                    auto detailLB = Label::createWithSystemFont("住院","fonts/Marker Felt.ttf",40,Size(120,60),TextHAlignment::LEFT,TextVAlignment::TOP);
+                    detailLB->setPosition(Point(20,10));
+                    detailLB->setTextColor(Color4B::BLACK);
+                    detailLB->setAnchorPoint(Vec2(0, 0));
+                    detailBtn->addChild(detailLB);
+                    auto timeLB = Label::createWithSystemFont("2017-04-05","Arial",40,Size(visibleSize.width-280,60),TextHAlignment::CENTER,TextVAlignment::TOP);
+                    timeLB->setPosition(Point(140,10));
+                    timeLB->setTextColor(Color4B::BLACK);
+                    timeLB->setAnchorPoint(Vec2(0, 0));
+                    labelDic.insert(4, timeLB);
+                    detailBtn->addChild(timeLB);
+                }
+  //如果大于1就要在下面加入病例到scrollView
+            }
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            caseData.Accept(writer);
+            CCLOG("病人病例：  %s", buffer.GetString());
+        }
+    }
+}
+
+
 
 //长征动态
 Layer* UserCaseScene::createDynamicLayer(){
@@ -351,6 +490,7 @@ Layer* UserCaseScene::createDynamicLayer(){
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
     auto layer = LayerColor::create(Color4B(255, 255, 255, 255));
     layer->setContentSize(visibleSize);
+    layer->setTag(2);
     layer->setPosition(Point(origin.x, origin.y));
     layer->setAnchorPoint(Vec2(0, 0));
     auto callback = [](Touch * ,Event *){
@@ -365,15 +505,17 @@ Layer* UserCaseScene::createDynamicLayer(){
     bkView->setPosition(0,0);
     bkView->setAnchorPoint(Vec2(0, 0));
     bkView->setContentSize(Size(visibleSize.width, visibleSize.height));
+    bkView->setTag(2);
     layer->addChild(bkView);
     
-    auto scrollV=createTableView(Vec2(0, 100), Size(visibleSize.width, 890));
-    bkView->addChild(scrollV);
+  /*  auto scrollV=createTableView(Vec2(0, 100), Size(visibleSize.width, 890));
+    bkView->addChild(scrollV);  */
     
     return layer;
 }
 
 ScrollView* UserCaseScene::createTableView(Vec2 origin,Size visibleSize){
+    rapidjson::Value& data = dynamicData["data"];
     auto scrollView=cocos2d::ui::ScrollView::create();
     scrollView->setPosition(Vec2(origin.x, origin.y));
     scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
@@ -381,7 +523,7 @@ ScrollView* UserCaseScene::createTableView(Vec2 origin,Size visibleSize){
     scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
     scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
     scrollView->setInnerContainerSize(Size(visibleSize.width, 220*10));//设置内容大小
-    for (int i=0; i<10; i++) {
+    for (int i=0; i<data.GetArray().Size(); i++) {
         auto layer1 = createMessageBtn(i,scrollView->getInnerContainerSize());
         scrollView->addChild(layer1);
     }
@@ -390,6 +532,7 @@ ScrollView* UserCaseScene::createTableView(Vec2 origin,Size visibleSize){
 }
 
 Button* UserCaseScene::createMessageBtn(int i, Size  innerSize){
+     rapidjson::Value& data = dynamicData["data"][i];
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
     
@@ -412,9 +555,8 @@ Button* UserCaseScene::createMessageBtn(int i, Size  innerSize){
     headBtn->setPosition(Vec2(20, 20));
     headBtn->setAnchorPoint(Vec2(0, 0));
     headBtn->setTouchEnabled(true);
-    headBtn->ignoreContentAdaptWithSize(true);
-    headBtn->setScale9Enabled(true);
-    headBtn->setContentSize(Size(130, 130));
+    float height=headBtn->getContentSize().height;
+    headBtn->setScale(130.0/height);
     headBtn->setTag(i);
     layer->addChild(headBtn);
     headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
@@ -423,7 +565,11 @@ Button* UserCaseScene::createMessageBtn(int i, Size  innerSize){
         }
     });
     
-    auto nameLB = Label::createWithSystemFont("热烈祝贺乾隆--荣获先进党支部！陈书记获院优秀共产党员称号！大家激情澎湃","fonts/Marker Felt.ttf",35,Size(layer->getContentSize().width-190,130),TextHAlignment::LEFT,TextVAlignment::TOP);
+    string msgStr="";
+    if (!data["msg"].IsNull()) {
+      msgStr=data["msg"].GetString();
+    }
+    auto nameLB = Label::createWithSystemFont(msgStr,"fonts/Marker Felt.ttf",35,Size(layer->getContentSize().width-190,130),TextHAlignment::LEFT,TextVAlignment::TOP);
     nameLB->setPosition(Point(170,20));
     nameLB->setTextColor(Color4B(0, 0, 0, 255/2));
     nameLB->setAnchorPoint(Vec2(0, 0));
@@ -551,7 +697,7 @@ Layer* UserCaseScene::createUserInfoLayer(){
     userName->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(userName);
     
-    auto textFieldUser = TextField::create("抵抗力","Arial",35);
+    auto textFieldUser = TextField::create("未知","Arial",35);
     textFieldUser->setMaxLength(40);
     textFieldUser->setTouchSize(Size(300, 50));
     textFieldUser->setPosition(Vec2(380,886));
@@ -562,6 +708,7 @@ Layer* UserCaseScene::createUserInfoLayer(){
     textFieldUser->setTextHorizontalAlignment(TextHAlignment::LEFT);
     textFieldUser->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
     bkView->addChild(textFieldUser);
+    textFieldDic.insert(0,textFieldUser);
     
     auto lineV=Sprite::create("userInfo_line.png");
     lineV->setPosition(Vec2(210, 880));
@@ -578,7 +725,7 @@ Layer* UserCaseScene::createUserInfoLayer(){
     auto textFieldSex = TextField::create("女","Arial",35);
     textFieldSex->setMaxLength(40);
     textFieldSex->setTouchSize(Size(80, 50));
-    textFieldSex->setPosition(Vec2(350,822));
+    textFieldSex->setPosition(Vec2(330,822));
     textFieldSex->setAnchorPoint(Vec2(0,0));
     textFieldSex->setContentSize(Size(80,50));
     textFieldSex->setTextColor(Color4B::BLACK);
@@ -586,17 +733,18 @@ Layer* UserCaseScene::createUserInfoLayer(){
     textFieldSex->setTextHorizontalAlignment(TextHAlignment::LEFT);
     textFieldSex->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
     bkView->addChild(textFieldSex);
+    textFieldDic.insert(1,textFieldSex);
     
-    auto age = Label::createWithSystemFont("性别：","Arial",35,Size(140,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
-    age->setPosition(Point(412,822));
+    auto age = Label::createWithSystemFont("年龄：","Arial",35,Size(140,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    age->setPosition(Point(392,822));
     age->setTextColor(Color4B(91, 144, 229, 255));
     age->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(age);
     
-    auto textFieldAge = TextField::create("32","Arial",35);
+    auto textFieldAge = TextField::create("未知","Arial",35);
     textFieldAge->setMaxLength(40);
     textFieldAge->setTouchSize(Size(120, 50));
-    textFieldAge->setPosition(Vec2(530,822));
+    textFieldAge->setPosition(Vec2(500,822));
     textFieldAge->setAnchorPoint(Vec2(0,0));
     textFieldAge->setContentSize(Size(120,50));
     textFieldAge->setTextColor(Color4B::BLACK);
@@ -604,6 +752,7 @@ Layer* UserCaseScene::createUserInfoLayer(){
     textFieldAge->setTextHorizontalAlignment(TextHAlignment::LEFT);
     textFieldAge->addEventListener(CC_CALLBACK_2(UserCaseScene::eventCallBack, this));
     bkView->addChild(textFieldAge);
+    textFieldDic.insert(2,textFieldAge);
     
     auto lineV2=Sprite::create("userInfo_line.png");
     lineV2->setPosition(Vec2(210, 816));
@@ -611,12 +760,18 @@ Layer* UserCaseScene::createUserInfoLayer(){
     lineV2->setScaleX(0.6);
     bkView->addChild(lineV2);
     
-    auto textfieldName=createBasicData(bkView, Vec2(59, 758), "真实姓名：", "张牧之");
-    auto textfieldNum=createBasicData(bkView, Vec2(59, 688), "证件号：", "未填写");
-     auto textfieldTel1=createBasicData(bkView, Vec2(59, 618), "电话：", "未填写");
-    auto textfieldTel2=createBasicData(bkView, Vec2(59, 548), "电话1：", "未填写");
-    auto textfieldTel3=createBasicData(bkView, Vec2(59, 478), "电话2：", "未填写");
-    auto textfieldCaseNum=createBasicData(bkView, Vec2(59, 408), "病历号：", "未填写");
+    auto textfieldName=createBasicData(bkView, Vec2(59, 758), "真实姓名：", "未知");
+    textFieldDic.insert(3,textfieldName);
+    auto textfieldNum=createBasicData(bkView, Vec2(59, 688), "证件号：", "未知");
+    textFieldDic.insert(4, textfieldNum);
+     auto textfieldTel1=createBasicData(bkView, Vec2(59, 618), "电话：", "未知");
+    textFieldDic.insert(5, textfieldTel1);
+    auto textfieldTel2=createBasicData(bkView, Vec2(59, 548), "电话1：", "未知");
+    textFieldDic.insert(6, textfieldTel2);
+    auto textfieldTel3=createBasicData(bkView, Vec2(59, 478), "电话2：", "未知");
+    textFieldDic.insert(7, textfieldTel3);
+    auto textfieldCaseNum=createBasicData(bkView, Vec2(59, 408), "病历号：", "未知");
+    textFieldDic.insert(8, textfieldCaseNum);
     
     auto password = Label::createWithSystemFont("密码修改","Arial",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     password->setPosition(Vec2(59, 338));
@@ -639,8 +794,6 @@ Layer* UserCaseScene::createUserInfoLayer(){
     lineV4->setAnchorPoint(Vec2(0, 0));
     lineV4->setScaleX(0.85);
     bkView->addChild(lineV4);
-    
-    
     
     return layer;
 }
@@ -672,8 +825,212 @@ TextField*  UserCaseScene::createBasicData(Sprite* bkView,Vec2 point,string name
     lineV->setScaleX(0.85);
     bkView->addChild(lineV);
     
+    
     return textFieldUser;
 }
+
+#pragma-个人资料界面
+void UserCaseScene::getUserDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getUserById?patientId=%s",UserDefault::getInstance()->getStringForKey("id").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(UserCaseScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void UserCaseScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    userData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->userData.HasParseError()) {
+        
+        return;
+    }
+    if(this->userData.HasMember("status")){
+        if (this->userData["status"].GetInt()==0) {
+         rapidjson::Value& object = userData["data"];
+            rapidjson::StringBuffer buffer;
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            userData.Accept(writer);
+            CCLOG("病人个人资料：  %s", buffer.GetString());
+            for (int i=0; i<textFieldDic.size(); i++) {
+                TextField* textField=textFieldDic.at(i);
+                switch (i) {
+                    case 0:if(!object["userId"].IsNull()){textField->setString(object["userId"].GetString());
+                    }break;
+                    case 1:if(!object["sex"].IsNull()){if(strcmp(object["sex"].GetString(),"M")==0){textField->setString("男");}else{textField->setString("女");}
+                    }break;
+                    case 2:if(!object["age"].IsNull()){textField->setString(object["age"].GetString());
+                    }break;
+                    case 3:if(!object["name"].IsNull()){
+                        textField->setString(object["name"].GetString());
+                    }break;
+                    case 4:if(!object["idCardNo"].IsNull()){textField->setString(object["idCardNo"].GetString());
+                    }break;
+                    case 5:if(!object["phone"].IsNull()){textField->setString(object["phone"].GetString());
+                    }break;
+                    case 6:if(!object["phone1"].IsNull()){textField->setString(object["phone1"].GetString());
+                    }break;
+                    case 7:if(!object["phone2"].IsNull()){textField->setString(object["phone2"].GetString());
+                    }break;
+                    case 8:if(!object["caseNo"].IsNull()){textField->setString(object["caseNo"].GetString());
+                    }break;
+                        
+                    default:
+                        break;
+                }
+            }
+            
+            
+            for (int i=0; i<labelDic.size(); i++) {
+                auto label=labelDic.at(i);
+                if (i==0) {
+                    if (!object["name"].IsNull()) {
+                        label->setString(object["name"].GetString());}
+                }else if(i==1){
+                    if (!object["sex"].IsNull()) {string sex="女";if(strcmp(object["sex"].GetString(), "M")==0){sex="男";} label->setString(sex);}
+                }else if(i==2){
+                    if (!object["age"].IsNull()) {  char age[500]={0};  sprintf(age,"%s岁",object["age"].GetString()); label->setString(age);}
+                }else if(i==3){
+                    if (!object["idCardNo"].IsNull()) {label->setString(object["idCardNo"].GetString());}
+                }else if(i==4){
+                    if (!object["ctime"].IsNull()) {label->setString(object["ctime"].GetString());}
+                }else if(i==5){
+                    if (!object["ctime"].IsNull()) {label->setString(object["ctime"].GetString());}
+                }
+#pragma-其他数据
+            }
+        }
+        
+ 
+    }
+}
+#pragma-backBtn更新个人信息
+void UserCaseScene::pushUserDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    string passwd=infoData["data"]["passwd"].GetString();
+    if (surePassword==nullptr) {
+    }else{
+        if (strcmp("", surePassword->getString().c_str())) {
+            passwd=surePassword->getString();     }
+    }
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"userId=%s&passwd=%s",UserDefault::getInstance()->getStringForKey("userId").c_str(),passwd.c_str());
+    string url=memberUrl;
+    string sex="";
+    string age="";
+    string name="";
+    string idCardNo="";
+    string phone="";
+    string phone1="";
+    string phone2="";
+    string caseNo="";
+    for (int i=0; i<textFieldDic.size(); i++) {
+        TextField* textField=textFieldDic.at(i);
+        switch (i) {
+            case 1: {sex="";
+                if (strcmp("", textField->getString().c_str())) {
+                    if (strcmp(textField->getString().c_str(), "男")==0) {
+                        sex="M";
+                    }else if(strcmp(textField->getString().c_str(), "女")==0){
+                        sex="F";
+                    }
+                 url.append("&sex=");url.append(sex); }
+            }break;
+            case 2:{age="";
+                if (strcmp("", textField->getString().c_str())) {
+                    age=textField->getString();   url.append("&age=");url.append(age);  }
+            }break;
+            case 3:{name="";
+                if (strcmp("", textField->getString().c_str())) {
+                    name=textField->getString();   url.append("&name=");url.append(name);  }
+            }break;
+            case 4:{idCardNo="";
+                if (strcmp("", textField->getString().c_str())) {
+                    idCardNo=textField->getString();    url.append("&idCardNo=");url.append(idCardNo); }
+            }break;
+            case 5:{phone="";
+                if (strcmp("", textField->getString().c_str())) {
+                    phone=textField->getString();    url.append("&phone=");url.append(phone); }
+            }break;
+            case 6:{phone1="";
+                 if (strcmp("", textField->getString().c_str())) {
+                    phone1=textField->getString();   url.append("&phone1=");url.append(phone1);  }
+            }break;
+            case 7:{phone2="";
+               if (strcmp("", textField->getString().c_str())) {
+                    phone2=textField->getString();    url.append("&phone2=");url.append(phone2); }
+            }break;
+            case 8:{caseNo="";
+                if (strcmp("", textField->getString().c_str())) {
+                    caseNo=textField->getString();   url.append("&caseNo=");url.append(caseNo);  }
+            }break;
+                
+            default:
+                break;
+        }
+    }
+    char URL[2000];
+    sprintf(URL,"%s",url.c_str());
+    char* content=URL;
+    string memberURL="http://czapi.looper.pro/web/updatePersonalInfo";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(UserCaseScene::onHttpRequestCompleted3, this),content);
+}
+
+void UserCaseScene::onHttpRequestCompleted3(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document updateData;
+    
+    updateData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (updateData.HasParseError()) {
+        
+        return;
+    }
+    if(updateData.HasMember("status")){
+        if (updateData["status"].GetInt()==0) {
+            
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        updateData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+
+
+
+
+
 
 
 //实现CheckBox回调函数
@@ -703,6 +1060,7 @@ void UserCaseScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
             }else{
                 //切换页面
             multLayer->switchTo(tag);
+                onEnter();
             }
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
@@ -729,9 +1087,11 @@ void UserCaseScene::eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
             
             CCLOG("DELETE_BACKWARD");
+            break;
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
             if (tag>=1000&&tag<=1002) {
-                
+            }else{
+            pushUserDataToNetWork();
             }
             CCLOG("DETACH_WITH_IME");
             
@@ -798,9 +1158,7 @@ Layer* UserCaseScene::createExitLayer(){
 }
 
 
-TextField *originalPassword;
-TextField *newPassword;
-TextField* surePassword;
+
 //修改密码
 Layer* UserCaseScene::createChangeKeyLayer(){
     auto visibleSize=Director::getInstance()->getVisibleSize();
@@ -860,6 +1218,7 @@ Layer* UserCaseScene::createChangeKeyLayer(){
                 this->addChild(judgeV);
                 judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
             }else{
+                pushUserDataToNetWork();
                this->removeChildByTag(1050);
             }
             break;
@@ -938,10 +1297,7 @@ Layer* UserCaseScene::createCodeLayer(){
     layer->addChild(contentV);
     
     
-    auto codeImage = Sprite::create("example.png");
-    codeImage->setAnchorPoint(Vec2(0,0));
-    codeImage->setPosition(Vec2(225,445));
-    codeImage->setContentSize(Size(196, 196));
+    DrawNode *codeImage=createSQCodeImage("www.baidu.com",Vec2(225,445));
     contentV->addChild(codeImage);
     
     auto deleteBtn=Button::create();
@@ -975,6 +1331,61 @@ Layer* UserCaseScene::createCodeLayer(){
     
     return layer;
 }
+
+cocos2d::DrawNode * UserCaseScene::createSQCodeImage(std::string content,Vec2 origin){
+    char* contentStr=(char*)content.c_str();
+    bool bRet = m_QREncode.EncodeData(0, 0, 1, -1, contentStr);
+    if(bRet)
+    {
+        int nSize = 5;
+        int originalSize = m_QREncode.m_nSymbleSize + (QR_MARGIN * 2);
+        CCDrawNode *pQRNode = CCDrawNode::create();
+        
+        CCPoint pt[6];
+        ccColor4F color;
+        
+        pt[0] = ccp(0, 0);
+        pt[1] = ccp((m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize, (m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize);
+        pt[2] = ccp((m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize, 0);
+        
+        pt[3] = pt[0];
+        pt[4] = ccp(0, (m_QREncode.m_nSymbleSize + QR_MARGIN * 2)*nSize);
+        pt[5] = pt[1];
+        color = ccc4f(1, 1, 1, 1);
+        pQRNode->drawPolygon(pt, 6, color, 0, color);
+        
+        for (int i = 0; i < m_QREncode.m_nSymbleSize; ++i)
+        {
+            for (int j = 0; j < m_QREncode.m_nSymbleSize; ++j)
+            {
+                pt[0] = ccp((i + QR_MARGIN)*nSize, (j + QR_MARGIN)*nSize);
+                pt[1] = ccp(((i + QR_MARGIN) + 1)*nSize, ((j + QR_MARGIN) + 1)*nSize);
+                pt[2] = ccp(((i + QR_MARGIN) + 1)*nSize, ((j + QR_MARGIN) + 0)*nSize);
+                
+                pt[3] = pt[0];
+                pt[4] = ccp(((i + QR_MARGIN) + 0)*nSize, ((j + QR_MARGIN) + 1)*nSize);
+                pt[5] = pt[1];
+                if (m_QREncode.m_byModuleData[i][j] == 1)
+                {
+                    color = ccc4f(0, 0, 0, 1);
+                }
+                else
+                {
+                    color = ccc4f(1, 1, 1, 1);
+                }
+                pQRNode->drawPolygon(pt, 6, color, 0, color);
+            }
+        }
+        //        CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+        //        pQRNode->setPosition(ccp((winSize.width - nSize*m_QREncode.m_nSymbleSize) / 2, winSize.height - (winSize.height - nSize*m_QREncode.m_nSymbleSize) / 2));
+        pQRNode->setAnchorPoint(Vec2(0, 0));
+        pQRNode->setPosition(origin);
+        pQRNode->setScale(1.70);
+        //        pQRNode->setScaleY(-1);
+        return pQRNode;
+    }
+}
+
 
 //上传头像
 Layer* UserCaseScene::createAlbumLayer(){
@@ -1043,6 +1454,49 @@ Layer* UserCaseScene::createAlbumLayer(){
     
     return layer;
 }
+
+#pragma-用于加载网络数据
+
+void UserCaseScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    string url="http://czapi.looper.pro/web/getInformation";
+    netManeger->sendMessage(url,CC_CALLBACK_2(UserCaseScene::onHttpRequestCompleted, this),nullptr);
+}
+void UserCaseScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    Size visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+//     rapidjson::Document Jsondata;
+    
+    dynamicData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (dynamicData.HasParseError()) {
+        
+        return;
+    }
+    if(dynamicData.HasMember("data")){
+        rapidjson::Value& object = dynamicData["data"];
+        auto bkView=dynamicLayer->getChildByTag(2);
+        auto scrollV=createTableView(Vec2(0, 100), Size(visibleSize.width, 890));
+        bkView->addChild(scrollV);
+
+    }
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    dynamicData.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+}
+
+
+
+
 
 //截取字符串
 std::vector<std::string> UserCaseScene::parseUTF8(const std::string &str)

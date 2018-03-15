@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -133,6 +134,7 @@ cocos2d::Layer* VisitTimeScene::createPromptLayer(std::string content){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
+            pushDataToNetWork();
             this->removeChildByTag(2001);
             break;
         }
@@ -179,13 +181,62 @@ void VisitTimeScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType ty
                     box->setSelected(false);
                 }
             }
+
+            contentStr="";
+            if (tag==6) {//赋值
+                contentStr.append(to_string(12));
+            }else{
+            contentStr.append(to_string(tag+1));
+            }
+            contentStr.append("个月后将要随访，请提前做好准备");
             break;
         }
-        case cocos2d::ui::CheckBox::EventType::UNSELECTED:
+        case cocos2d::ui::CheckBox::EventType::UNSELECTED:{
+            contentStr="";
             log("UNSELECTED!");
-            break;
+            break;}
         default:
             break;
     }
 }
 
+#pragma-设置随访时间
+void VisitTimeScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"patientId=%s&doctorId=%s&context=%s",UserDefault::getInstance()->getStringForKey("patientId").c_str(),UserDefault::getInstance()->getStringForKey("id").c_str(),contentStr.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/patientInform";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(VisitTimeScene::onHttpRequestCompleted, this),url);
+}
+
+void VisitTimeScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        if (this->infoData["status"].GetInt()==0) {
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}

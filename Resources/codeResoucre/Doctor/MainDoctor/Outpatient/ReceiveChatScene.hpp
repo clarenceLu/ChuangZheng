@@ -10,6 +10,12 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
+
 class ReceiveChatScene:public cocos2d::Scene ,public cocos2d::TextFieldDelegate{
 public:
     static cocos2d::Scene* createScene();
@@ -23,6 +29,14 @@ public:
     void selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::EventType type);
     void selectedItemEventScrollView(Ref* pSender, cocos2d::ui::ScrollView::EventType type);
     
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
     private:
+    rapidjson::Document infoData;
+    rapidjson::Document receiveData;
+    cocos2d::ui::ListView* lv;
+    
+    
 };
 #endif /* ReceiveChatScene_hpp */

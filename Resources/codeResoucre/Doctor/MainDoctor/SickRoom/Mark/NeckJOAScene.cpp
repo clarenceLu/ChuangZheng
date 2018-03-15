@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -21,39 +22,39 @@ bool NeckJOAScene::init(){
     }
 #pragma-ValueVector加入数据
     ValueVector vector1;
-    vector1.push_back(Value("4分：正常"));
-    vector1.push_back(Value("3分：能持筷及一般家务劳动，但手笨拙"));
-    vector1.push_back(Value("2分：虽手不灵活，但能持筷"));
-    vector1.push_back(Value("1分：能持勺，但不能持筷"));
-    vector1.push_back(Value("0分：自己不能持筷或勺进餐"));
+    vector1.push_back(Value("4分:正常"));
+    vector1.push_back(Value("3分:能持筷及一般家务劳动，但手笨拙"));
+    vector1.push_back(Value("2分:虽手不灵活，但能持筷"));
+    vector1.push_back(Value("1分:能持勺，但不能持筷"));
+    vector1.push_back(Value("0分:自己不能持筷或勺进餐"));
     string key1 = "上肢运动功能";
     ValueVector vector2;
-    vector2.push_back(Value("4分：正常"));
-    vector2.push_back(Value("3分：平地或上楼行走不用支持物，但下肢不灵活"));
-    vector2.push_back(Value("2分：在平地行走可不用支持物，但上楼时需用"));
-    vector2.push_back(Value("1分：即使在平地行走也需用支持物"));
-    vector2.push_back(Value("0分：不能行走"));
+    vector2.push_back(Value("4分:正常"));
+    vector2.push_back(Value("3分:平地或上楼行走不用支持物，但下肢不灵活"));
+    vector2.push_back(Value("2分:在平地行走可不用支持物，但上楼时需用"));
+    vector2.push_back(Value("1分:即使在平地行走也需用支持物"));
+    vector2.push_back(Value("0分:不能行走"));
     string key2 = "下肢运动功能";
     ValueVector vector3;
-    vector3.push_back(Value("2分：正常"));
-    vector3.push_back(Value("1分：有轻度感觉障碍或麻木"));
-    vector3.push_back(Value("0分：有明显感觉障碍"));
+    vector3.push_back(Value("2分:正常"));
+    vector3.push_back(Value("1分:有轻度感觉障碍或麻木"));
+    vector3.push_back(Value("0分:有明显感觉障碍"));
     string key3 = "上肢（感觉）";
     ValueVector vector4;
-    vector4.push_back(Value("2分：正常"));
-    vector4.push_back(Value("1分：有轻度感觉障碍或麻木"));
-    vector4.push_back(Value("0分：有明显感觉障碍"));
+    vector4.push_back(Value("2分:正常"));
+    vector4.push_back(Value("1分:有轻度感觉障碍或麻木"));
+    vector4.push_back(Value("0分:有明显感觉障碍"));
     string key4 = "下肢（感觉）";
     ValueVector vector5;
-    vector5.push_back(Value("2分：正常"));
-    vector5.push_back(Value("1分：有轻度感觉障碍或麻木"));
-    vector5.push_back(Value("0分：有明显感觉障碍"));
+    vector5.push_back(Value("2分:正常"));
+    vector5.push_back(Value("1分:有轻度感觉障碍或麻木"));
+    vector5.push_back(Value("0分:有明显感觉障碍"));
     string key5 = "躯干（感觉）";
     ValueVector vector6;
-    vector6.push_back(Value("3分：正常"));
-    vector6.push_back(Value("2分：轻度排尿困难，尿频，尿踌躇"));
-    vector6.push_back(Value("1分：高度排尿困难，尿费力，尿失禁或淋漓"));
-    vector6.push_back(Value("0分：尿潴留"));
+    vector6.push_back(Value("3分:正常"));
+    vector6.push_back(Value("2分:轻度排尿困难，尿频，尿踌躇"));
+    vector6.push_back(Value("1分:高度排尿困难，尿费力，尿失禁或淋漓"));
+    vector6.push_back(Value("0分:尿潴留"));
     string key6 = "膀胱功能";
     
 #pragma-ValueMap加入数据
@@ -90,6 +91,7 @@ bool NeckJOAScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
+            pushDataToNetWork();
             log("NeckJOA sure");
         }
             
@@ -374,3 +376,159 @@ void NeckJOAScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type
             break;
     }
 }
+
+std::string NeckJOAScene::getJsonData(int type)
+{
+    totalNum=0;
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        rapidjson::Value array(rapidjson::kArrayType);
+        rapidjson::Value array2(rapidjson::kArrayType);
+        rapidjson::Value array3(rapidjson::kArrayType);
+        rapidjson::Value array4(rapidjson::kArrayType);
+        rapidjson::Value array5(rapidjson::kArrayType);
+        rapidjson::Value array6(rapidjson::kArrayType);
+        for (int i=0; i<boxDic.size(); i++) {
+            CheckBox* box=(CheckBox*)boxDic.at(i);
+            int tag=box->getTag();
+            if (tag>=0&&tag<5) {
+                    if (box->getSelectedState()) {
+                        totalNum+=4-tag;
+                         array.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+               }
+            }
+            if (tag>=5&&tag<10) {
+                    if (box->getSelectedState()) {
+                        totalNum+=9-tag;
+                        array2.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=10&&tag<13) {
+                    if (box->getSelectedState()) {
+                        totalNum+=12-tag;
+                        array3.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    }
+            }
+            if (tag>=13&&tag<16) {
+                    if (box->getSelectedState()) {
+                        totalNum+=15-tag;
+                        array4.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    }
+            }
+            if (tag>=16&&tag<19) {
+                    if (box->getSelectedState()) {
+                        totalNum+=18-tag;
+                        array5.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=19&&tag<23) {
+                    if (box->getSelectedState()) {
+                        totalNum+=22-tag;
+                        array6.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+        }
+        document.AddMember("上肢运动功能", array, allocator);
+        document.AddMember("下肢运动功能", array2, allocator);
+        document.AddMember("上肢感觉", array3, allocator);
+        document.AddMember("下肢感觉", array4, allocator);
+        document.AddMember("躯干感觉", array5, allocator);
+        document.AddMember("膀胱功能", array6, allocator);
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void NeckJOAScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    string jsonData=getJsonData(0);
+    sprintf(jsonStr,"%s;%s",jsonData.c_str(),to_string(totalNum).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"pf_jJOA;pf_jJOA_total",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(NeckJOAScene::onHttpRequestCompleted, this),url);
+}
+
+void NeckJOAScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+string NeckJOAScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 0: case 5:case 10:case 13:case 16:case 19:
+            content="正常";break;
+        case 1:
+            content="能持筷及一般家务劳动，但手笨拙";break;
+        case 2:
+            content="虽手不灵活，但能持筷";break;
+        case 3:
+            content="能持勺，但不能持筷";break;//神经根型颈椎病
+        case 4:
+            content="自己不能持筷或勺进餐";break;
+        case 6:
+            content="平地或上楼行走不用支持物，但下肢不灵活";break;
+        case 7:
+            content="在平地行走可不用支持物，但上楼时需用";break;
+        case 8:
+            content="即使在平地行走也需用支持物";break;
+        case 9:
+            content="不能行走";break;
+        case 11: case 14:case 17:
+            content="有轻度感觉障碍或麻木";break;
+        case 12:case 15:case 18:
+            content="有明显感觉障碍";break;
+        case 20:
+            content="轻度排尿困难，尿频，尿踌躇";break;
+        case 21:
+            content="高度排尿困难，尿费力，尿失禁或淋漓";break;
+        case 22:
+            content="尿潴留";break;
+        default:
+            break;
+    }
+    return content;
+}
+

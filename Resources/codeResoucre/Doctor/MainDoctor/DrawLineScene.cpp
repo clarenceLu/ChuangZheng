@@ -9,6 +9,8 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
+
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -52,6 +54,8 @@ bool DrawLineScene::init(){
     
     return true;
 }
+
+
 void DrawLineScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder);
@@ -233,14 +237,25 @@ void DrawLineScene::onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::
     }
     log("content%s",content);
 #pragma-核对结果是否正确
+    if (type==1) {
+        //第一次打开则发送请求给服务器
+        UserDefault::getInstance()->setStringForKey("DrawPassWord", content);
+        UserDefault::getInstance()->flush();
+        pushDataToNetWork(content);
+}else{
     string result=content;
-    if (result==UserDefault::getInstance()->getStringForKey("DrawPassWord")) {
+    if (UserDefault::getInstance()->getStringForKey("DrawPassWord")=="") {
+        showServerMessage("未设置手势锁，点击空白处即可进入");
+        Director::getInstance()->popScene();
+    }else if (result==UserDefault::getInstance()->getStringForKey("DrawPassWord")) {
         log("验证成功");
         showServerMessage("验证成功");
         Director::getInstance()->popScene();
-    }else if(result!=""){
-     showServerMessage("手势错误");
-    }
+        }else if(result!=""){
+        verifyDataToNetWork(result);
+        }
+        
+}
     log("TouchTest onTouchesEnded");
 }
 //打断触摸事件，一般是系统层级的消息，如来电话，触摸事件就会被打断
@@ -273,6 +288,89 @@ void DrawLineScene::showServerMessage( string ch )
 }
 
 
+#pragma-用于加载网络数据
+void DrawLineScene::pushDataToNetWork(string content){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/saveGlock?code=%s&doctorId=%s",content.c_str(),UserDefault::getInstance()->getStringForKey("id").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(DrawLineScene::onHttpRequestCompleted, this),nullptr);
+}
+
+void DrawLineScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        if (this->infoData["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+#pragma-用于加载网络数据
+void DrawLineScene::verifyDataToNetWork(string content){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/checkGlock?code=%s&doctorId=%s",content.c_str(),UserDefault::getInstance()->getStringForKey("id").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(DrawLineScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void DrawLineScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        if (this->infoData["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }else{
+            showServerMessage("手势错误");
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        infoData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
 
 
 

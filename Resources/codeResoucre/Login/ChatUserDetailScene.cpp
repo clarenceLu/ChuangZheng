@@ -10,6 +10,7 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
 #include "SelectStep3Scene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -41,21 +42,32 @@ bool ChatUserDetailScene::init(){
     });
     this->addChild(backBtn);
     
-    auto scrollView=cocos2d::ui::ScrollView::create();
+    scrollView=cocos2d::ui::ScrollView::create();
     scrollView->setPosition(Vec2(0, 30));
     scrollView->setAnchorPoint(Vec2(0, 0));
     scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
     scrollView->setScrollBarEnabled(true);//是否显示滚动条
     scrollView->setContentSize(Size(visibleSize.width, 950));//设置窗口大小
     scrollView->setBackGroundColor(Color3B(255, 255, 255));//设置背景颜色
-    createScrollDetailView(scrollView);
+    
     bkView->addChild(scrollView);
     return true;
 };
 
+void ChatUserDetailScene::onEnter(){
+    Scene::onEnter();
+    getUserDataToNetWork();
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    infoData.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+    
+}
+
 void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
+    rapidjson::Value& data = infoData["data"];
     
     auto bkView=Sprite::create("alpha.png");
     bkView->setPosition(Vec2(0, 0));
@@ -67,9 +79,8 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
     headBtn->setPosition(Vec2(244, 815));
     headBtn->setAnchorPoint(Vec2(0, 0));
     headBtn->setTouchEnabled(true);
-    headBtn->ignoreContentAdaptWithSize(true);
-    headBtn->setScale9Enabled(true);
-    headBtn->setContentSize(Size(151, 151));
+    float height3=headBtn->getContentSize().height;
+    headBtn->setScale(151.0/height3);
     bkView->addChild(headBtn);
     headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
         if (type == Widget::TouchEventType::ENDED){
@@ -79,12 +90,37 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
             this->addChild(layer);
         }
     });
-
-    createLabel(Vec2(0, 758), "真实姓名：", "张牧之", bkView);
-    createLabel(Vec2(0, 678), "病历号：", "20171112082214", bkView);
-    createLabel(Vec2(0, 598), "性别：", "女", bkView);
-    createLabel(Vec2(0, 518), "年龄：", "32", bkView);
-    float height= createLabel(Vec2(0, 438), "自述症状：", "头后仰上身麻无敌无敌无敌无敌无敌", bkView);
+    string name="佚名";
+    string caseNo="未知";
+    string sex="男";
+    string age="未知";
+    string  contentStr="自述：";
+    if(!data["name"].IsNull()){
+        name=data["name"].GetString();
+    } if(!data["caseNo"].IsNull()){
+        caseNo=data["caseNo"].GetString();
+    } if(!data["sex"].IsNull()){
+               if (strcmp(data["sex"].GetString(), "F")==0) {sex="女";}
+    } if(!data["age"].IsNull()){
+        age=data["age"].GetString();
+    }
+    if (!data["step1"].IsNull()) {
+        log("step1:%s",data["step1"].GetString());
+        contentData.Parse<rapidjson::kParseNoFlags>(infoData["data"]["step1"].GetString());
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        contentData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+            contentStr=searchContentForInfoData(contentStr, "step1：",contentData);
+    }if (!data["step2"].IsNull()) {
+        contentStr.append(data["step2"].GetString());
+    }
+    createLabel(Vec2(0, 758), "真实姓名：", name, bkView);
+    createLabel(Vec2(0, 678), "病历号：", caseNo, bkView);
+    createLabel(Vec2(0, 598), "性别：", sex, bkView);
+    createLabel(Vec2(0, 518), "年龄：", age, bkView);
+    float height= createLabel(Vec2(0, 438), "自述症状：", contentStr, bkView);
 
     auto imageLB = Label::createWithSystemFont("影像：","fonts/Marker Felt.ttf",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     imageLB->setPosition(Point(56,400-height));
@@ -124,9 +160,8 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
             }
             imageBtn1->setAnchorPoint(Vec2(0, 0));
             imageBtn1->setTouchEnabled(true);
-            imageBtn1->ignoreContentAdaptWithSize(true);
-            imageBtn1->setScale9Enabled(true);
-            imageBtn1->setContentSize(Size(125, 125));
+            float height2=imageBtn1->getContentSize().height;
+            imageBtn1->setScale(125.0/height2);
             bkView->addChild(imageBtn1);
             imageBtn1->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
                 if (type == Widget::TouchEventType::ENDED){
@@ -139,6 +174,59 @@ void ChatUserDetailScene::createScrollDetailView(ScrollView* superV){
     
     bkView->setPosition(Vec2(0, currentHeight-960));
     
+}
+
+std::string ChatUserDetailScene::searchContentForInfoData(std::string content,std::string title,rapidjson::Document& data){
+    if (data.IsObject()) {
+        content.append(title);
+        for (auto j=data.MemberBegin(); j!=data.MemberEnd(); ++j) {
+            auto key = (j->name).GetString();
+            if (data[key].Size()) {
+                if (strcmp(key, "chooseKey")==0) {
+                    content.append("手脚、胳膊、腿");
+                }else  if (strcmp(key, "headKey")==0) {
+                    content.append("疼痛程度");
+                }else  if (strcmp(key, "lastKey")==0) {
+                    content.append("症状补充");
+                }else  if (strcmp(key, "milStringKey")==0) {
+                    content.append("一口气做多走(单位:米)");
+                }else{
+                content.append(key);
+                }
+                content.append(":");
+                //仅修改棘突异常
+            }
+            log("key:%s", key);
+            for(auto i = 0; i < data[key].Size(); ++i){
+                content.append(data[key][i].GetString());
+                if (i==data[key].Size()-1&&j==data.MemberEnd()-1) {}else{
+                    content.append(" ");}
+                //仅修改棘突异常
+                if (i==data[key].Size()-1) {
+                    if (strcmp(title.c_str(), "棘突：")==0) {
+                        content.append("）");
+                    }
+                }
+                
+                log("%s", data[key][i].GetString());
+            }
+        }
+        content.append(";");
+    }else if(data.IsArray()){
+        if (data.Size()>0) {
+            content.append(title);
+        }
+        for(auto i = 0; i < data.Size(); ++i){
+            content.append(data[i].GetString());
+            content.append(" ");
+            log("%s", data[i].GetString());
+        }
+        if (data.Size()>0) {
+            content.append(";");
+        }
+    }
+    log("content：%s",content.c_str());
+    return content;
 }
 
 Layer* ChatUserDetailScene::createAlbumLayer(){
@@ -272,7 +360,7 @@ float ChatUserDetailScene::createLabel(Vec2 point,string name1,string name2,Spri
     nameLB->setAnchorPoint(Vec2(0, 0));
     superV->addChild(nameLB);
     
-    auto nameLB2 = Label::createWithSystemFont(name2,"Arial",35,Size(visibleSize.width-265,0),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto nameLB2 = Label::createWithSystemFont(name2,"Arial",35,Size(visibleSize.width-265,0),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
      float height=nameLB2->getContentSize().height;
     nameLB2->setPosition(Point(218,point.y+41-height));
     nameLB2->setTextColor(Color4B(0,0,0, 255/3*2));
@@ -280,4 +368,43 @@ float ChatUserDetailScene::createLabel(Vec2 point,string name1,string name2,Spri
     superV->addChild(nameLB2);
     
     return height;
+}
+
+
+
+#pragma-个人资料界面
+void ChatUserDetailScene::getUserDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getUserById?patientId=%s",UserDefault::getInstance()->getStringForKey("id").c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(ChatUserDetailScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void ChatUserDetailScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->infoData.HasParseError()) {
+        
+        return;
+    }
+    if(this->infoData.HasMember("status")){
+        if (this->infoData["status"].GetInt()==0) {
+            scrollView->removeAllChildren();
+           createScrollDetailView(scrollView);
+            }
+        }
 }

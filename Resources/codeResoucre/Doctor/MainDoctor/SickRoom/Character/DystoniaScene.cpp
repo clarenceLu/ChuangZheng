@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -45,7 +46,7 @@ bool DystoniaScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
-            Director::getInstance()->popScene();
+            pushDataToNetWork();
         default:
             break;
     }
@@ -70,6 +71,7 @@ bool DystoniaScene::init(){
     acceptBox->setTouchEnabled(true);
     acceptBox->addEventListener(CC_CALLBACK_2(DystoniaScene::checkBoxCallback,this));
     addChild(acceptBox);
+    boxDic.insert(1, acceptBox);
     
     auto refuseLB= Label::createWithSystemFont("增强","Arial",35,Size(90,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     refuseLB->setPosition(Vec2(214, 877));
@@ -83,6 +85,7 @@ bool DystoniaScene::init(){
     refuseBox->setTouchEnabled(true);
     refuseBox->addEventListener(CC_CALLBACK_2(DystoniaScene::checkBoxCallback,this));
     addChild(refuseBox);
+    boxDic.insert(2, refuseBox);
     
     auto lineV8=Sprite::create("userInfo_line.png");
     lineV8->setPosition(Vec2(50,862));
@@ -109,6 +112,8 @@ bool DystoniaScene::init(){
     acceptBox2->setTouchEnabled(true);
     acceptBox2->addEventListener(CC_CALLBACK_2(DystoniaScene::checkBoxCallback,this));
     addChild(acceptBox2);
+    boxDic.insert(3, acceptBox2);
+    
     
     auto refuseLB2= Label::createWithSystemFont("增强","Arial",35,Size(90,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     refuseLB2->setPosition(Vec2(214, 732));
@@ -122,6 +127,7 @@ bool DystoniaScene::init(){
     refuseBox2->setTouchEnabled(true);
     refuseBox2->addEventListener(CC_CALLBACK_2(DystoniaScene::checkBoxCallback,this));
     addChild(refuseBox2);
+    boxDic.insert(4, refuseBox2);
     
     
     return true;
@@ -161,3 +167,107 @@ void DystoniaScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType typ
             break;
     }
 }
+
+
+std::string DystoniaScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    document.SetArray();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+    for (int i=1; i<3; i++) {
+        CheckBox*currentBox=boxDic.at(i);
+        if (currentBox->getSelectedState()) {
+            document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+        }
+    }
+    }else{
+        for (int i=3; i<5; i++) {
+            CheckBox*currentBox=boxDic.at(i);
+            if (currentBox->getSelectedState()) {
+                document.PushBack(rapidjson::Value(changeNumToString(i).c_str(), allocator),allocator);
+            }
+        }
+    }
+        
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void DystoniaScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    sprintf(jsonStr,"%s;%s",getJsonData(0).c_str(),getJsonData(1).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+#pragma-这边怎么存的数据
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"tz_jzlyc_sz;tz_jzlyc_xz",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(DystoniaScene::onHttpRequestCompleted, this),url);
+    
+}
+
+void DystoniaScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+string DystoniaScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 1:
+            content="减弱";
+            break;
+        case 2:
+            content="增强";
+            break;
+        case 3:
+            content="减弱";break;//神经根型颈椎病
+        case 4:
+            content="增强";break;//神经根型颈椎病
+            
+            
+        default:
+            break;
+    }
+    return content;
+}
+
+

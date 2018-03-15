@@ -188,12 +188,19 @@ void LoginScene::createHudView(){
 }
 
 void LoginScene::saveData(rapidjson::Value& object,int type){
-    UserDefault::getInstance()->deleteValueForKey("DrawPassWord");
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    loginData.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+    
+//    UserDefault::getInstance()->deleteValueForKey("DrawPassWord");
+   
     UserDefault::getInstance()->setStringForKey("id",object["id"].GetString());
     UserDefault::getInstance()->setStringForKey("name",object["name"].GetString());
     UserDefault::getInstance()->setStringForKey("userId",object["userId"].GetString());
     UserDefault::getInstance()->setStringForKey("passwd",object["passwd"].GetString());
     if (type==1) {
+         UserDefault::getInstance()->setStringForKey("isLock", object["isLock"].GetString());
        UserDefault::getInstance()->setStringForKey("groupId",object["groupId"].GetString());
          if (!object["isleader"].IsNull()) {
 //             string isleader=CCString::createWithFormat("%d",object["isleader"].GetInt())->getCString();
@@ -229,7 +236,8 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
 //如果不存在此参数
             log("没有此参数");
             saveData(object,0);
-            auto userCaseSC=UserCaseScene::create();
+            auto userCaseSC=(UserCaseScene*)UserCaseScene::create();
+            userCaseSC->infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
             Director::getInstance()->replaceScene(userCaseSC);
         }
       else  if (!object["groupId"].IsNull()) {
@@ -256,10 +264,11 @@ void LoginScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* respon
 
 void LoginScene::pushDataToNetWork(string username,string passwd){
     NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
-    char strtest[500] = {0};
-    sprintf(strtest,"http://czapi.looper.pro/web/userLogin?userId=%s&passwd=%s", username.c_str(),passwd.c_str());
-    string url=strtest;
-    netManeger->sendMessage(url,CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),nullptr);
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"userId=%s&passwd=%s",username.c_str(),passwd.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/userLogin";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(LoginScene::onHttpRequestCompleted, this),url);
 }
 
 
@@ -295,29 +304,22 @@ void LoginScene::menuLoginCallback(Ref* pSender)
     }
     if (tag==100) {
          Size visibleSize=Director::getInstance()->getVisibleSize();
-        if (userName->getStringLength()<2) {
+        if (strcmp(userName->getString().c_str(), "")==0) {
             auto judgeV = Label::createWithSystemFont("请输入您的账号","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
             judgeV->setPosition(Vec2(visibleSize.width/2, 568));
             judgeV->setTextColor(Color4B(91, 144, 229, 255));
             judgeV->setAnchorPoint(Vec2(0.5, 0));
             this->addChild(judgeV,10);
-//            judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
-        }else if(password->getStringLength()<1){
+            judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
+        }else if(strcmp(password->getString().c_str(), "")==0){
             auto judgeV = Label::createWithSystemFont("请输入您的密码","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
             judgeV->setPosition(Vec2(visibleSize.width/2, 568));
             judgeV->setTextColor(Color4B(91, 144, 229, 255));
             judgeV->setAnchorPoint(Vec2(0.5, 0));
             this->addChild(judgeV,10);
             judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
-        }else if(password->getStringLength()>=1&&userName->getStringLength()>=2){
+        }else {
      pushDataToNetWork(userName->getString(), password->getString());
-        }else{
-            auto judgeV = Label::createWithSystemFont("请输入账号和密码","Arial",35,Size(visibleSize.width,50),TextHAlignment::CENTER,TextVAlignment::BOTTOM);
-            judgeV->setPosition(Vec2(visibleSize.width/2, 568));
-            judgeV->setTextColor(Color4B(91, 144, 229, 255));
-            judgeV->setAnchorPoint(Vec2(0.5, 0));
-            this->addChild(judgeV,10);
-            judgeV->runAction(Sequence::create(DelayTime::create(0.5),FadeOut::create(0.5), NULL));
         }
     }
 

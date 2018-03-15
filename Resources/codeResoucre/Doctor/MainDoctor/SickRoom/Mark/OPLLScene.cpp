@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -45,7 +46,7 @@ bool OPLLScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            Director::getInstance()->popScene();
+            pushDataToNetWork();
             log("OPLL sure");
         }
             
@@ -96,6 +97,7 @@ void OPLLScene::createScrollDetailView(ScrollView* superV){
     weightField->setTextColor(Color4B(0, 0, 0, 220));
     weightField->setTextHorizontalAlignment(TextHAlignment::CENTER);
     weightField->addEventListener(CC_CALLBACK_2(OPLLScene::eventCallBack, this));
+    textFieldDic.insert(0, weightField);
     bkView->addChild(weightField);
     auto weightLB2 = Label::createWithSystemFont("kg","Arial",35,Size(visibleSize.width-310,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
     weightLB2->setPosition(Point(260,visibleSize.height-240));
@@ -123,6 +125,7 @@ void OPLLScene::createScrollDetailView(ScrollView* superV){
     timeField->setTextColor(Color4B(0, 0, 0, 220));
     timeField->setTextHorizontalAlignment(TextHAlignment::CENTER);
     timeField->addEventListener(CC_CALLBACK_2(OPLLScene::eventCallBack, this));
+    textFieldDic.insert(1, timeField);
     bkView->addChild(timeField);
     auto timeLB2 = Label::createWithSystemFont("month","Arial",35,Size(visibleSize.width-310,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
     timeLB2->setPosition(Point(260,visibleSize.height-330));
@@ -173,7 +176,7 @@ void OPLLScene::createScrollDetailView(ScrollView* superV){
     bkView->addChild(womanLB);
   
 //骨化类型
-    auto greenV=Sprite::create("btn_spine_blue.png");
+    auto greenV=Sprite::create("recover_rect_green.png");
     greenV->setPosition(Vec2(14, visibleSize.height-492));
     greenV->setAnchorPoint(Vec2(0, 0));
     greenV->setContentSize(Size(visibleSize.width-28, 62));
@@ -262,6 +265,7 @@ void OPLLScene::createScrollDetailView(ScrollView* superV){
     occupyField->setTextColor(Color4B(0, 0, 0, 220));
     occupyField->setTextHorizontalAlignment(TextHAlignment::CENTER);
     occupyField->addEventListener(CC_CALLBACK_2(OPLLScene::eventCallBack, this));
+    textFieldDic.insert(2, occupyField);
     bkView->addChild(occupyField);
     auto occupyLB2 = Label::createWithSystemFont("%","Arial",35,Size(90,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
     occupyLB2->setPosition(Point(visibleSize.width-56,visibleSize.height-670));
@@ -318,6 +322,7 @@ void OPLLScene::createScrollDetailView(ScrollView* superV){
     cobbsField->setTextColor(Color4B(0, 0, 0, 220));
     cobbsField->setTextHorizontalAlignment(TextHAlignment::CENTER);
     cobbsField->addEventListener(CC_CALLBACK_2(OPLLScene::eventCallBack, this));
+    textFieldDic.insert(3, cobbsField);
     bkView->addChild(cobbsField);
     auto cobbLB2 = Label::createWithSystemFont("度","Arial",35,Size(visibleSize.width-310,50),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
     cobbLB2->setPosition(Point(260,visibleSize.height-785));
@@ -446,25 +451,26 @@ void OPLLScene::createScrollDetailView(ScrollView* superV){
     otherLB->setTextColor(Color4B(91,144,230, 255));
     otherLB->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(otherLB);
-    occupyField=TextField::create("点击填写","Arial",35);
-    occupyField->setMaxLength(60);
-    occupyField->setTouchSize(Size(visibleSize.width-360,50));
-    occupyField->setAnchorPoint(Vec2(1,0));
-    occupyField->setPosition(Point(visibleSize.width-100,visibleSize.height-1150));
-    occupyField->setContentSize(Size(visibleSize.width-360,50));
-    occupyField->setPlaceHolderColor(Color4B(91, 144, 229, 200));
-    occupyField->setTextColor(Color4B(0, 0, 0, 220));
-    occupyField->setTextHorizontalAlignment(TextHAlignment::CENTER);
-    occupyField->addEventListener(CC_CALLBACK_2(OPLLScene::eventCallBack, this));
-    bkView->addChild(occupyField);
+    otherField=TextField::create("点击填写","Arial",35);
+    otherField->setMaxLength(60);
+    otherField->setTouchSize(Size(visibleSize.width-360,50));
+    otherField->setAnchorPoint(Vec2(1,0));
+    otherField->setPosition(Point(visibleSize.width-100,visibleSize.height-1150));
+    otherField->setContentSize(Size(visibleSize.width-360,50));
+    otherField->setPlaceHolderColor(Color4B(91, 144, 229, 200));
+    otherField->setTextColor(Color4B(0, 0, 0, 220));
+    otherField->setTextHorizontalAlignment(TextHAlignment::CENTER);
+    otherField->addEventListener(CC_CALLBACK_2(OPLLScene::eventCallBack, this));
+    textFieldDic.insert(4, otherField);
+    bkView->addChild(otherField);
     
  //风险平衡评价
-    auto greenV2=Sprite::create("btn_spine_blue.png");
+    auto greenV2=Sprite::create("recover_rect_green.png");
     greenV2->setPosition(Vec2(14, visibleSize.height-1220));
     greenV2->setAnchorPoint(Vec2(0, 0));
     greenV2->setContentSize(Size(visibleSize.width-28, 62));
     bkView->addChild(greenV2);
-    auto markLB= Label::createWithSystemFont("风险平衡评价(随访时填写)","Arial",35,Size(400,62),TextHAlignment::LEFT,TextVAlignment::CENTER);
+    auto markLB= Label::createWithSystemFont("风险平衡评价(随访时填写)","Arial",35,Size(460,62),TextHAlignment::LEFT,TextVAlignment::CENTER);
     markLB->setPosition(Vec2(40, 0));
     markLB->setTextColor(Color4B(255, 255, 255, 255));
     markLB->setAnchorPoint(Vec2(0, 0));
@@ -528,6 +534,8 @@ void OPLLScene::createScrollDetailView(ScrollView* superV){
     superV->setInnerContainerSize(Size(visibleSize.width, 2400-170));
     bkView->setPosition(Vec2(0, 2400-170-950));
     
+    getDataToNetWork();
+    
 }
 
 void OPLLScene::createSelectView(int tag,Vec2 point,string title,Sprite*bkView){
@@ -584,6 +592,8 @@ void OPLLScene::createSelectView(int tag,Vec2 point,string title,Sprite*bkView){
 
 void OPLLScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
+    TextField* textField = dynamic_cast<cocos2d::ui::TextField*>(pSender);
+    log("content %s",textField->getString().c_str());
     switch (type){
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
             CCLOG("INSERT_TEXT");
@@ -595,25 +605,514 @@ void OPLLScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType typ
             break;
     }
 }
+
 void OPLLScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
 {
     Size visibleSize=Director::getInstance()->getVisibleSize();
     CheckBox* item = (CheckBox*)ref;
     int tag= item->getTag();
     switch (type)
-    {
+{
         case cocos2d::ui::CheckBox::EventType::SELECTED:
             log("SELECTED!");
         {
-        
-        }
+             log("Box tag:%d,boxSize :%ld",tag,boxDic.size());
+            if (tag>=0&&tag<2) {
+                for (int i=0; i<2; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=2&&tag<5) {
+                for (int i=2; i<5; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=5&&tag<7) {
+                for (int i=5; i<7; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=7&&tag<9) {
+                for (int i=7; i<9; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=13&&tag<16) {
+                for (int i=13; i<16; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=16&&tag<19) {
+                for (int i=16; i<19; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=19&&tag<22) {
+                for (int i=19; i<22; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=13&&tag<16) {
+                for (int i=13; i<16; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=22&&tag<25) {
+                for (int i=22; i<25; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=25&&tag<28) {
+                for (int i=25; i<28; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=28&&tag<31) {
+                for (int i=28; i<31; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=31&&tag<34) {
+                for (int i=31; i<34; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=34&&tag<37) {
+                for (int i=34; i<37; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=37&&tag<40) {
+                for (int i=37; i<40; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=40&&tag<43) {
+                for (int i=40; i<43; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=43&&tag<46) {
+                for (int i=43; i<46; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            if (tag>=46&&tag<49) {
+                for (int i=46; i<49; i++) {
+                    CheckBox *box=boxDic.at(i);
+                    if (box->getTag()!=tag) {
+                        box->setSelected(false);
+                    }
+                }
+            }
+            
+}
             break;
         case cocos2d::ui::CheckBox::EventType::UNSELECTED:
-            log("UNSELECTED!");
-        {
-        }
+            log("UNSELECTED!");{
+                
+            }
             break;
         default:
             break;
     }
 }
+
+std::string OPLLScene::getJsonData(int type)
+{
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        rapidjson::Value array(rapidjson::kArrayType);
+        rapidjson::Value array2(rapidjson::kArrayType);
+        rapidjson::Value array3(rapidjson::kArrayType);
+        rapidjson::Value array4(rapidjson::kArrayType);
+        rapidjson::Value array5(rapidjson::kArrayType);
+        rapidjson::Value array6(rapidjson::kArrayType);
+        rapidjson::Value array7(rapidjson::kArrayType);
+        rapidjson::Value array8(rapidjson::kArrayType);
+        rapidjson::Value array9(rapidjson::kArrayType);
+        rapidjson::Value array10(rapidjson::kArrayType);
+        rapidjson::Value array11(rapidjson::kArrayType);
+        rapidjson::Value array12(rapidjson::kArrayType);
+        rapidjson::Value array13(rapidjson::kArrayType);
+        rapidjson::Value array14(rapidjson::kArrayType);
+        rapidjson::Value array15(rapidjson::kArrayType);
+        rapidjson::Value array16(rapidjson::kArrayType);
+        rapidjson::Value array17(rapidjson::kArrayType);
+        rapidjson::Value array18(rapidjson::kArrayType);
+        array18.PushBack(rapidjson::Value(weightField->getString().c_str(), allocator),allocator);
+        rapidjson::Value array19(rapidjson::kArrayType);
+        array19.PushBack(rapidjson::Value(timeField->getString().c_str(), allocator),allocator);
+        rapidjson::Value array20(rapidjson::kArrayType);
+        array20.PushBack(rapidjson::Value(occupyField->getString().c_str(), allocator),allocator);
+        rapidjson::Value array21(rapidjson::kArrayType);
+        array21.PushBack(rapidjson::Value(cobbsField->getString().c_str(), allocator),allocator);
+        rapidjson::Value array22(rapidjson::kArrayType);
+        array22.PushBack(rapidjson::Value(otherField->getString().c_str(), allocator),allocator);
+        document.AddMember("体重", array18, allocator);
+        document.AddMember("病程", array19, allocator);
+        document.AddMember("占位率", array20, allocator);
+        document.AddMember("cobbs角", array21, allocator);
+        document.AddMember("其他", array22, allocator);
+        
+        
+        for (int i=0; i<boxDic.size(); i++) {
+            CheckBox* box=(CheckBox*)boxDic.at(i);
+            int tag=box->getTag();
+            if (tag>=0&&tag<2) {
+                if (box->getSelectedState()) {
+                    array.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=2&&tag<5) {
+                if (box->getSelectedState()) {
+                    array2.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array2.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=5&&tag<7) {
+                if (box->getSelectedState()) {
+                    array3.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array3.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=7&&tag<9) {
+                if (box->getSelectedState()) {
+                    array4.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array4.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=13&&tag<16) {
+                if (box->getSelectedState()) {
+                    array5.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array5.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=16&&tag<19) {
+                if (box->getSelectedState()) {
+                    array6.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array6.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=19&&tag<22) {
+                if (box->getSelectedState()) {
+                    array7.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array7.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=13&&tag<16) {
+                if (box->getSelectedState()) {
+                    array8.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array8.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=22&&tag<25) {
+                if (box->getSelectedState()) {
+                    array9.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array9.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=25&&tag<28) {
+                if (box->getSelectedState()) {
+                    array10.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array10.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=28&&tag<31) {
+                if (box->getSelectedState()) {
+                    array11.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array11.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=31&&tag<34) {
+                if (box->getSelectedState()) {
+                    array12.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array12.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=34&&tag<37) {
+                if (box->getSelectedState()) {
+                    array13.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array13.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=37&&tag<40) {
+                if (box->getSelectedState()) {
+                    array14.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array14.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=40&&tag<43) {
+                if (box->getSelectedState()) {
+                    array15.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array15.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=43&&tag<46) {
+                if (box->getSelectedState()) {
+                    array16.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array16.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=46&&tag<49) {
+                if (box->getSelectedState()) {
+                    array17.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                    array17.PushBack(rapidjson::Value(to_string(tag).c_str(), allocator),allocator);
+                }
+            }
+            
+            
+        }
+        document.AddMember("吸烟", array, allocator);
+        document.AddMember("矢状位", array2, allocator);
+        document.AddMember("横断面", array3, allocator);
+        document.AddMember("K-line", array4, allocator);
+        document.AddMember("并发症", array5, allocator);
+        document.AddMember("神经功能恢复-患者", array6, allocator);
+        document.AddMember("神经功能恢复-医生", array7, allocator);
+        document.AddMember("颈部活动度-患者", array8, allocator);
+        document.AddMember("生理曲度恢复-医生", array9, allocator);
+        document.AddMember("并发脑脊液漏-患者", array10, allocator);
+        document.AddMember("并发脑脊液漏-医生", array11, allocator);
+        document.AddMember("并发神经症状加重-患者", array12, allocator);
+        document.AddMember("并发神经症状加重-医生", array13, allocator);
+        document.AddMember("并发C5神经根麻痹-患者", array14, allocator);
+        document.AddMember("并发C5神经根麻痹-医生", array15, allocator);
+        document.AddMember("并发骨化物进展-患者", array16, allocator);
+        document.AddMember("并发骨化物进展-医生", array17, allocator);
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void OPLLScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    string jsonData=getJsonData(0);
+    sprintf(jsonStr,"%s",jsonData.c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"pf_OPLL",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(OPLLScene::onHttpRequestCompleted, this),url);
+}
+
+void OPLLScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+string OPLLScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 0:
+            content="是";break;
+        case 1:
+            content="否";break;
+        case 2:
+            content="局限型";break;
+        case 3:
+            content="连续型";break;//神经根型颈椎病
+        case 4:
+            content="混合型";break;
+        case 5:
+            content="开口型";break;
+        case 6:
+            content="闭口型";break;
+        case 7:
+            content="阳性";break;
+        case 8:
+            content="阴性";break;
+        case 9:
+            content="脑脊液漏";break;
+        case 10:
+            content="神经症状加重";break;
+        case 11:
+            content="C5神经麻痹";break;
+        case 12:
+            content="骨化物进展";break;
+        case 13:case 16:case 19:case 22:case 25:case 28:case 31:case 34:case 37:case 40:case 43:case 46:
+            content="接受";break;
+        case 14:case 17:case 20:case 23:case 26:case 29:case 32:case 35:case 38:case 41:case 44:case 47:
+            content="拒绝";break;
+        case 15:case 18:case 21:case 24:case 27:case 30:case 33:case 36:case 39:case 42:case 45:case 48:
+            content="均可";break;
+        default:
+            break;
+    }
+    return content;
+}
+
+
+#pragma-网络数据
+void OPLLScene::getDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/getCaseById?caseId=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str());
+    netManeger->postHttpRequest(memberUrl,CC_CALLBACK_2(OPLLScene::onHttpRequestCompleted2, this),nullptr);
+}
+
+void OPLLScene::onHttpRequestCompleted2(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+     rapidjson::Document Jsondata;
+    
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (Jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(Jsondata.HasMember("status")){
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        Jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+        
+        
+        if (Jsondata["status"].GetInt()==0) {
+            const rapidjson::Value& val_form = Jsondata["data"];
+            if(val_form.IsObject()){
+                if (!val_form["pf_OPLL"].IsNull()) {
+                    infoData.Parse<rapidjson::kParseDefaultFlags>(val_form["pf_OPLL"].GetString());
+//刷新界面
+                    updateForInfoData();
+                }
+                
+            }}
+    }
+}
+
+void OPLLScene::updateForInfoData(){
+    if (infoData.IsObject()) {
+        for (auto j=infoData.MemberBegin(); j!=infoData.MemberEnd(); ++j) {
+            auto key = (j->name).GetString();
+            if (strcmp(key, "体重")==0) {
+                if (infoData[key].Size()) {
+                    weightField->setString(infoData[key][0].GetString());}
+            }else if (strcmp(key, "病程")==0) {
+                if (infoData[key].Size()) {
+                    timeField->setString(infoData[key][0].GetString());}
+            }else if (strcmp(key, "占位率")==0) {
+                if (infoData[key].Size()) {
+                    occupyField->setString(infoData[key][0].GetString());}
+            }else if (strcmp(key, "cobbs角")==0) {
+                if (infoData[key].Size()) {
+                    cobbsField->setString(infoData[key][0].GetString());}
+            }else if (strcmp(key, "其他")==0) {
+                if (infoData[key].Size()) {
+                    otherField->setString(infoData[key][0].GetString());}
+            }else if(infoData[key].Size()>1){
+                int tag=atoi(infoData[key][infoData[key].Size()-1].GetString());
+                log("tag:%d",tag);
+                CheckBox* box=(CheckBox*)boxDic.at(tag);
+                box->setSelected(true);
+               //都是选择题
+            }
+        }
+
+    }
+}
+
+

@@ -2,7 +2,7 @@
 #include "LoginScene.h"
 #include "WelcomeScene.hpp"
 
-
+#include "MessageNotificationScene.hpp"
 #include "SpineTendernessScene.hpp"
 #include "UserCaseScene.hpp"
 #include "TreatScene.hpp"
@@ -243,7 +243,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 //   auto scene = WelcomeScene::createScene();
 
   //  auto scene=TreatWayScene::createScene();
-//    auto scene=TreatScene::createScene();
+//    auto scene=MessageNotificationScene::createScene();
 //    auto  scene=DrawLineScene::createScene();
 
     director->runWithScene(scene);
@@ -298,8 +298,12 @@ void AppDelegate::ImageSavePath(std::string str){
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
+    if (UserDefault::getInstance()->getStringForKey("isLock").length()==0||UserDefault::getInstance()->getStringForKey("isLock")=="0") {
+        log("islock  %s",UserDefault::getInstance()->getStringForKey("isLock").c_str());
+    }else{
     auto  scene=DrawLineScene::createScene();
     Director::getInstance()->pushScene(scene);
+    }
 #if USE_AUDIO_ENGINE
     AudioEngine::pauseAll();
 #elif USE_SIMPLE_AUDIO_ENGINE

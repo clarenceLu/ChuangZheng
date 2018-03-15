@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -45,8 +46,12 @@ bool SetTemporaryRoom::init(){
     addBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            log("新建成功");
-            Director::getInstance()->popScene();
+            if (strcmp(textfieldHospital->getString().c_str(), "")==0||strcmp(textfieldBuilding->getString().c_str(), "")==0||strcmp(textfieldFloor->getString().c_str(), "")==0||strcmp(textfieldBed->getString().c_str(), "")==0) {
+            }else{
+                pushDataToNetWork();
+                log("新建成功");
+            }
+           
         }
         default:
             break;
@@ -121,5 +126,46 @@ void SetTemporaryRoom::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventT
             
             break;
             
+    }
+}
+
+#pragma -新建临时床位
+void SetTemporaryRoom::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    //当type为2时，删除成员
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/createBed?doctorId=%s&bedNo=%s&hospitalName=%s&buildingName=%s&floorName=%s",UserDefault::getInstance()->getStringForKey("id").c_str(),textfieldBed->getString().c_str(),textfieldHospital->getString().c_str(),textfieldBuilding->getString().c_str(),textfieldFloor->getString().c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(SetTemporaryRoom::onHttpRequestCompleted, this),nullptr);
+}
+
+void SetTemporaryRoom::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+     rapidjson::Document Jsondata;
+    
+    Jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (Jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(Jsondata.HasMember("status")){
+        if (Jsondata["status"].GetInt()==0) {
+          Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        Jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
     }
 }

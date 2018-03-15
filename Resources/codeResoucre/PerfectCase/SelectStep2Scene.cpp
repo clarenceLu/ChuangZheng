@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -49,7 +50,7 @@ bool SelectStep2Scene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            
+           pushDataToNetWork();
         }
         default:
             break;
@@ -57,7 +58,7 @@ bool SelectStep2Scene::init(){
     });
     this->addChild(sureBtn);
     
-    auto textFieldContent= TextField::create("一百字以内","Arial",35);
+    textFieldContent= TextField::create("一百字以内","Arial",35);
     textFieldContent->setMaxLength(240);
 //用于多行输入
     textFieldContent->ignoreContentAdaptWithSize(false);
@@ -91,3 +92,57 @@ void SelectStep2Scene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventT
             break;
     }
 }
+
+
+#pragma-用于加载网络数据
+void SelectStep2Scene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    string content="";
+    if (strcmp("", textFieldContent->getString().c_str())) {
+        log("length:%d,%s",textFieldContent->getStringLength(),textFieldContent->getString().c_str());
+        content=textFieldContent->getString();
+    }
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"userId=%s&step2=%s",UserDefault::getInstance()->getStringForKey("userId").c_str(),content.c_str());
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateCase";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(SelectStep2Scene::onHttpRequestCompleted, this),url);
+}
+
+void SelectStep2Scene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+
+

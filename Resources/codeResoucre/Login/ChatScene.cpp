@@ -11,6 +11,7 @@
 #include <iostream>
 #include "ChatUserDetailScene.hpp"
 #include "SearchScene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -42,7 +43,7 @@ bool ChatScene::init(){
     });
     this->addChild(backBtn);
     
-    auto searchBtn=Button::create();
+ /*   auto searchBtn=Button::create();
     searchBtn->loadTextures("btn_search.png", "btn_search.png");
     searchBtn->setPosition(Vec2(553, visibleSize.height-85));
     searchBtn->setScale(0.87);
@@ -57,81 +58,169 @@ bool ChatScene::init(){
             break;
     }
     });
-    this->addChild(searchBtn);
-
-    ScrollView* Select4Scroll=createTableView(Vec2(0, 0), Size(visibleSize.width, visibleSize.height-150));
-    bkView->addChild(Select4Scroll);
+    this->addChild(searchBtn);   */
+    
+    lv = ListView::create();
+    lv->setDirection(ui::ScrollView::Direction::VERTICAL);//设置方向为垂直方向
+    lv->setBounceEnabled(true);
+    lv->setBackGroundImage("alpha.png");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成
+    lv->setBackGroundImageScale9Enabled(true);
+    lv->setContentSize(Size(visibleSize.width, visibleSize.height-150));
+    lv->setAnchorPoint(Point(0,0));
+    lv->setPosition(Point(0,0));
+    lv->addEventListener((ui::ListView::ccListViewCallback)CC_CALLBACK_2(ChatScene::selectedItemEvent, this));//添加监听函数
+    lv->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(ChatScene::selectedItemEventScrollView, this));
+    this->addChild(lv);
+    pushDataToNetWork();
+   
     return true;
 }
-ScrollView* ChatScene::createTableView(Vec2 origin,Size visibleSize){
-    auto scrollView=cocos2d::ui::ScrollView::create();
-    scrollView->setPosition(Vec2(origin.x, origin.y));
-    scrollView->setDirection(cocos2d::ui::ScrollView::Direction::VERTICAL);//方向
-    scrollView->setScrollBarEnabled(true);//是否显示滚动条
-    scrollView->setContentSize(Size(visibleSize.width, visibleSize.height));//设置窗口大小
-    scrollView->setBackGroundColor(Color3B(255, 0, 255));//设置背景颜色
-    scrollView->setInnerContainerSize(Size(visibleSize.width, 160*10));//设置内容大小
-    for (int i=0; i<10; i++) {
-        auto layer1 = createMessageLayer(i,scrollView->getInnerContainerSize());
-        scrollView->addChild(layer1);
+void ChatScene::selectedItemEvent(Ref* pSender, cocos2d::ui::ListView::EventType type)
+{
+    switch (type)
+    {
+        case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_START:
+        {
+            ListView* listView = static_cast<ListView*>(pSender);
+            CC_UNUSED_PARAM(listView);
+            CCLOG("select child start index = %ld", listView->getCurSelectedIndex());
+            break;
+        }
+        case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_END:
+        {
+            ListView* listView = static_cast<ListView*>(pSender);
+            CC_UNUSED_PARAM(listView);
+            CCLOG("select child end index = %ld", listView->getCurSelectedIndex());
+            long index=listView->getCurSelectedIndex();
+#pragma-跳转聊天界面
+            break;
+        }
+        default:
+            break;
     }
-    return scrollView;
+}
+void ChatScene::selectedItemEventScrollView(Ref* pSender, ui::ScrollView::EventType type)
+{
+    switch (type) {
+        case ui::ScrollView::EventType::SCROLL_TO_BOTTOM://滑动到底部
+            CCLOG("SCROLL_TO_BOTTOM");
+            break;
+        case ui::ScrollView::EventType::SCROLL_TO_TOP://滑动到头部
+            CCLOG("SCROLL_TO_TOP");
+            break;
+        default:
+            break;
+    }
 }
 
-Layer* ChatScene::createMessageLayer(int i, Size  innerSize){
+Layout* ChatScene::createMessageLayer(int i, Size  innerSize){
+    rapidjson::Value& object = infoData["data"];
     auto visibleSize=Director::getInstance()->getVisibleSize();
     Vec2 origin=Director::getInstance()->getVisibleOrigin();
     //Data
-    auto layer = LayerColor::create(Color4B(255, 255, 255, 255));
-    layer->setContentSize(Size(visibleSize.width, 153));
-    layer->setPosition(Point(0,innerSize.height-160*(i+1)+10));
-    layer->setAnchorPoint(Vec2(0, 0));
-    layer->setTag(1000+i);
+    auto layout = Layout::create();
+    layout->setBackGroundImageScale9Enabled(true);
+    layout->setBackGroundImage("alpha.png");
+    //必须执行一下允许点击
+    layout->setTouchEnabled(true);
+    layout->setContentSize(Size(visibleSize.width, 153));
+    layout->setTag(1000+i);
     
     auto bkView=Sprite::create("bk_tableView_white.png");
     bkView->setPosition(Vec2(visibleSize.width/2, 0));
     bkView->setAnchorPoint(Vec2(0.5, 0));
-    bkView->setContentSize(layer->getContentSize());
-    layer->addChild(bkView);
+    bkView->setContentSize(layout->getContentSize());
+    layout->addChild(bkView);
     
     auto headBtn=ImageView::create("bk_headIV.png");
     headBtn->setPosition(Vec2(15, 15));
     headBtn->setTouchEnabled(true);
-    headBtn->ignoreContentAdaptWithSize(true);
-    headBtn->setScale9Enabled(true);
-    headBtn->setContentSize(Size(120, 120));
+    float height=headBtn->getContentSize().height;
+    headBtn->setScale(120.0/height);
     headBtn->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(headBtn);
     headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
         if (type == Widget::TouchEventType::ENDED){
-            auto chatSC=ChatUserDetailScene::createScene();
-            Director::getInstance()->pushScene(chatSC);
+/*            auto chatSC=ChatUserDetailScene::createScene();
+            Director::getInstance()->pushScene(chatSC);    */
         }
     });
  
-        auto contentLB = Label::createWithSystemFont("20160608","Arial",32,Size(380,50),TextHAlignment::LEFT,TextVAlignment::TOP);
+        auto contentLB = Label::createWithSystemFont("未知","Arial",32,Size(380,50),TextHAlignment::LEFT,TextVAlignment::TOP);
         contentLB->setPosition(Point(150,10));
         contentLB->setTextColor(Color4B(0, 0, 0, 255/2));
         contentLB->setAnchorPoint(Vec2(0, 0));
         bkView->addChild(contentLB);
 
-        auto jobLB = Label::createWithSystemFont("介绍人:周大伟","Arial",32,Size(380,50),TextHAlignment::RIGHT,TextVAlignment::TOP);
+        auto jobLB = Label::createWithSystemFont("介绍人:无","Arial",32,Size(380,50),TextHAlignment::RIGHT,TextVAlignment::TOP);
         jobLB->setPosition(Point(visibleSize.width-400,10));
         jobLB->setTextColor(Color4B(0, 0, 0, 255/2));
         jobLB->setAnchorPoint(Vec2(0, 0));
         bkView->addChild(jobLB);
-                                   
-    auto nameLB = Label::createWithSystemFont("张敏","Arial",35,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    
+  /*  "0" : {
+        "doctorId" : "10",
+        "userId" : "shijg",
+        "name" : "lica",
+        "role" : "1",
+        "headUrl" : {
+        },
+        "groupId" : "4"
+    },   */
+    if (!object["name"].IsNull()) {
+        string name=object["name"].GetString();
+    auto nameLB = Label::createWithSystemFont(name,"Arial",35,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     nameLB->setPosition(Point(150,80));
     nameLB->setTextColor(Color4B(0, 0, 0, 255));
     nameLB->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(nameLB);
+    }
     
-    auto timeLB = Label::createWithSystemFont("早上6:00","Arial",25,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
+    auto timeLB = Label::createWithSystemFont("上午","Arial",25,Size(380,60),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
     timeLB->setPosition(Point(513,80));
     timeLB->setTextColor(Color4B(0, 0, 0, 255/3));
     timeLB->setAnchorPoint(Vec2(0, 0));
     bkView->addChild(timeLB);
-    return layer;
+    return layout;
+}
+
+#pragma-网络请求
+void ChatScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char strtest[500] = {0};
+    sprintf(strtest,"http://czapi.looper.pro/web/getMyChatList?patientId=%s", UserDefault::getInstance()->getStringForKey("userId").c_str());
+    string url=strtest;
+    netManeger->sendMessage(url,CC_CALLBACK_2(ChatScene::onHttpRequestCompleted, this),nullptr);
+}
+void ChatScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    Size visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    //     rapidjson::Document Jsondata;
+    
+    infoData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (infoData.HasParseError()) {
+        
+        return;
+    }
+    if(infoData.HasMember("data")){
+        rapidjson::Value& object = infoData["data"];
+        for (int i=0; i<object.Size(); i++) {
+            auto layer1 = createMessageLayer(i,lv->getInnerContainerSize());
+            lv->insertCustomItem(layer1,i);
+        }
+    }
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    infoData.Accept(writer);
+    CCLOG("%s", buffer.GetString());
 }
 

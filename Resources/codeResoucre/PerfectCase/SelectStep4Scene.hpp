@@ -30,12 +30,28 @@ public:
     
     cocos2d::Layer* createMessageLayer(int i, cocos2d::Size  innerSize);
     
-    
 #pragma-用于加载数据
     void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
     void pushDataToNetWork();
+    
+    void onHttpRequestCompleted2(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void selectDoctorToNetWork();
+    
+    void onHttpRequestCompleted3(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void commandDoctorToNetWork();
+//当commandtype为2时代表推荐病人给其他医生，这个时候是单选的
+    void onEnter();
+    int commandType;
+    int selectDorctorId;
+    
 private:
     rapidjson::Document loginData;
+    
+    cocos2d::Map<int, cocos2d::ui::CheckBox*> boxDic;
+    
+    rapidjson::vector<int>  selectNumVector;
+    
+    cocos2d::ui::TextField *  searchText;
     
 };
 #endif /* SelectStep4Scene_hpp */

@@ -11,6 +11,7 @@
 #include <iostream>
 #include "SelectStep3Scene.hpp"
 #include "SelectStep4Scene.hpp"
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -21,6 +22,7 @@ bool WaitChatDetailScene::init(){
     if (!Scene::init()) {
         return false;
     }
+    refuseReason="";
     return true;
 };
 
@@ -71,13 +73,23 @@ void WaitChatDetailScene::createScrollDetailView(ScrollView* superV){
     bkView->setContentSize(Size(visibleSize.width, 950));
     superV->addChild(bkView);
     
+//data
+     rapidjson::Value& data =this->infoData["data"][indexForData];
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    data.Accept(writer);
+    CCLOG("%s", buffer.GetString());
+    if (data.HasMember("patientId")) {
+        UserDefault::getInstance()->setStringForKey("patientId",data["patientId"].GetString());
+    }
+    
+    
     auto headBtn=ImageView::create("bk_headIV.png");
     headBtn->setPosition(Vec2(244, 815));
     headBtn->setAnchorPoint(Vec2(0, 0));
     headBtn->setTouchEnabled(true);
-    headBtn->ignoreContentAdaptWithSize(true);
-    headBtn->setScale9Enabled(true);
-    headBtn->setContentSize(Size(151, 151));
+     float height2=headBtn->getContentSize().height;
+    headBtn->setScale(151.0/height2);
     bkView->addChild(headBtn);
     headBtn->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
         if (type == Widget::TouchEventType::ENDED){
@@ -87,14 +99,48 @@ void WaitChatDetailScene::createScrollDetailView(ScrollView* superV){
             this->addChild(layer);
         }
     });
+    string name="";
+    if (data["name"].IsNull()) {}else{
+        name=data["name"].GetString();
+    }
+    string caseNo="";
+    if (data["caseNo"].IsNull()) {}else{
+        caseNo=data["caseNo"].GetString();
+    }
+    createLabel(Vec2(0, 758), "真实姓名：", name, bkView);
+    createLabel(Vec2(0, 678), "病历号：", caseNo, bkView);
+    string sex="男";
+    if (data["sex"].IsNull()) {
+    }else{
+        if (strcmp(data["sex"].GetString(),"F")==0||strcmp(data["sex"].GetString(),"女")==0) {  sex="女"; }
+    }
+    createLabel(Vec2(0, 598), "性别：", sex, bkView);
     
-    createLabel(Vec2(0, 758), "真实姓名：", "张牧之", bkView);
-    createLabel(Vec2(0, 678), "病历号：", "20171112082214", bkView);
-    createLabel(Vec2(0, 598), "性别：", "女", bkView);
-    createLabel(Vec2(0, 518), "年龄：", "32", bkView);
-    float height= createLabel(Vec2(0, 438), "自述症状：", "头后仰上身麻无敌无敌无敌无敌无敌", bkView);
-    createLabel(Vec2(0, 400-height), "介绍人：", "董大伟", bkView);
-    createLabel(Vec2(0, 320-height), "推荐人：", "小布什", bkView);
+    string age="";
+    if (data["age"].IsNull()) {
+    }else{
+        age=data["age"].GetString();
+    }
+    createLabel(Vec2(0, 518), "年龄：",age , bkView);
+   
+    float height=10;
+if (type==1) {//通过病人信息的infoData，字段不同，不同的处理
+    if (data["step2"].IsNull()) {
+        height= createLabel(Vec2(0, 438), "自述症状：", "暂时不清楚", bkView);
+    }else{
+        log("自述症状%s",data["step2"].GetString());
+        height= createLabel(Vec2(0, 438), "自述症状：", data["step2"].GetString(), bkView);
+    }
+}else{
+    if (data["answers"].IsNull()) {
+       height= createLabel(Vec2(0, 438), "自述症状：", "暂时不清楚", bkView);
+    }else{
+        log("自述症状%s",data["answers"].GetString());
+       height= createLabel(Vec2(0, 438), "自述症状：", data["answers"].GetString(), bkView);
+    }
+}
+    createLabel(Vec2(0, 400-height), "介绍人：", "无", bkView);
+    createLabel(Vec2(0, 320-height), "推荐人：", "无", bkView);
     
     
     auto imageLB = Label::createWithSystemFont("影像：","fonts/Marker Felt.ttf",35,Size(200,50),TextHAlignment::LEFT,TextVAlignment::BOTTOM);
@@ -135,9 +181,8 @@ void WaitChatDetailScene::createScrollDetailView(ScrollView* superV){
             }
             imageBtn1->setAnchorPoint(Vec2(0, 0));
             imageBtn1->setTouchEnabled(true);
-            imageBtn1->ignoreContentAdaptWithSize(true);
-            imageBtn1->setScale9Enabled(true);
-            imageBtn1->setContentSize(Size(125, 125));
+            float height3=imageBtn1->getContentSize().height;
+            imageBtn1->setScale(125.0/height3);
             bkView->addChild(imageBtn1);
             imageBtn1->addTouchEventListener([this](Ref* pSender,Widget::TouchEventType type){
                 if (type == Widget::TouchEventType::ENDED){
@@ -148,7 +193,9 @@ void WaitChatDetailScene::createScrollDetailView(ScrollView* superV){
     }
     if (type==1) {
     superV->setInnerContainerSize(Size(visibleSize.width, currentHeight+30));
+        if (superV->getInnerContainerSize().height>950) {
     bkView->setPosition(Vec2(0, currentHeight-960));
+        }else{ bkView->setPosition(Vec2(0, -20));}
     }else if(type==2){
         superV->setInnerContainerSize(Size(visibleSize.width, currentHeight+210));
         bkView->setPosition(Vec2(0, currentHeight-960+185));
@@ -179,7 +226,8 @@ void WaitChatDetailScene::createScrollDetailView(ScrollView* superV){
             case ui::Widget::TouchEventType::BEGAN: break;
             case ui::Widget::TouchEventType::ENDED:{
                 log("推荐给别人");
-                auto select4SC=SelectStep4Scene::createScene();
+                auto select4SC=(SelectStep4Scene*)SelectStep4Scene::createScene();
+                select4SC->commandType=2;
                 Director::getInstance()->pushScene(select4SC);
             }
             default:
@@ -234,7 +282,8 @@ void WaitChatDetailScene::createScrollDetailView(ScrollView* superV){
         recommendBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
             case ui::Widget::TouchEventType::BEGAN: break;
             case ui::Widget::TouchEventType::ENDED:{
-                auto select4SC=SelectStep4Scene::createScene();
+                auto select4SC=(SelectStep4Scene*)SelectStep4Scene::createScene();
+                select4SC->commandType=2;
                 Director::getInstance()->pushScene(select4SC);
                 log("推荐给别人");
             }
@@ -328,9 +377,7 @@ Layer* WaitChatDetailScene::createRefuseLayer(){
         case ui::Widget::TouchEventType::ENDED:{
             this->removeChildByTag(2002);
             log("替换成拒绝列表,同时请求数据");
-            auto chatSC=(WaitChatDetailScene*)WaitChatDetailScene::createScene();
-            chatSC->type=3;
-            Director::getInstance()->replaceScene(chatSC);
+            pushDataToNetWork("refused");
         }
         default:
             break;
@@ -516,6 +563,7 @@ cocos2d::Layer* WaitChatDetailScene::createPromptLayer(std::string content){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:
         {
+            pushDataToNetWork("accepted");
             this->removeChildByTag(2001);
             log("确认接诊");
             break;
@@ -551,17 +599,72 @@ cocos2d::Layer* WaitChatDetailScene::createPromptLayer(std::string content){
 
 void WaitChatDetailScene::eventCallBack(Ref* pSender,cocos2d::ui::TextField::EventType type)
 {
+     TextField* textField = dynamic_cast<cocos2d::ui::TextField*>(pSender);
     switch (type){
             
         case cocos2d::ui::TextField::EventType::INSERT_TEXT:
-            CCLOG("INSERT_TEXT");
+            refuseReason=textField->getString();
+            log("%s",textField->getString().c_str());
             break;
         case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
-            CCLOG("DELETE_BACKWARD");
+            refuseReason=textField->getString();
+            log("%s",textField->getString().c_str());
+            break;
         case cocos2d::ui::TextField::EventType::DETACH_WITH_IME:
-            CCLOG("DETACH_WITH_IME");
+//            CCLOG("DETACH_WITH_IME");
             
             break;
     }
 }
+#pragma-用于加载网络数据处理门诊申请
+void WaitChatDetailScene::pushDataToNetWork(string applicationType){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+//data
+    rapidjson::Value& data =this->infoData["data"][indexForData];
+    char memberUrl[500]={0};
+    sprintf(memberUrl,"http://czapi.looper.pro/web/updateOutpatient?requestId=%d&type=%s&refuseReason=%s",atoi(data["requestId"].GetString()),applicationType.c_str(),refuseReason.c_str());
+    string memberURL=memberUrl;
+    netManeger->sendMessage(memberURL,CC_CALLBACK_2(WaitChatDetailScene::onHttpRequestCompleted, this),nullptr);
+}
 
+void WaitChatDetailScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    // rapidjson::Document Jsondata;
+    
+    this->networkData.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (this->networkData.HasParseError()) {
+        
+        return;
+    }
+    if(this->networkData.HasMember("status")){
+        if (this->networkData["status"].GetInt()==0) {
+            auto chatSC=(WaitChatDetailScene*)WaitChatDetailScene::createScene();
+            chatSC->type=3;
+            chatSC->indexForData=indexForData;
+            
+            chatSC->infoData.SetObject();
+            rapidjson::Document::AllocatorType& allocator = chatSC->infoData.GetAllocator();
+            rapidjson::Value array(rapidjson::kArrayType);
+            array=this->infoData["data"];
+            chatSC->infoData.AddMember("data", array, allocator);
+            
+            this->removeChildByTag(2002);
+            Director::getInstance()->replaceScene(chatSC);
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        networkData.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}

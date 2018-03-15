@@ -10,6 +10,11 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
 class SelectStep2Scene:public cocos2d::Scene ,public cocos2d::TextFieldDelegate{
 public:
     static cocos2d::Scene* createScene();
@@ -19,6 +24,11 @@ public:
     
     void eventCallBack(cocos2d::Ref* pSender,cocos2d::ui::TextField::EventType type);
     
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
+private:
+    cocos2d::ui::TextField* textFieldContent;
 };
 
 #endif /* SelectStep2Scene_hpp */

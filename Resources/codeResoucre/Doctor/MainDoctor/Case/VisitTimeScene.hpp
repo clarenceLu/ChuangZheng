@@ -10,6 +10,12 @@
 
 #include <stdio.h>
 #include "ui/CocosGUI.h"
+
+#include "network/HttpClient.h"
+#include "json/rapidjson.h"
+#include "json/document.h"
+#include "json/writer.h"
+#include "json/stringbuffer.h"
 USING_NS_CC;
 class VisitTimeScene:public cocos2d::Scene{
 public:
@@ -20,7 +26,13 @@ public:
      cocos2d::Layer* createPromptLayer(std::string content);
     
      void checkBoxCallback(cocos2d::Ref * ref, cocos2d::ui::CheckBox::EventType type);
+    
+    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void pushDataToNetWork();
+    
 private:
+    rapidjson::Document infoData;
+    std::string contentStr;
 };
 
 #endif /* VisitTimeScene_hpp */

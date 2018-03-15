@@ -9,6 +9,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "NetWrokMangerData.hpp"
 using namespace cocos2d::ui;
 using namespace std;
 USING_NS_CC;
@@ -48,7 +49,7 @@ bool NDIScene::init(){
     sureBtn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){ switch (type){
         case ui::Widget::TouchEventType::BEGAN: break;
         case ui::Widget::TouchEventType::ENDED:{
-            Director::getInstance()->popScene();
+            pushDataToNetWork();
             log("NeckJOA sure");
         }
             
@@ -370,6 +371,294 @@ void NDIScene::checkBoxCallback(cocos2d::Ref * ref, CheckBox::EventType type)
     }
 }
 
+
+std::string NDIScene::getJsonData(int type)
+{
+    totalNum=0;
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    if (type==0) {
+        rapidjson::Value array(rapidjson::kArrayType);
+        rapidjson::Value array2(rapidjson::kArrayType);
+        rapidjson::Value array3(rapidjson::kArrayType);
+        rapidjson::Value array4(rapidjson::kArrayType);
+        rapidjson::Value array5(rapidjson::kArrayType);
+        rapidjson::Value array6(rapidjson::kArrayType);
+        rapidjson::Value array7(rapidjson::kArrayType);
+        rapidjson::Value array8(rapidjson::kArrayType);
+        rapidjson::Value array9(rapidjson::kArrayType);
+        rapidjson::Value array10(rapidjson::kArrayType);
+        for (int i=0; i<boxDic.size(); i++) {
+            CheckBox* box=(CheckBox*)boxDic.at(i);
+            int tag=box->getTag();
+            if (tag>=0&&tag<6) {
+                if (box->getSelectedState()) {
+                    totalNum+=5-tag;
+                    array.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=6&&tag<12) {
+                if (box->getSelectedState()) {
+                    totalNum+=11-tag;
+                    array2.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=12&&tag<18) {
+                if (box->getSelectedState()) {
+                    totalNum+=17-tag;
+                    array3.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=18&&tag<24) {
+                if (box->getSelectedState()) {
+                    totalNum+=23-tag;
+                    array4.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=24&&tag<30) {
+                if (box->getSelectedState()) {
+                    totalNum+=29-tag;
+                    array5.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=30&&tag<36) {
+                if (box->getSelectedState()) {
+                    totalNum+=35-tag;
+                    array6.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=36&&tag<42) {
+                if (box->getSelectedState()) {
+                    totalNum+=41-tag;
+                    array7.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=42&&tag<49) {
+                if (box->getSelectedState()) {
+                    totalNum+=48-tag;
+                    array8.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=49&&tag<55) {
+                if (box->getSelectedState()) {
+                    totalNum+=54-tag;
+                    array9.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+            if (tag>=55&&tag<61) {
+                if (box->getSelectedState()) {
+                    totalNum+=60-tag;
+                    array10.PushBack(rapidjson::Value(changeNumToString(tag).c_str(), allocator),allocator);
+                }
+            }
+        }
+        document.AddMember("疼痛程度", array, allocator);
+        document.AddMember("个人生活料理", array2, allocator);
+        document.AddMember("抬起物品", array3, allocator);
+        document.AddMember("阅读", array4, allocator);
+        document.AddMember("头痛", array5, allocator);
+        document.AddMember("集中注意力", array6, allocator);
+        document.AddMember("工作", array7, allocator);
+        document.AddMember("开车/骑车", array8, allocator);
+        document.AddMember("睡眠", array9, allocator);
+        document.AddMember("娱乐休闲", array10, allocator);
+    }
+    
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    document.Accept(writer);
+    
+    log("buffer:%s",buffer.GetString());
+    return buffer.GetString();
+}
+
+#pragma-用于加载网络数据
+void NDIScene::pushDataToNetWork(){
+    NetWorkManger* netManeger =NetWorkManger::sharedWorkManger();
+    char jsonStr[1000]={0};
+    string jsonData=getJsonData(0);
+    sprintf(jsonStr,"%s;%s",jsonData.c_str(),to_string((int)totalNum).c_str());
+    char*json=jsonStr;
+    char memberUrl[1000]={0};
+    sprintf(memberUrl,"recordId=%s&keys=%s&answers=%s",UserDefault::getInstance()->getStringForKey("caseId").c_str(),"pf_jNDI;pf_jNDI_total",json);
+    char* url=memberUrl;
+    string memberURL="http://czapi.looper.pro/web/updateMedicalRecords";
+    netManeger->postHttpRequest(memberURL,CC_CALLBACK_2(NDIScene::onHttpRequestCompleted, this),url);
+}
+
+void NDIScene::onHttpRequestCompleted(HttpClient* sender, HttpResponse* response)
+{
+    auto visibleSize=Director::getInstance()->getVisibleSize();
+    if (!response)
+    {
+        return;
+    }
+    if(!response -> isSucceed()){
+        log("response failed");
+        log("error buffer: %s", response -> getErrorBuffer());
+        return;
+    }
+    std::vector<char> *data = response->getResponseData();
+    std::string recieveData;
+    recieveData.assign(data->begin(), data->end());
+    
+    rapidjson::Document jsondata;
+    
+    jsondata.Parse<rapidjson::kParseDefaultFlags>(recieveData.c_str());
+    
+    if (jsondata.HasParseError()) {
+        
+        return;
+    }
+    if(jsondata.HasMember("status")){
+        if (jsondata["status"].GetInt()==0) {
+            Director::getInstance()->popScene();
+        }
+        
+        rapidjson::StringBuffer buffer;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        jsondata.Accept(writer);
+        CCLOG("%s", buffer.GetString());
+    }
+}
+string NDIScene::changeNumToString(int num){
+    string content="";
+    switch (num) {
+        case 0:
+            content="现在没有疼痛";break;
+        case 1:
+            content="现在有轻微疼痛";break;
+        case 2:
+            content="现在有中等程度疼痛";break;
+        case 3:
+            content="现在疼痛相当严重";break;//神经根型颈椎病
+        case 4:
+            content="现在疼痛非常严重";break;
+        case 5:
+            content="现在疼痛严重的无法形容";break;
+        case 6:
+            content="我能正常地照料自己而不引起额外的疼痛";break;
+        case 7:
+            content="我能正常地照料自己但会引起额外的疼痛";break;
+        case 8:
+            content="只能较慢地小心地活动且引起疼痛";break;
+        case 9:
+            content="需人帮助，但大部分可以自己完成";break;
+        case 10:
+            content="每天多数的日常生活需要帮助";break;
+        case 11:
+            content="我不能穿衣，洗簌有困难，不能离床";break;
+        case 12:
+            content="我能提起重物而不引起额外的疼痛";break;
+        case 13:
+            content="我能提起重物，但会引起额外的疼痛";break;//神经根型颈椎病
+        case 14:
+            content="因为疼痛不能把重物从地上提起但从桌子上可能提起";break;
+        case 15:
+            content="不能提起重物但可提起较轻或中等重物";break;
+        case 16:
+            content="我仅仅能提起非常轻的重物";break;
+        case 17:
+            content="我不能提起任何东西";break;
+        case 18:
+            content="我可如常阅读，而不引起颈痛";break;
+        case 19:
+            content="我可如常阅读，但会引起轻微的颈痛";break;
+        case 20:
+            content="我可如常阅读，但会引起中度颈痛";break;
+        case 21:
+            content="我不能如常阅读，由于有中度颈痛";break;
+        case 22:
+            content="我几乎完全不能阅读，由于有严重的颈痛";break;
+        case 23:
+            content="我根本不能阅读";break;
+        case 24:
+            content="我根本没有头痛";break;
+        case 25:
+            content="我有轻度头痛（不常发作）";break;
+        case 26:
+            content="我有中度头痛（不常头痛）";break;
+        case 27:
+            content="我有中度头痛（经常发作）";break;
+        case 28:
+            content="我有严重的头痛（经常发作）";break;
+        case 29:
+            content="我的头痛几乎没有停止过";break;
+        case 30:
+            content="如有需要时我能充分集中注意力（没有困难）";break;
+        case 31:
+            content="需要时我能集中注意力";break;
+        case 32:
+            content="当我需要集中注意力有不小的困难";break;
+        case 33:
+            content="当我需要集中注意力时，相当难做到";break;//神经根型颈椎病
+        case 34:
+            content="当我需要集中注意力时，很难做到";break;
+        case 35:
+            content="我根本不能集中注意力";break;
+        case 36:
+            content="我完全能胜任工作，想做多少就做多少";break;
+        case 37:
+            content="只能干一些基本分量的工作，但不能过量";break;
+        case 38:
+            content="只能完成一些基本分量的工作，但不能过量";break;
+        case 39:
+            content="不能做基本分量的工作";break;
+        case 40:
+            content="几乎不能工作";break;
+        case 41:
+            content="完全不能工作";break;
+        case 42:
+            content="能开车或骑车，没有颈痛";break;
+        case 43:
+            content="能随意开车或骑车，但引起轻微疼痛";break;//神经根型颈椎病
+        case 44:
+            content="能随意开车或骑车，但引起中度疼痛";break;
+        case 45:
+            content="中度颈痛不能随意开车或骑车";break;
+        case 46:
+            content="因颈痛严重，几乎不能开车或骑车";break;
+        case 47:
+            content="因颈痛严重，根本不能开车或骑车";break;
+        case 48:
+            content="我不会开车或骑车";break;
+        case 49:
+            content="我睡眠没有问题";break;
+        case 50:
+            content="我有点睡不好（失眠少于1小时）";break;
+        case 51:
+            content="我睡得不好（失眠1-2小时）";break;
+        case 52:
+            content="我睡得不好（失眠2-3小时）";break;
+        case 53:
+            content="我睡得相当不好（失眠3-5小时）";break;//神经根型颈椎病
+        case 54:
+            content="我完全不能入睡（失眠5-7小时）";break;
+        case 55:
+            content="我能参加各种娱乐活动根本无颈痛";break;
+        case 56:
+            content="我能参加各种娱乐活动但有轻度颈痛";break;
+        case 57:
+            content="由于颈痛我只能参加大部分日常娱乐活动";break;
+        case 58:
+            content="由于颈痛我只能参加少数娱乐活动";break;
+        case 59:
+            content="由于颈痛我几乎不能参加任何娱乐活动";break;
+        case 60:
+            content="由于颈痛我完全不能参加任何娱乐活动";break;
+        
+        default:
+            break;
+    }
+    return content;
+}
+
+
+
+
+
+
 void  NDIScene::createData(){
     ValueVector vector1;
     vector1.push_back(Value("5分：现在没有疼痛 "));
@@ -381,7 +670,7 @@ void  NDIScene::createData(){
     string key1 = "疼痛程度";
     ValueVector vector2;
     vector2.push_back(Value("5分：我能正常地照料自己而不引起额外的疼痛"));
-    vector2.push_back(Value("6分：我能正常地照料自己但会引起额外的疼痛"));
+    vector2.push_back(Value("4分：我能正常地照料自己但会引起额外的疼痛"));
     vector2.push_back(Value("3分：只能较慢地小心地活动且引起疼痛"));
     vector2.push_back(Value("2分：需人帮助，但大部分可以自己完成  "));
     vector2.push_back(Value("1分：每天多数的日常生活需要帮助"));
@@ -392,7 +681,7 @@ void  NDIScene::createData(){
     vector3.push_back(Value("4分：我能提起重物，但会引起额外的疼痛"));
     vector3.push_back(Value("3分：因为疼痛不能把重物从地上提起但从桌子上可能提起"));
     vector3.push_back(Value("2分：不能提起重物但可提起较轻或中等重物  "));
-    vector3.push_back(Value("1分：我仅仅能提起非常轻度重物"));
+    vector3.push_back(Value("1分：我仅仅能提起非常轻的重物"));
     vector3.push_back(Value("0分：我不能提起任何东西"));
     string key3 = "抬起(拿起)物品";
     ValueVector vector4;
@@ -408,7 +697,7 @@ void  NDIScene::createData(){
     vector5.push_back(Value("4分：我有轻度头痛（不常发作）"));
     vector5.push_back(Value("3分：我有中度头痛（不常头痛）"));
     vector5.push_back(Value("2分：我有中度头痛（经常发作）"));
-    vector5.push_back(Value("1分：我有严重的头痛（经常发作"));
+    vector5.push_back(Value("1分：我有严重的头痛（经常发作）"));
     vector5.push_back(Value("0分：我的头痛几乎没有停止过 "));
     string key5 = "头痛";
     ValueVector vector6;
@@ -420,17 +709,17 @@ void  NDIScene::createData(){
     vector6.push_back(Value("0分：我根本不能集中注意力"));
     string key6 = "集中注意力";
     ValueVector vector7;
-    vector7.push_back(Value("5分：我完全能胜任工作，想做多少就作多少 "));
+    vector7.push_back(Value("5分：完全能胜任工作，想做多少就做多少 "));
     vector7.push_back(Value("4分：只能干一些基本分量的工作，但不能过量"));
-    vector7.push_back(Value("3分：我只能完成大部分基本工作工作，但不能过量"));
-    vector7.push_back(Value("2分：我不能做基本分量的工作"));
-    vector7.push_back(Value("1分：我几乎不能工作"));
-    vector7.push_back(Value("0分：我完全不能工作"));
+    vector7.push_back(Value("3分：只能完成大部分基本工作工作，但不能过量"));
+    vector7.push_back(Value("2分：不能做基本分量的工作"));
+    vector7.push_back(Value("1分：几乎不能工作"));
+    vector7.push_back(Value("0分：完全不能工作"));
     string key7 = "工作";
     ValueVector vector8;
-    vector8.push_back(Value("5分：我能开车或骑车，没有颈痛"));
-    vector8.push_back(Value("4分：我能随意开车或骑车，但引起轻微疼痛"));
-    vector8.push_back(Value("3分：我能随意开车或骑车，但引起中度疼痛"));
+    vector8.push_back(Value("5分：能开车或骑车，没有颈痛"));
+    vector8.push_back(Value("4分：能随意开车或骑车，但引起轻微疼痛"));
+    vector8.push_back(Value("3分：能随意开车或骑车，但引起中度疼痛"));
     vector8.push_back(Value("2分：中度颈痛不能随意开车或骑车"));
     vector8.push_back(Value("1分：因颈痛严重，几乎不能开车或骑车"));
     vector8.push_back(Value("0分：因颈痛严重，根本不能开车或骑车"));
@@ -439,10 +728,10 @@ void  NDIScene::createData(){
     ValueVector vector9;
     vector9.push_back(Value("5分：我睡眠没有问题"));
     vector9.push_back(Value("4分：我有点睡不好（失眠少于1小时）"));
-    vector9.push_back(Value("3分：我睡得不好（失眠1~2小时）"));
-    vector9.push_back(Value("2分：我睡得不好（失眠2~3小时）"));
-    vector9.push_back(Value("1分：我睡得相当不好（失眠3~5小时）"));
-    vector9.push_back(Value("0分：我完全不能入睡（失眠5~7小时）"));
+    vector9.push_back(Value("3分：我睡得不好（失眠1-2小时）"));
+    vector9.push_back(Value("2分：我睡得不好（失眠2-3小时）"));
+    vector9.push_back(Value("1分：我睡得相当不好（失眠3-5小时）"));
+    vector9.push_back(Value("0分：我完全不能入睡（失眠5-7小时）"));
     string key9 = "睡眠";
     ValueVector vector10;
     vector10.push_back(Value("5分：我能参加各种娱乐活动根本无颈痛"));
